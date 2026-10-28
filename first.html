@@ -1,0 +1,577 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>HTML File Viewer</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="bootstrap.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --primary: #635bff;
+            --primary-dark: #4b44dc;
+            --success: #10b981;
+            --text: #172033;
+            --muted: #778198;
+            --border: #e7eaf1;
+            --surface:#071426;
+            --background: #071426;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(99, 91, 255, 0.08),
+                    transparent 35%
+                ),
+                var(--background);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 36px 28px;
+        }
+
+        .app-card {
+            background: var(--surface);
+            border: 1px solid rgba(226, 230, 240, 0.9);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow:
+                0 12px 40px rgba(31, 41, 70, 0.06),
+                0 2px 8px rgba(31, 41, 70, 0.03);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .header-icon {
+            display: grid;
+            place-items: center;
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            border-radius: 17px;
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #776cff,
+                #5145e5
+            );
+            box-shadow: 0 7px 18px rgba(99, 91, 255, 0.25);
+        }
+
+        .header-icon svg {
+            width: 27px;
+            height: 27px;
+        }
+
+        .header h1 {
+            margin: 0 0 5px;
+            font-size: clamp(1.45rem, 3vw, 2rem);
+            font-weight: 750;
+            letter-spacing: -0.8px;
+        }
+
+        .header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.93rem;
+        }
+
+        .section-block {
+            margin-bottom: 26px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .heading-number {
+            display: grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 9px;
+            background: #eeedff;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .heading-number.green {
+            background: #e5faf2;
+            color: #059669;
+        }
+
+        .heading-description {
+            display: block;
+            margin-top: 3px;
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .main-buttons,
+        .sub-buttons {
+            display: grid;
+            gap: 12px;
+        }
+
+        .main-buttons {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .sub-buttons {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .main-buttons .btn,
+        .sub-buttons .btn {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            min-height: 54px;
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            font-size: 0.94rem;
+            font-weight: 650;
+            transition:
+                transform 180ms ease,
+                background 180ms ease,
+                border-color 180ms ease,
+                box-shadow 180ms ease,
+                color 180ms ease;
+        }
+
+        .main-buttons .btn {
+            color: #555f76;
+            background: #fafbfe;
+        }
+
+        .main-buttons .btn:hover {
+            color: var(--primary);
+            background: #f3f2ff;
+            border-color: #c9c5ff;
+            transform: translateY(-2px);
+        }
+
+        .main-buttons .btn.active,
+        .main-buttons .btn.btn-primary {
+            color: white;
+            border-color: transparent;
+            background: linear-gradient(
+                135deg,
+                #776cff,
+                #5145e5
+            );
+            box-shadow: 0 6px 15px rgba(99, 91, 255, 0.22);
+        }
+
+        .sub-buttons .btn {
+            color: #536477;
+            background: #fafbfc;
+        }
+
+        .sub-buttons .btn:hover {
+            color: #059669;
+            background: #effcf6;
+            border-color: #a7ebd0;
+            transform: translateY(-2px);
+        }
+
+        .sub-buttons .btn.active,
+        .sub-buttons .btn.btn-success {
+            color: white;
+            border-color: transparent;
+            background: linear-gradient(
+                135deg,
+                #21c997,
+                #059669
+            );
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .button-indicator {
+            width: 8px;
+            height: 8px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.65;
+        }
+
+        .active .button-indicator {
+            background: white;
+            opacity: 1;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.16);
+        }
+
+        .main-buttons .btn:focus-visible,
+        .sub-buttons .btn:focus-visible {
+            outline: 3px solid rgba(99, 91, 255, 0.35);
+            outline-offset: 3px;
+        }
+
+        .divider {
+            height: 1px;
+            margin: 28px 0;
+            background: var(--border);
+        }
+
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .viewer-label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .viewer-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border: 1px solid #d7f5e7;
+            border-radius: 999px;
+            background: #effcf6;
+            color: #07865d;
+            font-size: 0.76rem;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        .viewer-frame {
+            overflow: hidden;
+            border: 1px solid #e0e5ef;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 5px 20px rgba(31, 41, 70, 0.05);
+        }
+
+        .viewer {
+            display: block;
+            width: 100%;
+            height: 680px;
+            border: none;
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 16px 12px;
+            }
+
+            .app-card {
+                padding: 22px 16px;
+                border-radius: 18px;
+            }
+
+            .header {
+                gap: 12px;
+                margin-bottom: 26px;
+            }
+
+            .header-icon {
+                width: 46px;
+                height: 46px;
+                border-radius: 14px;
+            }
+
+            .main-buttons {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+            .sub-buttons {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+            }
+
+            .main-buttons .btn,
+            .sub-buttons .btn {
+                min-height: 49px;
+                padding: 11px 12px;
+            }
+
+            .viewer {
+                height: 560px;
+            }
+
+            .divider {
+                margin: 24px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid app-container">
+    <main class="app-card">
+
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-icon" aria-hidden="true">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                    <path d="M3 9h18"></path>
+                    <path d="M7 6.5h.01M10 6.5h.01"></path>
+                    <path d="m10 13 2 2 4-4"></path>
+                </svg>
+            </div>
+
+            <div>
+                
+                <p>Choose a group and property   to explore your content.</p>
+            </div>
+        </header>
+
+        <!-- 3 MAIN TOGGLE BUTTONS -->
+        <section class="section-block">
+            <div class="section-heading">
+                <span class="heading-number">01</span>
+                <div style="color: white;">
+                    Groups
+                    <span class="heading-description">
+                        Select a group in the modern periodic table to view its properties
+                    </span>
+                </div>
+            </div>
+
+            <div class="main-buttons" id="mainButtons">
+                <button
+                    type="button"
+                    class="btn btn-primary active"
+                    data-section="1"
+                    aria-pressed="true"
+                >
+                    <span class="button-indicator"></span>
+                    Alkali metals
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-section="2"
+                    aria-pressed="false"
+                >
+                    <span class="button-indicator"></span>
+                    Alkaline earth metals
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    data-section="3"
+                    aria-pressed="false"
+                >
+                    <span class="button-indicator"></span>
+                    Halogens
+                </button>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- 4 SUB-TOGGLE BUTTONS -->
+        <section class="section-block">
+            <div class="section-heading">
+                <span class="heading-number green">02</span>
+                <div style="color: #ffffff;">
+                    Properties
+                    <span class="heading-description">
+                        Choose a property within the selected section
+                    </span>
+                </div>
+            </div>
+
+            <div class="sub-buttons" id="subButtons">
+                <button
+                    type="button"
+                    class="btn btn-success active"
+                    data-page="1"
+                    aria-pressed="true"
+                >
+                    <span class="button-indicator"></span>
+                    Atomic radius
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    data-page="2"
+                    aria-pressed="false"
+                >
+                    <span class="button-indicator"></span>
+                    Melting point
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    data-page="3"
+                    aria-pressed="false"
+                >
+                    <span class="button-indicator"></span>
+                    Boiling point
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    data-page="4"
+                    aria-pressed="false"
+                >
+                    <span class="button-indicator"></span>
+                    Chemical reactivity
+                </button>
+            </div>
+        </section>
+
+        <!-- HTML FILE DISPLAY -->
+        <section class="viewer-section">
+            <div class="viewer-header">
+                <div class="viewer-label">
+                    <span class="heading-number">03</span>
+                    Content preview
+                </div>
+
+                <span class="viewer-status">
+                    <span class="status-dot"></span>
+                    Viewer
+                </span>
+            </div>
+
+            <div class="viewer-frame">
+                <iframe
+                    id="htmlViewer"
+                    class="viewer"
+                    src="https://my-app-project-whknyzp75yacjeatrj8day.streamlit.app/?embed=True&group=0&property=0"
+                    title="HTML file viewer"
+                ></iframe>
+            </div>
+        </section>
+
+    </main>
+</div>
+script
+<script>
+    const mainButtons = document.querySelectorAll(
+        "#mainButtons button"
+    );
+
+    const subButtons = document.querySelectorAll(
+        "#subButtons button"
+    );
+
+    const htmlViewer = document.getElementById("htmlViewer");
+
+    let currentSection = 1;
+    let currentPage = 1;
+
+    function loadHTML() {
+        // Same URL and loading logic as before
+        htmlViewer.src =
+            `https://my-app-project-whknyzp75yacjeatrj8day.streamlit.app/?embed=True&group=${currentSection-1}&property=${currentPage-1}`;
+    }
+
+    // Toggle between the 3 main sections
+    mainButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            currentSection = Number(button.dataset.section);
+
+            mainButtons.forEach(btn => {
+                const selected = btn === button;
+                btn.classList.toggle("active", selected);
+                btn.classList.toggle("btn-primary", selected);
+                btn.classList.toggle("btn-outline-primary", !selected);
+                btn.setAttribute("aria-pressed", String(selected));
+            });
+
+            loadHTML();
+        });
+    });
+
+    // Toggle between the 4 pages
+    subButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            currentPage = Number(button.dataset.page);
+
+            subButtons.forEach(btn => {
+                const selected = btn === button;
+                btn.classList.toggle("active", selected);
+                btn.classList.toggle("btn-success", selected);
+                btn.classList.toggle("btn-outline-success", !selected);
+                btn.setAttribute("aria-pressed", String(selected));
+            });
+
+            loadHTML();
+        });
+    });
+</script>
+
+</body>
+</html>
