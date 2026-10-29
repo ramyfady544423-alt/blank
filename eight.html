@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ball Bounce Lab</title>
+<style>
+:root{--bg:#071426;--panel:#101f35;--line:#263b57;--text:#edf5ff;--muted:#9db0c9;--cyan:#58e1ef;--purple:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#12294a 0%,var(--bg) 60%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{max-width:1200px;margin:auto;padding:30px 22px 18px}
+.eyebrow{color:var(--cyan);font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;margin:8px 0 10px;letter-spacing:-.04em}
+header p{color:var(--muted);margin:0;max-width:680px}
+main{max-width:1200px;margin:auto;padding:0 22px 30px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(290px,.8fr);gap:18px}
+.panel{background:linear-gradient(145deg,rgba(19,37,62,.96),rgba(11,25,44,.96));border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 18px 45px #0002}
+.panel-head{padding:16px 19px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{font-size:1rem;margin:0}
+.pill{border:1px solid #2e526c;color:var(--cyan);border-radius:99px;padding:4px 10px;font-size:.75rem}
+canvas{display:block;width:100%;height:auto;aspect-ratio:760/470;background:#09182a}
+.scene-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 18px;color:var(--muted);font-size:.82rem}
+.controls{padding:18px;display:grid;gap:21px}
+.control-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}
+label{font-weight:700}
+.value{font-variant-numeric:tabular-nums;color:var(--cyan);font-weight:800}
+input[type=range]{width:100%;accent-color:var(--cyan);cursor:pointer}
+.scale{display:flex;justify-content:space-between;color:var(--muted);font-size:.75rem;margin-top:3px}
+.help{color:var(--muted);font-size:.8rem;margin:5px 0 0}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+button{border:1px solid #34506d;border-radius:12px;background:#172b46;color:var(--text);padding:11px 13px;font:inherit;font-weight:750;cursor:pointer;transition:.18s}
+button:hover{transform:translateY(-1px);border-color:var(--cyan);background:#203b5c}
+button.primary{background:var(--cyan);color:#061726;border-color:var(--cyan)}
+button.primary:hover{background:#9af3fa}
+button.wide{grid-column:1/-1}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 18px}
+.stat{background:#09192b;border:1px solid #213851;border-radius:13px;padding:12px}
+.stat span{display:block;color:var(--muted);font-size:.76rem}
+.stat strong{display:block;font-size:1.25rem;margin-top:3px;font-variant-numeric:tabular-nums}
+.info{padding:17px 19px;border-top:1px solid var(--line);color:var(--muted);font-size:.86rem}
+.info strong{color:var(--text)}
+@media(max-width:850px){main{grid-template-columns:1fr}header{padding-top:24px}}
+@media(max-width:480px){main{padding:0 12px 20px}header{padding-left:16px;padding-right:16px}.stats{padding-left:12px;padding-right:12px}.controls{padding:14px}.panel-head{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Interactive physics simulator</div>
+  <h1>Ball Bounce Lab</h1>
+  <p>Change gravity, bounce strength, and the ramp angle. Press play and watch how the ball rolls, flies, and bounces.</p>
+</header>
+<main>
+  <section class="panel">
+    <div class="panel-head"><h2>Live simulation</h2><span class="pill" id="status">READY</span></div>
+    <canvas id="scene" width="760" height="470" aria-label="Animated ball and ramp physics simulation"></canvas>
+    <div class="scene-foot"><span>↗ Ramp angle changes the launch direction</span><span>Trail shows recent movement</span></div>
+    <div class="info"><strong>Try this:</strong> Set gravity low and bounce high. Then increase gravity and see how the ball's flight changes.</div>
+  </section>
+  <aside class="panel">
+    <div class="panel-head"><h2>Experiment controls</h2><span class="pill">SI-style units</span></div>
+    <div class="controls">
+      <div>
+        <div class="control-top"><label for="gravity">Gravity</label><span class="value" id="gravityVal">9.8 m/s²</span></div>
+        <input id="gravity" type="range" min="0" max="25" step=".1" value="9.8">
+        <div class="scale"><span>0 · Moon-like</span><span>25 · Strong</span></div>
+        <p class="help">How strongly the ball accelerates downward.</p>
+      </div>
+      <div>
+        <div class="control-top"><label for="bounce">Bounce strength</label><span class="value" id="bounceVal">75%</span></div>
+        <input id="bounce" type="range" min="0" max="100" step="1" value="75">
+        <div class="scale"><span>0% · No bounce</span><span>100% · Very springy</span></div>
+        <p class="help">How much vertical speed remains after hitting a surface.</p>
+      </div>
+      <div>
+        <div class="control-top"><label for="ramp">Ramp angle</label><span class="value" id="rampVal">25°</span></div>
+        <input id="ramp" type="range" min="5" max="45" step="1" value="25">
+        <div class="scale"><span>5° · Gentle</span><span>45° · Steep</span></div>
+      </div>
+      <div>
+        <div class="control-top"><label for="speed">Launch speed</label><span class="value" id="speedVal">7.0 m/s</span></div>
+        <input id="speed" type="range" min="2" max="14" step=".5" value="7">
+        <div class="scale"><span>2 m/s</span><span>14 m/s</span></div>
+      </div>
+      <div class="buttons">
+        <button class="primary" id="playBtn">▶ Play</button>
+        <button id="resetBtn">↺ Reset</button>
+        <button id="stepBtn" class="wide">⏭ Step forward 0.1 s</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Simulation time</span><strong id="timeStat">0.00 s</strong></div>
+      <div class="stat"><span>Ball height</span><strong id="heightStat">0.00 m</strong></div>
+      <div class="stat"><span>Bounces</span><strong id="bounceStat">0</strong></div>
+      <div class="stat"><span>Speed</span><strong id="velocityStat">0.00 m/s</strong></div>
+    </div>
+  </aside>
+</main>
+<script>
+(() => {
+  const canvas = document.getElementById('scene');
+  const ctx = canvas.getContext('2d');
+  const $ = id => document.getElementById(id);
+  const controls = ['gravity','bounce','ramp','speed'];
+  let running = false, last = 0, elapsed = 0, ball, bounceCount = 0, trail = [];
+  const W = canvas.width, H = canvas.height;
+  const floorY = 405, radius = 13;
+  const rampStart = {x:72,y:300};
+  let rampEnd = {x:260,y:300};
+  function values(){
+    return {g:+$('gravity').value, e:+$('bounce').value/100, angle:+$('ramp').value*Math.PI/180, speed:+$('speed').value};
+  }
+  function updateLabels(){
+    $('gravityVal').textContent = (+$('gravity').value).toFixed(1)+' m/s²';
+    $('bounceVal').textContent = $('bounce').value+'%';
+    $('rampVal').textContent = $('ramp').value+'°';
+    $('speedVal').textContent = (+$('speed').value).toFixed(1)+' m/s';
+    if(!running) draw();
+  }
+  function reset(){
+    const v=values();
+    elapsed=0; bounceCount=0; trail=[];
+    rampEnd={x:260,y:rampStart.y-Math.tan(v.angle)*188};
+    // Start at the upper end of the ramp, with the launch speed directed down the ramp.
+    ball={x:rampEnd.x-5,y:rampEnd.y-radius,vx:v.speed*Math.cos(v.angle),vy:v.speed*Math.sin(v.angle),startY:rampEnd.y-radius};
+    running=false; last=0;
+    $('playBtn').textContent='▶ Play';
+    $('status').textContent='READY';
+    updateStats(); draw();
+  }
+  function physics(dt){
+    const v=values();
+    elapsed+=dt;
+    const oldX=ball.x, oldY=ball.y;
+    ball.vy += v.g*dt*27; // visual scale: gravity is expressed in m/s²
+    ball.x += ball.vx*dt*27;
+    ball.y += ball.vy*dt*27;
+    // Main floor collision
+    if(ball.y+radius>=floorY){
+      ball.y=floorY-radius;
+      if(Math.abs(ball.vy)>0.55 && v.e>0){
+        ball.vy=-Math.abs(ball.vy)*v.e;
+        ball.vx*=0.985;
+        bounceCount++;
+      } else {
+        ball.vy=0; ball.vx*=0.985;
+      }
+    }
+    // A small platform at the right creates another surface to experiment with.
+    const platform={x:480,y:315,w:175,h:13};
+    if(ball.vy>0 && oldY+radius<=platform.y && ball.y+radius>=platform.y &&
+       ball.x+radius>platform.x && ball.x-radius<platform.x+platform.w){
+      ball.y=platform.y-radius;
+      ball.vy=-Math.abs(ball.vy)*v.e;
+      bounceCount++;
+    }
+    // Keep the ball within the visible lab.
+    if(ball.x-radius>W){ball.x=-radius;trail=[];}
+    if(ball.x< -radius) ball.x=-radius;
+    if(ball.x+radius>W-8){ball.x=W-8-radius;ball.vx=-Math.abs(ball.vx)*0.7;}
+    trail.push({x:ball.x,y:ball.y});
+    if(trail.length>24) trail.shift();
+    updateStats();
+  }
+  function updateStats(){
+    $('timeStat').textContent=elapsed.toFixed(2)+' s';
+    $('heightStat').textContent=Math.max(0,(floorY-radius-ball.y)/27).toFixed(2)+' m';
+    $('bounceStat').textContent=bounceCount;
+    $('velocityStat').textContent=Math.hypot(ball.vx,ball.vy).toFixed(2)+' m/s';
+  }
+  function draw(){
+    const v=values();
+    ctx.clearRect(0,0,W,H);
+    // Background grid
+    ctx.fillStyle='#09182a';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(116,157,197,.10)';ctx.lineWidth=1;
+    for(let x=20;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=20;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    // Floor
+    const grad=ctx.createLinearGradient(0,floorY,W,H);
+    grad.addColorStop(0,'#173755');grad.addColorStop(1,'#0c2138');
+    ctx.fillStyle=grad;ctx.fillRect(0,floorY,W,H-floorY);
+    ctx.strokeStyle='#58e1ef';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,floorY);ctx.lineTo(W,floorY);ctx.stroke();
+    // Ramp
+    rampEnd={x:260,y:rampStart.y-Math.tan(v.angle)*188};
+    ctx.strokeStyle='#6f86a5';ctx.lineWidth=13;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(rampStart.x,rampStart.y);ctx.lineTo(rampEnd.x,rampEnd.y);ctx.stroke();
+    ctx.strokeStyle='#a78bfa';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(rampStart.x,rampStart.y-7);ctx.lineTo(rampEnd.x,rampEnd.y-7);ctx.stroke();
+    // Platform
+    ctx.fillStyle='#254969';ctx.fillRect(480,315,175,13);
+    ctx.fillStyle='#58e1ef';ctx.fillRect(480,315,175,3);
+    // Labels
+    ctx.fillStyle='#9db0c9';ctx.font='12px system-ui';ctx.fillText('RAMP',95,340);
+    ctx.fillText('BOUNCE PLATFORM',480,302);
+    ctx.fillText('GROUND',16,430);
+    // Trail
+    for(let i=0;i<trail.length;i++){
+      const p=trail[i], alpha=(i+1)/trail.length;
+      ctx.beginPath();ctx.arc(p.x,p.y,radius*alpha*.72,0,Math.PI*2);
+      ctx.fillStyle=`rgba(88,225,239,${alpha*.25})`;ctx.fill();
+    }
+    // Ball and shadow
+    ctx.beginPath();ctx.ellipse(ball.x,floorY-2,18,5,0,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.25)';ctx.fill();
+    const ballGrad=ctx.createRadialGradient(ball.x-5,ball.y-6,2,ball.x,ball.y,radius+2);
+    ballGrad.addColorStop(0,'#ffffff');ballGrad.addColorStop(.22,'#9af3fa');ballGrad.addColorStop(1,'#0ea5b7');
+    ctx.beginPath();ctx.arc(ball.x,ball.y,radius,0,Math.PI*2);ctx.fillStyle=ballGrad;ctx.fill();
+    ctx.strokeStyle='#d6fcff';ctx.lineWidth=1.5;ctx.stroke();
+    // Gravity arrow
+    if(v.g>0.1){
+      const ax=Math.min(W-45,Math.max(42,ball.x+30)), ay=Math.min(H-80,Math.max(45,ball.y+25));
+      ctx.strokeStyle='#fbad68';ctx.fillStyle='#fbad68';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(ax,ay-25);ctx.lineTo(ax,ay+15);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ax-5,ay+8);ctx.lineTo(ax,ay+16);ctx.lineTo(ax+5,ay+8);ctx.stroke();
+      ctx.font='bold 11px system-ui';ctx.fillText('g',ax+8,ay+2);
+    }
+  }
+  function frame(ts){
+    if(!running)return;
+    if(!last)last=ts;
+    let dt=Math.min((ts-last)/1000,.035);last=ts;
+    // Substeps improve collision stability.
+    const n=Math.max(1,Math.ceil(dt/.008));
+    for(let i=0;i<n;i++)physics(dt/n);
+    draw();
+    requestAnimationFrame(frame);
+  }
+  $('playBtn').addEventListener('click',()=>{
+    running=!running;
+    $('playBtn').textContent=running?'❚❚ Pause':'▶ Play';
+    $('status').textContent=running?'RUNNING':'PAUSED';
+    if(running){last=0;requestAnimationFrame(frame);}
+  });
+  $('resetBtn').addEventListener('click',reset);
+  $('stepBtn').addEventListener('click',()=>{
+    if(running){running=false;$('playBtn').textContent='▶ Play';}
+    $('status').textContent='STEPPING';
+    for(let i=0;i<10;i++)physics(.01);
+    draw();
+    if(!running)$('status').textContent='PAUSED';
+  });
+  controls.forEach(id=>$(id).addEventListener('input',()=>{
+    updateLabels();
+    if(id==='ramp' || id==='speed') reset();
+  }));
+  reset();
+})();
+</script>
+</body>
+</html>
