@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Living Organisms Atlas</title>
+<style>
+:root{--bg:#071426;--panel:#0d2038;--panel2:#112944;--line:#25415f;--text:#edf5ff;--muted:#a9bfd6;--cyan:#62e6df;--blue:#78aaff;--green:#a5efbd;--pink:#ff9fc7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#133354 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:38px max(20px,calc((100% - 1320px)/2)) 28px;border-bottom:1px solid var(--line);background:#08172ad9}
+.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-size:.75rem}
+h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.06;margin:12px 0}header p{max-width:800px;color:var(--muted);margin:12px 0 0}
+main{max-width:1320px;margin:auto;padding:24px 18px 60px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.stat,.panel{background:linear-gradient(145deg,#102641,#0b1c31);border:1px solid var(--line);border-radius:18px}.stat{padding:16px}.stat b{display:block;font-size:1.8rem;color:var(--cyan)}.stat span{color:var(--muted);font-size:.85rem}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tab,button,select,input{font:inherit}.tab,button{border:1px solid var(--line);background:#102640;color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;transition:.18s}.tab:hover,button:hover{border-color:var(--cyan);transform:translateY(-1px)}.tab.active{background:var(--cyan);color:#05202a;border-color:var(--cyan);font-weight:800}
+.panel{padding:18px;margin-bottom:18px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}.field label{display:block;font-size:.8rem;color:var(--muted);margin:0 0 6px}.field input,.field select{width:100%;background:#07182b;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;min-width:0}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.panelhead h2{margin:0;font-size:1.2rem}.hint{color:var(--muted);font-size:.85rem}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:650px}table{border-collapse:collapse;width:100%;min-width:900px;background:#091a2d}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #1b3651;vertical-align:top}th{position:sticky;top:0;background:#17324f;color:#cce6ff;z-index:1;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}td{font-size:.88rem}tr:hover td{background:#112944}.name{font-weight:800;color:var(--text)}.latin{display:block;color:var(--muted);font-style:italic;font-size:.78rem}.pill{display:inline-block;border:1px solid #345b79;background:#142f4b;border-radius:999px;padding:3px 8px;font-size:.75rem;white-space:nowrap}.detailgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.property{background:#091a2d;border:1px solid #1d3955;border-radius:12px;padding:12px}.property small{display:block;color:var(--cyan);text-transform:uppercase;font-weight:800;letter-spacing:.05em;font-size:.68rem;margin-bottom:4px}.property div{font-weight:650}.property p{color:var(--muted);margin:5px 0 0;font-size:.8rem}
+.compare-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.compare-controls .field{flex:1;min-width:180px}.notice{border-left:3px solid var(--cyan);padding:10px 14px;background:#102841;color:var(--muted);border-radius:0 10px 10px 0;font-size:.88rem}
+footer{color:var(--muted);font-size:.8rem;text-align:center;padding:22px;border-top:1px solid var(--line)}
+@media(max-width:850px){.filters{grid-template-columns:1fr 1fr}.detailgrid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.filters,.detailgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}main{padding:16px 10px 40px}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Interactive biology reference</div><h1>Living Organisms Atlas</h1><p>Explore and compare 60 organisms across 50 biological properties—from cell type and kingdom to habitat, nutrition, reproduction, body systems, and ecological role. Search, filter, inspect a species, or compare two side by side.</p></header>
+<main>
+<div class="stats">
+ <div class="stat"><b id="organismCount">60</b><span>organisms in the atlas</span></div>
+ <div class="stat"><b>50</b><span>properties per organism</span></div>
+ <div class="stat"><b>3</b><span>major cell categories covered</span></div>
+ <div class="stat"><b>6</b><span>high-level groups represented</span></div>
+</div>
+<div class="tabs"><button class="tab active" data-view="explore">Explore organisms</button><button class="tab" data-view="compare">Compare two</button><button class="tab" data-view="properties">All 50 properties</button></div>
+<section id="exploreView">
+ <div class="panel">
+  <div class="filters">
+   <div class="field"><label for="search">Search name, cell type, habitat, or trait</label><input id="search" placeholder="Try: photosynthesis, ocean, prokaryote…"></div>
+   <div class="field"><label for="groupFilter">Major group</label><select id="groupFilter"><option value="">All groups</option></select></div>
+   <div class="field"><label for="cellFilter">Cell type</label><select id="cellFilter"><option value="">All cell types</option><option>Eukaryotic</option><option>Prokaryotic</option></select></div>
+   <div class="field"><label for="sortBy">Sort by</label><select id="sortBy"><option value="name">Common name</option><option value="group">Major group</option><option value="cell">Cell type</option><option value="habitat">Habitat</option></select></div>
+  </div>
+ </div>
+ <div class="panel"><div class="panelhead"><h2>Organism directory</h2><span class="hint" id="resultCount">60 results</span></div>
+  <div class="tablewrap"><table><thead><tr><th>Organism</th><th>Major group</th><th>Cell type</th><th>Cells</th><th>Nutrition</th><th>Habitat</th><th>Quick action</th></tr></thead><tbody id="organismRows"></tbody></table></div>
+ </div>
+ <div class="panel" id="detailPanel"><div class="panelhead"><h2>Organism profile</h2><span class="hint">Select “View profile” in the directory</span></div><div class="notice">A profile includes all 50 properties. Values are concise educational summaries; some vary by species, life stage, or environmental conditions.</div></div>
+</section>
+<section id="compareView" hidden>
+ <div class="panel"><div class="panelhead"><h2>Side-by-side comparison</h2><span class="hint">Choose any two organisms</span></div><div class="compare-controls">
+ <div class="field"><label for="compareA">Organism A</label><select id="compareA"></select></div><div class="field"><label for="compareB">Organism B</label><select id="compareB"></select></div><button id="compareBtn">Compare</button></div>
+ <div class="tablewrap" style="margin-top:16px"><table><thead><tr><th>Property</th><th id="headA">Organism A</th><th id="headB">Organism B</th></tr></thead><tbody id="compareRows"></tbody></table></div></div>
+</section>
+<section id="propertiesView" hidden>
+ <div class="panel"><div class="panelhead"><h2>The 50 properties</h2><span class="hint">Used for every organism profile</span></div><div class="detailgrid" id="propertyList"></div></div>
+</section>
+<div class="notice">Science note: “Prokaryotic” cells lack a membrane-bound nucleus; bacteria and archaea are prokaryotes. Animals, plants, fungi, and protists are eukaryotes. Viruses are not included because they are not cellular organisms. This is a simplified educational atlas, not a specialist taxonomic database.</div>
+</main><footer>Living Organisms Atlas · One self-contained HTML file · Works offline after saving</footer>
+<script>
+const propertyNames = [
+["Common name","The familiar name used in everyday language."],["Scientific name","A scientific binomial or commonly accepted scientific name."],["Domain","Broadest standard cellular classification."],["Kingdom / broad group","A useful high-level grouping; classifications can differ."],["Major group","The atlas category used for filtering."],["Cell type","Eukaryotic cells have a nucleus; prokaryotic cells do not."],["Cellularity","Whether the organism is single-celled or multicellular."],["Typical cell size","Approximate scale; varies greatly by cell."],["Nucleus","Whether cells have a membrane-bound nucleus."],["Membrane-bound organelles","Whether organelles such as mitochondria occur."],["Cell wall","Whether cells have a wall and its general material."],["Chloroplasts","Whether photosynthetic chloroplasts occur."],["Photosynthesis","Whether it makes sugars using light."],["Nutrition mode","How it obtains energy and carbon."],["Food source","Typical food or raw materials."],["Respiration","Common way energy is released; details vary."],["Oxygen relationship","Typical relationship with oxygen."],["Reproduction","Main reproductive methods."],["Sexual reproduction","Whether sexual reproduction occurs."],["Asexual reproduction","Whether asexual reproduction occurs."],["Development","Typical life cycle or growth pattern."],["Body organization","Main structural organization."],["Symmetry","Typical body symmetry, if applicable."],["Skeleton / support","Main structural support."],["Movement","Typical means of movement."],["Nervous system","Presence and general complexity."],["Circulatory system","How internal transport works."],["Respiratory structures","Structures or process for gas exchange."],["Digestive system","How food is processed."],["Excretory system","How waste is removed."],["Habitat","Typical living environment."],["Biome / ecosystem","Common ecosystem."],["Geographic range","Broad natural distribution."],["Temperature range","Typical conditions, not strict limits."],["Water requirement","Typical relationship with water."],["Osmoregulation","How water and salts are balanced."],["Typical size","Approximate adult size or colony scale."],["Typical lifespan","Highly variable typical lifespan."],["Diet / energy input","Main diet or energy source."],["Trophic role","Role in food webs."],["Ecological role","Effect on its ecosystem."],["Predators / threats","Representative threats."],["Defence","Typical protective adaptations."],["Senses / response","How it detects and responds to surroundings."],["Communication","Common signalling method, if known."],["Body covering","Outer surface or protective covering."],["Special adaptation","Notable adaptation."],["Human importance","A representative benefit, risk, or use."],["Conservation status","Broad status; not a formal global assessment."],["Interesting fact","A concise distinctive fact."]
+];
+const templates = {
+ Animal:{domain:"Eukarya",kingdom:"Animalia",cell:"Eukaryotic",cellularity:"Multicellular",nucleus:"Present",organelles:"Present, including mitochondria",wall:"Absent",chloroplast:"Absent",photo:"No",nutrition:"Heterotrophic; ingests food",respiration:"Cellular respiration; pathway depends on species",oxygen:"Usually aerobic",sexual:"Usually yes",asexual:"In some groups",body:"Specialized tissues and organs",digest:"Usually a digestive tract or cavity",excretory:"Kidneys, nephridia, or other specialized structures",water:"Needs water; tolerance varies",osmosis:"Specialized regulation varies by habitat",trophic:"Consumer; role varies",senses:"Sensory cells or organs",communication:"Visual, chemical, sound, or touch signals",cover:"Skin, scales, feathers, fur, shell, or exoskeleton",conservation:"Varies by species; check current assessments"},
+ Plant:{domain:"Eukarya",kingdom:"Plantae",cell:"Eukaryotic",cellularity:"Multicellular",nucleus:"Present",organelles:"Present, including mitochondria",wall:"Present; mainly cellulose",chloroplast:"Present in photosynthetic tissues",photo:"Yes, in green tissues",nutrition:"Mostly autotrophic by photosynthesis",respiration:"Aerobic cellular respiration",oxygen:"Usually aerobic",sexual:"Often yes",asexual:"Common in many plants",body:"Roots, stems, leaves, or simpler plant body",digest:"No digestive tract",excretory:"Gases and wastes diffuse or are stored/released",water:"Water required; adaptations vary",osmosis:"Water balance through membranes and tissues",trophic:"Producer",senses:"Responds to light, gravity, touch, and chemicals",communication:"Chemical signals; some use scents or electrical signals",cover:"Cuticle; bark or other tissues in many species",conservation:"Varies by species and region"},
+ Fungus:{domain:"Eukarya",kingdom:"Fungi",cell:"Eukaryotic",cellularity:"Mostly multicellular; yeasts are single-celled",nucleus:"Present",organelles:"Present, including mitochondria",wall:"Present; mainly chitin and glucans",chloroplast:"Absent",photo:"No",nutrition:"Absorbs nutrients after external digestion",respiration:"Mostly aerobic; some can ferment",oxygen:"Often aerobic; some tolerate low oxygen",sexual:"In many species",asexual:"Common via spores or budding",body:"Hyphae forming a mycelium, or single cells",digest:"External digestion then absorption",excretory:"Waste diffuses or is released",water:"Moisture is often important",osmosis:"Water moves across cell membranes",trophic:"Decomposer, parasite, or mutualist",senses:"Responds to nutrients, moisture, and chemicals",communication:"Chemical signalling and growth responses",cover:"Chitin-rich cell wall",conservation:"Varies; many are poorly assessed"},
+ Protist:{domain:"Eukarya",kingdom:"Often Protista in broad school-level usage",cell:"Eukaryotic",cellularity:"Mostly single-celled; some multicellular",nucleus:"Present",organelles:"Present",wall:"Varies; some have walls or shells",chloroplast:"Present in photosynthetic groups only",photo:"Some do; others consume or absorb food",nutrition:"Autotrophic, heterotrophic, or mixed",respiration:"Usually cellular respiration",oxygen:"Varies; aerobic and anaerobic examples",sexual:"In some groups",asexual:"Common, often by cell division",body:"Single cell or simple multicellular body",digest:"Food vacuoles or absorption; varies",excretory:"Diffusion and/or contractile vacuoles",water:"Many need water or moist environments",osmosis:"Contractile vacuoles in some freshwater forms",trophic:"Producer, consumer, or decomposer",senses:"Cell-level responses; some detect light or chemicals",communication:"Chemical signals and cell interactions",cover:"Cell membrane; sometimes pellicle, wall, or shell",conservation:"Varies; broad group is very diverse"},
+ Bacteria:{domain:"Bacteria",kingdom:"Bacteria (traditional school-level grouping)",cell:"Prokaryotic",cellularity:"Single-celled; may form colonies",nucleus:"Absent; DNA in nucleoid region",organelles:"No membrane-bound organelles",wall:"Usually peptidoglycan; some lack a wall",chloroplast:"Absent",photo:"Some groups photosynthesize",nutrition:"Autotrophic or heterotrophic",respiration:"Aerobic, anaerobic, or fermentation depending on species",oxygen:"Varies widely",sexual:"No true sexual reproduction; DNA exchange can occur",asexual:"Usually binary fission",body:"Single prokaryotic cell",digest:"Absorbs nutrients; enzymes may act outside cell",excretory:"Waste crosses membrane",water:"Needs suitable water availability",osmosis:"Membrane transport and cellular regulation",trophic:"Producer, consumer, decomposer, or symbiont",senses:"Senses chemicals, nutrients, and environmental changes",communication:"Chemical signalling; quorum sensing in some",cover:"Cell membrane; usually wall, sometimes capsule",conservation:"Most are not assessed individually"},
+ Archaea:{domain:"Archaea",kingdom:"Archaea",cell:"Prokaryotic",cellularity:"Single-celled; may form colonies",nucleus:"Absent; DNA in nucleoid region",organelles:"No membrane-bound organelles",wall:"No peptidoglycan; wall types vary",chloroplast:"Absent",photo:"Some use light-driven energy systems; not plant-like chloroplast photosynthesis",nutrition:"Autotrophic or heterotrophic",respiration:"Varies; some use unusual metabolic pathways",oxygen:"Aerobic or anaerobic, depending on species",sexual:"No true sexual reproduction; DNA exchange can occur",asexual:"Usually cell division",body:"Single prokaryotic cell",digest:"Absorbs nutrients",excretory:"Waste crosses membrane",water:"Varies; many live in ordinary habitats too",osmosis:"Membrane transport and cellular regulation",trophic:"Producer, consumer, or decomposer",senses:"Responds to chemical and physical conditions",communication:"Chemical signalling in some groups",cover:"Cell membrane with distinctive lipids; wall varies",conservation:"Most are not assessed individually"}
+};
+const raw = [
+["Human","Homo sapiens","Animal","Terrestrial","Omnivore","Worldwide, many environments","Walking upright; complex language","~1.5–2 m tall"],
+["Domestic dog","Canis lupus familiaris","Animal","Terrestrial","Omnivore/carnivore-leaning","Human-associated habitats worldwide","Acute smell; domesticated","~0.2–1 m at shoulder"],
+["Domestic cat","Felis catus","Animal","Terrestrial","Carnivore","Worldwide with humans","Retractable claws; strong night vision","~23–25 cm at shoulder"],
+["African elephant","Loxodonta africana","Animal","Savanna/forest","Herbivore","Sub-Saharan Africa","Trunk; large ears help lose heat","~3–4 m at shoulder"],
+["Blue whale","Balaenoptera musculus","Animal","Marine","Carnivore; filters krill","Oceans worldwide","Largest known animal; baleen filter-feeding","~24–30 m"],
+["Great white shark","Carcharodon carcharias","Animal","Marine","Carnivore","Temperate coastal and offshore seas","Rows of replaceable teeth","~4–6 m"],
+["Clownfish","Amphiprion ocellaris","Animal","Coral reef","Omnivore","Indo-Pacific reefs","Lives among sea anemone tentacles","~8–11 cm"],
+["Common octopus","Octopus vulgaris","Animal","Marine","Carnivore","Seafloor in many warm-temperate seas","Eight arms; camouflage","~0.6–1 m arm span"],
+["Honeybee","Apis mellifera","Animal","Terrestrial","Nectar and pollen","Many regions with flowering plants","Waggle dance; colony life","~1–1.5 cm"],
+["Monarch butterfly","Danaus plexippus","Animal","Terrestrial","Caterpillar eats milkweed; adult nectar","Americas; migratory populations","Long-distance migration","~8–10 cm wingspan"],
+["Earthworm","Lumbricus terrestris","Animal","Soil","Detritivore","Moist soils in many regions","Improves soil structure","~9–30 cm"],
+["Garden snail","Cornu aspersum","Animal","Terrestrial","Herbivore/detritivore","Gardens and moist habitats","Protective coiled shell","~2–4 cm shell"],
+["Housefly","Musca domestica","Animal","Terrestrial","Omnivorous scavenger","Worldwide near people","Sponging mouthparts; rapid life cycle","~6–7 mm"],
+["Red kangaroo","Osphranter rufus","Animal","Desert/grassland","Herbivore","Australia","Powerful hopping; marsupial pouch","~1.3–1.6 m body"],
+["Emperor penguin","Aptenodytes forsteri","Animal","Polar marine","Carnivore; fish and krill","Antarctica","Dense feathers; huddling in cold","~1.1–1.3 m"],
+["Green sea turtle","Chelonia mydas","Animal","Marine/coastal","Mostly herbivore as adult","Tropical and subtropical seas","Migrates between feeding and nesting sites","~0.8–1.2 m shell"],
+["Bald eagle","Haliaeetus leucocephalus","Animal","Forest/coastal","Carnivore; fish common","North America","Excellent eyesight; hooked beak","~0.7–1 m body"],
+["Poison dart frog","Dendrobatidae","Animal","Tropical forest","Small invertebrates","Central and South American tropics","Bright warning colours in some species","~1–6 cm"],
+["Nile crocodile","Crocodylus niloticus","Animal","Freshwater/wetlands","Carnivore","Sub-Saharan Africa and Nile region","Powerful bite; eyes and nostrils high on head","~3–5 m"],
+["Axolotl","Ambystoma mexicanum","Animal","Freshwater","Carnivore; small aquatic prey","Native to lake canals near Mexico City","Keeps external gills; regeneration ability","~15–30 cm"],
+["Oak tree","Quercus robur","Plant","Forest","Autotroph","Europe and western Asia","Acorns; long-lived woody tree","Often 20–40 m tall"],
+["Sunflower","Helianthus annuus","Plant","Grassland/farms","Autotroph","Native to North America; cultivated widely","Flower heads track sunlight when young","~1–3 m tall"],
+["Venus flytrap","Dionaea muscipula","Plant","Wetland","Photosynthesis plus captured insects for minerals","Nutrient-poor wetlands in the Carolinas","Snap-trap leaves","~10–30 cm tall"],
+["Saguaro cactus","Carnegiea gigantea","Plant","Desert","Autotroph","Sonoran Desert","Stores water; spines reduce water loss","Can exceed 10 m"],
+["Water lily","Nymphaea alba","Plant","Freshwater","Autotroph","Ponds and slow waters in parts of Europe","Floating leaves with air spaces","Leaves often 10–30 cm wide"],
+["Moss","Bryophyta (mosses)","Plant","Moist ground/rocks","Autotroph","Worldwide, especially damp places","No true roots; absorbs water across surfaces","Usually a few mm to cm tall"],
+["Pine tree","Pinus sylvestris","Plant","Forest","Autotroph","Europe and northern Asia","Needle leaves; cones","~10–35 m tall"],
+["Rice","Oryza sativa","Plant","Wetlands/farms","Autotroph","Cultivated worldwide","Grass adapted to flooded cultivation","~0.5–1.5 m tall"],
+["Kelp","Laminaria digitata","Protist","Marine","Autotroph","Cool North Atlantic coasts","Large seaweed with holdfast and blades","Can reach several metres"],
+["Green algae Chlamydomonas","Chlamydomonas reinhardtii","Protist","Freshwater","Autotroph","Ponds and moist soil","Single cell with two flagella","~10 μm"],
+["Amoeba","Amoeba proteus","Protist","Freshwater","Heterotroph; engulfs prey","Freshwater ponds","Pseudopods for movement and feeding","~200–700 μm"],
+["Paramecium","Paramecium caudatum","Protist","Freshwater","Heterotroph; bacteria and particles","Freshwater","Cilia move and sweep food inward","~100–300 μm"],
+["Euglena","Euglena gracilis","Protist","Freshwater","Mixotroph; photosynthesis and food uptake","Ponds and nutrient-rich water","Flagellum; eyespot detects light","~35–55 μm"],
+["Plasmodium parasite","Plasmodium falciparum","Protist","Host-dependent","Parasitic; uses host resources","Human and mosquito hosts in tropical regions","Causes malaria","Microscopic"],
+["Baker's yeast","Saccharomyces cerevisiae","Fungus","Food/fruit surfaces","Absorbs sugars","Worldwide; sugary substrates","Budding; fermentation makes carbon dioxide","~5–10 μm"],
+["Button mushroom","Agaricus bisporus","Fungus","Soil/compost","Decomposer; absorbs nutrients","Grassland and cultivated compost","Produces visible fruiting body","Cap often 5–10 cm"],
+["Bread mold","Rhizopus stolonifer","Fungus","Food/soil","Decomposer","Worldwide on damp organic matter","Fast-growing hyphae and spores","Colony can spread across food"],
+["Penicillium mold","Penicillium chrysogenum","Fungus","Soil/food/indoor surfaces","Decomposer","Worldwide","Some species produce useful antibiotics","Microscopic hyphae; fuzzy colonies"],
+["Fly agaric mushroom","Amanita muscaria","Fungus","Forest","Mycorrhizal partner of trees","Northern temperate forests","Red cap with pale spots; poisonous","Cap often 5–20 cm"],
+["Lactobacillus","Lactobacillus delbrueckii","Bacteria","Milk/fermented foods","Ferments sugars","Milk and fermented foods","Produces lactic acid","~1–10 μm"],
+["Escherichia coli","Escherichia coli","Bacteria","Intestine/water/soil","Heterotroph","Many warm-blooded animal intestines; environment","Some strains helpful, others cause illness","~1–3 μm long"],
+["Streptococcus bacterium","Streptococcus pneumoniae","Bacteria","Human respiratory tract","Heterotroph; host-associated","Humans; some strains cause disease","Spherical cells in pairs/chains","~0.5–1 μm"],
+["Cyanobacterium","Anabaena variabilis","Bacteria","Freshwater/soil","Photosynthetic autotroph","Freshwater and damp soils","Some relatives fix nitrogen","Filaments of microscopic cells"],
+["Salmonella","Salmonella enterica","Bacteria","Intestine/food/water","Heterotroph; some strains pathogenic","Animals and contaminated food/water","Can cause foodborne illness","~2–5 μm long"],
+["Thermus aquaticus","Thermus aquaticus","Bacteria","Hot springs","Heterotroph","Hot springs","Heat-stable enzymes used in biotechnology","~2–10 μm"],
+["Methanogen archaeon","Methanobrevibacter smithii","Archaea","Animal gut","Anaerobic; produces methane","Oxygen-poor guts and sediments","Makes methane during metabolism","Microscopic"],
+["Halophile archaeon","Halobacterium salinarum","Archaea","Salt lake/saltern","Uses light-driven protein for energy; not chloroplast photosynthesis","Extremely salty water","Can appear reddish-purple","Microscopic"],
+["Sulfolobus archaeon","Sulfolobus solfataricus","Archaea","Hot acidic spring","Chemolithotroph; uses inorganic chemicals","Hot, acidic volcanic environments","Thrives in hot acidic conditions","Microscopic"],
+["Tardigrade","Hypsibius exemplaris","Animal","Moist moss/sediment","Small food particles and microbes","Moss, soil, freshwater, marine habitats","Can enter a dehydrated tun state","~0.1–1 mm"],
+["Fruit bat","Pteropus vampyrus","Animal","Tropical forest","Mostly fruit/nectar","Southeast Asian forests and islands","Uses flight; important seed disperser","Large wingspan up to ~1.5 m"],
+["Sea star","Asterias rubens","Animal","Marine seafloor","Carnivore; molluscs and other prey","North Atlantic seafloor","Tube feet; can regrow some arms","~10–30 cm"],
+["Coral polyp","Acropora millepora","Animal","Coral reef","Small prey plus algal symbionts","Tropical reefs","Builds calcium-carbonate reef framework","Individual polyp few mm"],
+["Lobster","Homarus americanus","Animal","Marine seafloor","Omnivore/scavenger","Northwest Atlantic","Hard exoskeleton; moults to grow","~20–60 cm"],
+["Salmon","Salmo salar","Animal","River/ocean","Carnivore","North Atlantic rivers and ocean","Migrates between freshwater and sea","~70–100 cm"],
+["Common frog","Rana temporaria","Animal","Wetland/woodland","Insectivore","Europe","Metamorphosis from tadpole","~6–10 cm"],
+["Chicken","Gallus gallus domesticus","Animal","Farm/grassland","Omnivore","Domesticated worldwide","Feathers; lays hard-shelled eggs","~30–50 cm tall"],
+["Dandelion","Taraxacum officinale","Plant","Lawn/meadow","Autotroph","Many temperate regions","Wind-dispersed seeds","~5–40 cm tall"],
+["Pea plant","Pisum sativum","Plant","Fields/gardens","Autotroph","Cultivated worldwide","Root nodules can host nitrogen-fixing bacteria","~0.3–2 m"],
+["Redwood tree","Sequoia sempervirens","Plant","Temperate rainforest","Autotroph","Coastal California and Oregon","Among the tallest tree species","Can exceed 100 m"],
+["Lichen","Evernia prunastri","Fungus","Tree bark/rocks","Fungus partnered with photosynthetic alga/cyanobacterium","Air-exposed surfaces in many regions","Symbiosis of fungi and photosynthetic partner","Usually centimetres across"]
+];
+function build(r){
+ const [name,sci,type,hab,food,range,adapt,size]=r, t=templates[type];
+ const group=type==="Animal"?"Animals":type==="Plant"?"Plants":type==="Fungus"?"Fungi":type==="Protist"?"Protists":type==="Bacteria"?"Bacteria":"Archaea";
+ const d={
+ "Common name":name,"Scientific name":sci,"Domain":t.domain,"Kingdom / broad group":t.kingdom,"Major group":group,"Cell type":t.cell,"Cellularity":t.cellularity,
+ "Typical cell size":type==="Bacteria"||type==="Archaea"?"Usually ~0.5–5 μm":type==="Protist"?"Often ~5–500 μm":type==="Plant"?"Often ~10–100 μm":type==="Fungus"?"Yeast ~5–10 μm; hyphae vary":"Varies; many animal cells ~10–100 μm",
+ "Nucleus":t.nucleus,"Membrane-bound organelles":t.organelles,"Cell wall":t.wall,"Chloroplasts":t.chloroplast,"Photosynthesis":t.photo,
+ "Nutrition mode":type==="Animal"?"Heterotrophic":type==="Plant"?"Mostly autotrophic":type==="Fungus"?"Absorptive heterotroph":type==="Protist"?"Varied; some mixotrophic":type==="Bacteria"?"Varied; autotrophic or heterotrophic":"Varied; autotrophic or heterotrophic",
+ "Food source":food,"Respiration":t.respiration,"Oxygen relationship":t.oxygen,"Reproduction":type==="Animal"?"Usually sexual; details vary by species":type==="Plant"?"Seeds, spores, or vegetative growth, depending on group":type==="Fungus"?"Spores or budding; sexual and/or asexual":type==="Protist"?"Usually cell division; some sexual cycles":type==="Bacteria"?"Usually binary fission":"Usually cell division",
+ "Sexual reproduction":t.sexual,"Asexual reproduction":t.asexual,"Development":type==="Animal"?"Embryonic development; some have metamorphosis":type==="Plant"?"Germination and growth; flowering/seed or spore cycle varies":type==="Fungus"?"Spore germination or budding; mycelial growth":type==="Protist"?"Cell growth and division; some complex life cycles":"Cell growth and division",
+ "Body organization":t.body,"Symmetry":type==="Animal"?"Bilateral in many; radial or asymmetrical in some":type==="Plant"?"Usually organized around shoots/roots; flowers may be radial or bilateral":type==="Fungus"?"Usually filamentous or unicellular; no animal-like symmetry":type==="Protist"?"Varies; often irregular or simple symmetry":"Not applicable at organism scale; cell shape varies",
+ "Skeleton / support":type==="Animal"?"Internal skeleton, shell, hydrostatic support, or exoskeleton; varies":type==="Plant"?"Cellulose cell walls and turgor; woody tissues in some":"Cell wall or cell shape provides support",
+ "Movement":type==="Animal"?"Muscles, cilia, flagella, or passive movement; varies":type==="Plant"?"Usually rooted; growth can respond to stimuli":type==="Protist"?"Some swim using cilia, flagella, or pseudopods":type==="Fungus"?"Usually grows through substrate; spores disperse":"Some move with flagella; many are stationary",
+ "Nervous system":type==="Animal"?"Present in many animals; sponges lack a true nervous system": "Absent",
+ "Circulatory system":type==="Animal"?"Present in many; open or closed; some lack one":"Absent; transport by diffusion or internal flow",
+ "Respiratory structures":type==="Animal"?"Gills, lungs, tracheae, skin, or body surface; varies":"Gas exchange mostly across cell surface or plant tissues",
+ "Digestive system":t.digest,"Excretory system":t.excretory,"Habitat":hab,"Biome / ecosystem":hab,"Geographic range":range,
+ "Temperature range":"Species-specific; generally matches its habitat; not a strict limit","Water requirement":t.water,"Osmoregulation":t.osmosis,"Typical size":size,"Typical lifespan":"Species-specific; varies with environment and care",
+ "Diet / energy input":food,"Trophic role":type==="Plant"?"Primary producer":type==="Fungus"?"Usually decomposer or symbiotic partner":type==="Protist"?"Producer, consumer, parasite, or mixed":type==="Bacteria"||type==="Archaea"?"Producer, decomposer, consumer, or symbiont":"Consumer",
+ "Ecological role":type==="Plant"?"Makes biomass, provides food and habitat":type==="Fungus"?"Recycles nutrients or forms partnerships":type==="Protist"?"Food-web member; some produce oxygen or cause disease":type==="Bacteria"||type==="Archaea"?"Nutrient cycling, symbiosis, and diverse ecosystem processes":"Part of food webs; may pollinate, disperse seeds, or regulate populations",
+ "Predators / threats":type==="Plant"?"Herbivores, pathogens, habitat loss":type==="Fungus"?"Other microbes, environmental changes, habitat loss":type==="Bacteria"||type==="Archaea"?"Viruses, competing microbes, environmental stress":"Predators, disease, habitat change, and human activity",
+ "Defence":type==="Animal"?"Escape, camouflage, shells, toxins, or group behaviour; varies":type==="Plant"?"Thorns, chemicals, tough tissues, or rapid regrowth; varies":type==="Fungus"?"Chemical compounds, tough walls, spores": "Cell envelope, biofilms, chemical defenses, or rapid growth; varies",
+ "Senses / response":t.senses,"Communication":t.communication,"Body covering":t.cover,"Special adaptation":adapt,"Human importance":type==="Animal"?"Ecological role, food, companionship, research, or possible conflict; species-specific":type==="Plant"?"Food, materials, habitat, medicines, or ecological services; species-specific":type==="Fungus"?"Decomposition, food, fermentation, medicines, or disease; species-specific":"Important in nutrient cycling, food webs, biotechnology, or health; species-specific",
+ "Conservation status":t.conservation,"Interesting fact":adapt
+ };
+ return {name,sci,group,cell:t.cell,cellularity:t.cellularity,nutrition:d["Nutrition mode"],habitat:hab,properties:d};
+}
+const organisms=raw.map(build);
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function fillSelect(el,items){el.innerHTML=items.map((x,i)=>`<option value="${i}">${esc(x.name)} — ${esc(x.sci)}</option>`).join("")}
+function renderRows(){
+ const q=$("search").value.toLowerCase(), group=$("groupFilter").value, cell=$("cellFilter").value, sort=$("sortBy").value;
+ let list=organisms.filter(o=>(!group||o.group===group)&&(!cell||o.cell===cell)&&(!q||Object.values(o.properties).join(" ").toLowerCase().includes(q)));
+ list.sort((a,b)=>String(sort==="name"?a.name:sort==="group"?a.group:sort==="cell"?a.cell:a.habitat).localeCompare(String(sort==="name"?b.name:sort==="group"?b.group:sort==="cell"?b.cell:b.habitat)));
+ $("resultCount").textContent=`${list.length} result${list.length===1?"":"s"}`;
+ $("organismRows").innerHTML=list.map(o=>`<tr><td><span class="name">${esc(o.name)}</span><span class="latin">${esc(o.sci)}</span></td><td><span class="pill">${esc(o.group)}</span></td><td>${esc(o.cell)}</td><td>${esc(o.cellularity)}</td><td>${esc(o.nutrition)}</td><td>${esc(o.habitat)}</td><td><button onclick="showProfile('${esc(o.name).replace(/'/g,"\\'")}')">View profile</button></td></tr>`).join("")||`<tr><td colspan="7">No organisms match. Try changing your filters.</td></tr>`;
+}
+function showProfile(name){
+ const o=organisms.find(x=>x.name===name);if(!o)return;
+ $("detailPanel").innerHTML=`<div class="panelhead"><h2>${esc(o.name)} <span class="latin">${esc(o.sci)}</span></h2><span class="pill">${esc(o.group)} · ${esc(o.cell)}</span></div><div class="detailgrid">${propertyNames.map(([p,desc])=>`<div class="property"><small>${esc(p)}</small><div>${esc(o.properties[p]||"Not specified")}</div><p>${esc(desc)}</p></div>`).join("")}</div>`;
+ $("detailPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+window.showProfile=showProfile;
+function renderCompare(){
+ const a=organisms[+$("compareA").value],b=organisms[+$("compareB").value];
+ $("headA").innerHTML=`${esc(a.name)}<span class="latin">${esc(a.sci)}</span>`;$("headB").innerHTML=`${esc(b.name)}<span class="latin">${esc(b.sci)}</span>`;
+ $("compareRows").innerHTML=propertyNames.map(([p])=>{let av=a.properties[p]||"Not specified",bv=b.properties[p]||"Not specified";return `<tr><th>${esc(p)}</th><td style="${av===bv?'':'color:#a5efbd'}">${esc(av)}</td><td style="${av===bv?'':'color:#a5efbd'}">${esc(bv)}</td></tr>`}).join("");
+}
+function renderPropertyList(){$("propertyList").innerHTML=propertyNames.map(([n,d],i)=>`<div class="property"><small>${String(i+1).padStart(2,"0")} · ${esc(n)}</small><div>${esc(d)}</div></div>`).join("")}
+const groups=[...new Set(organisms.map(o=>o.group))].sort();
+$("groupFilter").innerHTML+=[...groups].map(g=>`<option>${esc(g)}</option>`).join("");
+fillSelect($("compareA"),organisms);fillSelect($("compareB"),organisms);$("compareB").value="1";
+["search","groupFilter","cellFilter","sortBy"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",renderRows));
+$("compareBtn").addEventListener("click",renderCompare);
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["explore","compare","properties"].forEach(v=>$(v+"View").hidden=v!==btn.dataset.view);if(btn.dataset.view==="compare")renderCompare();}));
+$("organismCount").textContent=organisms.length;renderRows();renderPropertyList();renderCompare();showProfile("Human");
+</script>
+</body></html>
