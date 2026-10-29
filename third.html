@@ -1,97 +1,502 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport"
-            content="width=device-width,initial-scale=1"><title>Molecule &
-            Bonding Lab</title>
-        <style>
-:root{--bg:#0b1020;--panel:#141c31;--text:#eef4ff;--muted:#a8b6d3;--line:#2c3a59;--accent:#7c9cff;--good:#5be0a1;--warn:#ffd166;--bad:#ff7b8b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#1d2b50 0,#0b1020 48%);color:var(--text);font:15px/1.5 system-ui,Segoe UI,Arial,sans-serif}header{padding:28px 20px 18px;text-align:center}h1{margin:0;font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.04em}header p{max-width:850px;margin:10px auto;color:var(--muted)}main{max-width:1250px;margin:auto;padding:0 16px 36px;display:grid;grid-template-columns:minmax(280px,370px) 1fr;gap:16px}.panel{background:linear-gradient(160deg,#17213aee,#11192bee);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 14px 40px #0003;min-width:0}h2{font-size:1.15rem;margin:0 0 12px}h3{font-size:1rem;margin:16px 0 8px}.muted{color:var(--muted)}label{display:block;font-weight:650;margin:12px 0 6px}select,input,button{font:inherit}select,input{width:100%;padding:11px 12px;border-radius:11px;background:#0d1528;color:var(--text);border:1px solid #3a4a6d;outline:none}select:focus,input:focus{border-color:var(--accent)}button{cursor:pointer;border:1px solid #526ba0;background:#26385f;color:white;padding:10px 13px;border-radius:11px;font-weight:700;transition:.18s}button:hover{filter:brightness(1.15);transform:translateY(-1px)}button.primary{background:linear-gradient(120deg,#6687ff,#8a66e8);border:0}button.danger{background:#482535;border-color:#814052}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.fieldrow{display:grid;grid-template-columns:1fr 100px;gap:9px}.hint{font-size:.87rem;color:var(--muted);margin:7px 0}.stage{min-height:265px;border:1px dashed #435578;border-radius:16px;background:radial-gradient(circle at center,#1b2b49,#0c1427);display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;padding:24px;position:relative;overflow:hidden}.atom{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#08101e;font-weight:900;box-shadow:inset -8px -10px 18px #0003,inset 5px 6px 15px #fff6,0 8px 22px #0005;position:relative;flex-shrink:0;border:2px solid #ffffff70}.atom .num{font-size:.67rem;line-height:1.2}.atom .sym{font-size:1.8rem;line-height:1.15}.atom .name{font-size:.65rem;max-width:82px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.atom .count{position:absolute;top:-8px;right:-6px;background:#fff;color:#17213a;border-radius:99px;padding:2px 7px;font-size:.72rem;border:2px solid #263654}.empty{color:var(--muted);text-align:center;max-width:360px}.formula{font-size:2rem;font-weight:850;letter-spacing:.02em;text-align:center;margin:12px 0}.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.stat{padding:12px;border:1px solid var(--line);background:#0e172a;border-radius:12px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.2rem}.status{border-radius:12px;padding:13px 14px;margin-top:12px;border:1px solid var(--line);background:#10192b}.status.good{border-color:#277b5d;background:#102a27}.status.warn{border-color:#856d30;background:#2b2515}.status.bad{border-color:#864153;background:#2c1722}.tag{display:inline-block;padding:3px 8px;border-radius:99px;font-size:.78rem;font-weight:800;background:#293957;margin-right:5px}.formula-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.molecule{border:1px solid var(--line);background:#10192b;padding:10px;border-radius:12px;text-align:left;width:100%}.molecule strong{display:block}.molecule span{color:var(--muted);font-size:.82rem}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}th{color:#cbd7f2}details{border:1px solid var(--line);border-radius:12px;padding:11px;margin-top:10px}summary{cursor:pointer;font-weight:750}footer{max-width:1200px;margin:0 auto;padding:0 18px 30px;color:var(--muted);font-size:.88rem}@media(max-width:850px){main{grid-template-columns:1fr}}@media(max-width:460px){.summary{grid-template-columns:1fr}.atom{width:75px;height:75px}}
-</style></head><body>
-        <header><h1>⚛️ Molecule & Bonding Lab</h1><p>Build a formula, inspect
-                valence electrons, and explore whether a familiar substance is
-                known. The bonding checker is an educational estimate—not proof
-                that a compound can or cannot exist.</p></header>
-        <main>
-            <section class="panel"><h2>1. Build your substance</h2><label
-                    for="element">Choose an element</label><select
-                    id="element"></select><div class="fieldrow"><div><label
-                            for="quantity">Number of atoms to add</label><input
-                            id="quantity" type="number" min="1" max="20"
-                            value="1"></div><div
-                        style="display:flex;align-items:end"><button
-                            class="primary" id="add" style="width:100%">＋
-                            Add</button></div></div><p class="hint">Add the same
-                    element more than once (for example, two H atoms for H₂).
-                    Each element has a unique color and its atomic
-                    number.</p><div class="buttons"><button id="remove">Remove
-                        last</button><button id="clear" class="danger">Clear
-                        all</button><button id="check" class="primary">Analyze
-                        bonding</button></div><h3>Quick examples</h3><div
-                    class="formula-list"
-                    id="examples"></div></section>
-            <section class="panel"><h2>2. Atom view</h2><div class="stage"
-                    id="stage"><div class="empty">Choose an element and press
-                        <b>Add</b> to start building.</div></div><div
-                    class="formula" id="formula">No atoms yet</div><div
-                    class="summary"><div class="stat"><small>Total
-                            atoms</small><strong
-                            id="atomTotal">0</strong></div><div
-                        class="stat"><small>Total valence e⁻</small><strong
-                            id="valenceTotal">0</strong></div><div
-                        class="stat"><small>Unique elements</small><strong
-                            id="elementTotal">0</strong></div></div><div
-                    id="analysis" class="status"><b>Waiting for your
-                        structure.</b><p class="muted">Add atoms to see a
-                        formula and bonding guidance.</p></div><h3>Atoms in your
-                    build</h3><div
-                    class="tablewrap"><table><thead><tr><th>Element</th><th>Atomic
-                                    no.</th><th>Atoms</th><th>Valence e⁻
-                                    each*</th><th>Valence e⁻
-                                    total*</th></tr></thead><tbody
-                            id="atomRows"><tr><td colspan="5" class="muted">No
-                                    atoms
-                                    added.</td></tr></tbody></table></div></section>
-            <section class="panel" style="grid-column:1/-1"><h2>3. Known
-                    substance library</h2><p class="muted">Search by name or
-                    formula, then click a result to load its atoms.</p><input
-                    id="search"
-                    placeholder="Search: water, CO2, sodium chloride…"><div
-                    class="formula-list" id="library"
-                    style="margin-top:12px"></div></section>
-            <section class="panel" style="grid-column:1/-1"><h2>4. Understand
-                    the bonding result</h2><div class="formula-list"><div
-                        class="stat"><b>Covalent</b><p class="muted">Atoms share
-                            electron pairs. Many main-group atoms tend toward a
-                            duet (H) or octet, but there are
-                            exceptions.</p></div><div
-                        class="stat"><b>Ionic</b><p class="muted">Electrons
-                            transfer and oppositely charged ions attract, often
-                            forming a crystal lattice rather than a single
-                            molecule.</p></div><div
-                        class="stat"><b>Metallic</b><p class="muted">Metal atoms
-                            form a lattice with delocalized electrons. Metallic
-                            bonding is not judged by dividing valence electrons
-                            by 8.</p></div></div><p
-                    class="hint"><b>Important:</b> “total valence electrons
-                    divisible by 8” is not a universal bonding rule. Octet
-                    counting is a useful pattern for many simple covalent
-                    molecules, but it cannot prove a substance exists or is
-                    impossible. Transition metals, odd-electron molecules (NO),
-                    expanded-octet species (SF₆), ions, and solids need more
-                    detailed chemistry.</p></section>
-        </main>
-        <script>
-const E=[
-[1,'H','Hydrogen',1,'#f4f7ff'],[2,'He','Helium',2,'#d8e7ff'],[3,'Li','Lithium',1,'#ff9e80'],[4,'Be','Beryllium',2,'#ffd166'],[5,'B','Boron',3,'#b8e986'],[6,'C','Carbon',4,'#aab2bd'],[7,'N','Nitrogen',5,'#7aa7ff'],[8,'O','Oxygen',6,'#ff7373'],[9,'F','Fluorine',7,'#b8f28b'],[10,'Ne','Neon',8,'#b8a1ff'],[11,'Na','Sodium',1,'#ffbd69'],[12,'Mg','Magnesium',2,'#f7d774'],[13,'Al','Aluminium',3,'#c8d1dc'],[14,'Si','Silicon',4,'#b3c7a8'],[15,'P','Phosphorus',5,'#ff9b54'],[16,'S','Sulfur',6,'#ffe66d'],[17,'Cl','Chlorine',7,'#8be28b'],[18,'Ar','Argon',8,'#b2a0ff'],[19,'K','Potassium',1,'#ff9b9b'],[20,'Ca','Calcium',2,'#ffce8a'],[21,'Sc','Scandium',2,'#c0b8a8'],[22,'Ti','Titanium',2,'#aeb9c8'],[23,'V','Vanadium',2,'#8fa6bd'],[24,'Cr','Chromium',1,'#8cabb2'],[25,'Mn','Manganese',2,'#c5a6c9'],[26,'Fe','Iron',2,'#b6a08d'],[27,'Co','Cobalt',2,'#8da9e8'],[28,'Ni','Nickel',2,'#8dc9b5'],[29,'Cu','Copper',1,'#d99369'],[30,'Zn','Zinc',2,'#a7b7c6'],[31,'Ga','Gallium',3,'#c4d3e3'],[32,'Ge','Germanium',4,'#b0c2a1'],[33,'As','Arsenic',5,'#b0b3d8'],[34,'Se','Selenium',6,'#e6b86a'],[35,'Br','Bromine',7,'#b97746'],[36,'Kr','Krypton',8,'#c1b4f4'],[37,'Rb','Rubidium',1,'#ff9caa'],[38,'Sr','Strontium',2,'#ffca9a'],[47,'Ag','Silver',1,'#d4dce5'],[48,'Cd','Cadmium',2,'#aebdcc'],[50,'Sn','Tin',4,'#bac5d0'],[53,'I','Iodine',7,'#9c83c8'],[54,'Xe','Xenon',8,'#a99dff'],[55,'Cs','Caesium',1,'#e6a3a3'],[56,'Ba','Barium',2,'#f4c27c'],[79,'Au','Gold',1,'#ffd34e'],[80,'Hg','Mercury',2,'#c6d0dc'],[82,'Pb','Lead',4,'#9aa8b7'],[92,'U','Uranium',2,'#8fbb85'],[78,'Pt','Platinum',1,'#e5d8ca'],[74,'W','Tungsten',2,'#9ea8b4']].map(x=>({n:x[0],s:x[1],name:x[2],v:x[3],color:x[4]}));
-const bySym=Object.fromEntries(E.map(e=>[e.s,e]));
-const samples=[
-['Water','H2O','covalent','Bent molecule; familiar liquid.'],['Hydrogen','H2','covalent','Diatomic elemental gas.'],['Oxygen','O2','covalent','Diatomic gas with a double bond.'],['Ozone','O3','covalent','Bent, resonance-stabilized molecule.'],['Nitrogen','N2','covalent','Diatomic gas with a triple bond.'],['Fluorine','F2','covalent','Diatomic halogen.'],['Chlorine','Cl2','covalent','Diatomic halogen.'],['Bromine','Br2','covalent','Diatomic halogen.'],['Iodine','I2','covalent','Diatomic halogen.'],['Hydrogen fluoride','HF','covalent','Polar covalent.'],['Hydrogen chloride','HCl','covalent','Polar covalent.'],['Hydrogen bromide','HBr','covalent','Polar covalent.'],['Hydrogen iodide','HI','covalent','Polar covalent.'],['Ammonia','NH3','covalent','Trigonal pyramidal.'],['Methane','CH4','covalent','Tetrahedral.'],['Ethane','C2H6','covalent','Two-carbon alkane.'],['Ethene','C2H4','covalent','Contains a C=C double bond.'],['Ethyne','C2H2','covalent','Contains a C≡C triple bond.'],['Carbon dioxide','CO2','covalent','Linear molecule.'],['Carbon monoxide','CO','covalent','Strong C–O bonding.'],['Nitric oxide','NO','covalent','Odd-electron radical; octet exception.'],['Nitrogen dioxide','NO2','covalent','Odd-electron radical.'],['Dinitrogen tetroxide','N2O4','covalent','Dimer of nitrogen dioxide.'],['Nitrous oxide','N2O','covalent','Linear molecule.'],['Nitrogen trifluoride','NF3','covalent','Trigonal pyramidal.'],['Nitrogen trichloride','NCl3','covalent','Trigonal pyramidal.'],['Sulfur dioxide','SO2','covalent','Bent molecule.'],['Sulfur trioxide','SO3','covalent','Trigonal planar.'],['Hydrogen sulfide','H2S','covalent','Bent molecule.'],['Sulfur hexafluoride','SF6','covalent','Expanded-octet example.'],['Sulfuric acid','H2SO4','covalent','Molecular acid; ionizes in water.'],['Sulfurous acid','H2SO3','covalent','Molecular acid.'],['Phosphine','PH3','covalent','Trigonal pyramidal.'],['Phosphorus trichloride','PCl3','covalent','Trigonal pyramidal.'],['Phosphorus pentachloride','PCl5','covalent','Hypervalent in common descriptions.'],['Phosphorus oxide','P4O10','covalent','Molecular formula of a phosphorus oxide.'],['Hydrogen peroxide','H2O2','covalent','Contains an O–O bond.'],['Methanol','CH4O','covalent','Alcohol.'],['Ethanol','C2H6O','covalent','Alcohol.'],['Glucose','C6H12O6','covalent','Simple sugar.'],['Sucrose','C12H22O11','covalent','Table sugar.'],['Acetic acid','C2H4O2','covalent','Acid in vinegar.'],['Formaldehyde','CH2O','covalent','Small aldehyde.'],['Acetone','C3H6O','covalent','Common solvent.'],['Benzene','C6H6','covalent','Aromatic ring.'],['Urea','CH4N2O','covalent','Organic molecule.'],['Hydrogen cyanide','HCN','covalent','Linear and highly toxic.'],['Cyanogen','C2N2','covalent','Contains C≡N groups.'],['Silane','SiH4','covalent','Silicon analogue of methane.'],['Silicon tetrachloride','SiCl4','covalent','Tetrahedral molecule.'],['Dichloromethane','CH2Cl2','covalent','Chlorinated solvent.'],['Chloroform','CHCl3','covalent','Chlorinated solvent.'],['Carbon tetrachloride','CCl4','covalent','Tetrahedral molecule.'],['Boron trifluoride','BF3','covalent','Electron-deficient Lewis acid.'],['Diborane','B2H6','covalent','Three-center bonding.'],['Carbon disulfide','CS2','covalent','Linear molecule.'],['Xenon difluoride','XeF2','covalent','Hypervalent noble-gas compound.'],['Xenon tetrafluoride','XeF4','covalent','Hypervalent noble-gas compound.'],['Chlorine trifluoride','ClF3','covalent','T-shaped; hypervalent.'],['Iodine pentafluoride','IF5','covalent','Square pyramidal.'],['Hydrazine','N2H4','covalent','Molecule with an N–N bond.'],['Hydrogen selenide','H2Se','covalent','Bent hydride.'],['Phosgene','COCl2','covalent','Reactive carbonyl compound.'],['Propane','C3H8','covalent','Three-carbon alkane.'],['Butane','C4H10','covalent','Four-carbon alkane.'],['Pentane','C5H12','covalent','Five-carbon alkane.'],['Hexane','C6H14','covalent','Six-carbon alkane.'],['Propene','C3H6','covalent','Three-carbon alkene.'],['Propyne','C3H4','covalent','Three-carbon alkyne.'],['Lactic acid','C3H6O3','covalent','Organic acid.'],['Citric acid','C6H8O7','covalent','Acid found in citrus fruits.'],['Ascorbic acid','C6H8O6','covalent','Vitamin C.'],['Ribose','C5H10O5','covalent','Pentose sugar.'],['Fructose','C6H12O6','covalent','Sugar isomer of glucose.'],['Glycerol','C3H8O3','covalent','Three-carbon alcohol.'],['Glycine','C2H5NO2','covalent','Simplest amino acid.'],['Alanine','C3H7NO2','covalent','Amino acid.'],['Caffeine','C8H10N4O2','covalent','Stimulant molecule.'],['Aspirin','C9H8O4','covalent','Acetylsalicylic acid.'],['Uric acid','C5H4N4O3','covalent','Biological molecule.'],['Naphthalene','C10H8','covalent','Two fused aromatic rings.'],['Phenol','C6H6O','covalent','Aromatic alcohol-like compound.'],['Toluene','C7H8','covalent','Aromatic solvent.'],['Ethylene glycol','C2H6O2','covalent','Diol; toxic if swallowed.'],['Dimethyl ether','C2H6O','covalent','Ether.'],['Acetaldehyde','C2H4O','covalent','Small aldehyde.'],['Nitrous acid','HNO2','covalent','Unstable acid.'],['Nitric acid','HNO3','covalent','Strong acid.'],['Hydrogen carbonate acid','H2CO3','covalent','Carbonic acid.'],['Boric acid','H3BO3','covalent','Weak acid.'],['Silicon dioxide','SiO2','network','Extended network solid; not separate SiO2 molecules in quartz.'],['Diamond','C','network','Carbon atoms in a 3-D covalent network.'],['Graphite','C','network','Carbon atoms in layered covalent networks.'],['Silicon carbide','SiC','network','Hard covalent network solid.'],['Boron nitride','BN','network','Extended network solid.'],
-['Sodium chloride','NaCl','ionic','Ionic crystal; formula unit, not isolated molecule.'],['Potassium chloride','KCl','ionic','Ionic crystal.'],['Lithium fluoride','LiF','ionic','Ionic crystal.'],['Sodium fluoride','NaF','ionic','Ionic crystal.'],['Calcium chloride','CaCl2','ionic','Ionic crystal.'],['Magnesium chloride','MgCl2','ionic','Ionic crystal.'],['Calcium oxide','CaO','ionic','Ionic solid.'],['Magnesium oxide','MgO','ionic','Ionic solid.'],['Sodium oxide','Na2O','ionic','Ionic solid.'],['Potassium oxide','K2O','ionic','Ionic solid.'],['Aluminium oxide','Al2O3','ionic','Extended ionic/covalent lattice.'],['Iron(III) oxide','Fe2O3','ionic','Ionic solid.'],['Iron(II) oxide','FeO','ionic','Ionic solid.'],['Copper(II) oxide','CuO','ionic','Ionic solid.'],['Zinc oxide','ZnO','ionic','Ionic solid with mixed bonding character.'],['Silver chloride','AgCl','ionic','Ionic solid.'],['Silver nitrate','AgNO3','ionic','Ionic solid containing polyatomic ions.'],['Sodium nitrate','NaNO3','ionic','Ionic solid.'],['Potassium nitrate','KNO3','ionic','Ionic solid.'],['Calcium carbonate','CaCO3','ionic','Ionic lattice with carbonate ions.'],['Sodium carbonate','Na2CO3','ionic','Ionic salt.'],['Sodium bicarbonate','NaHCO3','ionic','Baking soda.'],['Calcium sulfate','CaSO4','ionic','Ionic solid.'],['Magnesium sulfate','MgSO4','ionic','Ionic salt.'],['Copper sulfate','CuSO4','ionic','Ionic salt.'],['Ammonium chloride','NH4Cl','ionic','Ammonium and chloride ions.'],['Ammonium nitrate','NH4NO3','ionic','Ammonium and nitrate ions.'],['Sodium hydroxide','NaOH','ionic','Ionic solid; strong base.'],['Potassium hydroxide','KOH','ionic','Ionic solid; strong base.'],['Calcium hydroxide','Ca(OH)2','ionic','Ionic solid.'],['Sodium sulfide','Na2S','ionic','Ionic solid.'],['Barium sulfate','BaSO4','ionic','Sparingly soluble ionic solid.'],['Lead(II) iodide','PbI2','ionic','Ionic solid.'],['Potassium bromide','KBr','ionic','Ionic solid.'],['Lithium oxide','Li2O','ionic','Ionic solid.'],['Calcium fluoride','CaF2','ionic','Ionic solid.'],['Sodium phosphate','Na3PO4','ionic','Ionic salt.'],['Potassium permanganate','KMnO4','ionic','Ionic salt with polyatomic anion.'],['Sodium hypochlorite','NaClO','ionic','Common active ingredient in bleach.'],['Sodium sulfite','Na2SO3','ionic','Ionic salt.'],['Sodium thiosulfate','Na2S2O3','ionic','Ionic salt.'],['Potassium iodide','KI','ionic','Ionic salt.'],['Magnesium nitride','Mg3N2','ionic','Ionic solid.'],['Calcium nitride','Ca3N2','ionic','Ionic solid.'],['Aluminium fluoride','AlF3','ionic','Ionic solid.'],['Sodium bromide','NaBr','ionic','Ionic solid.'],['Calcium bromide','CaBr2','ionic','Ionic solid.'],['Potassium sulfate','K2SO4','ionic','Ionic salt.'],['Sodium chromate','Na2CrO4','ionic','Ionic salt.'],['Sodium dichromate','Na2Cr2O7','ionic','Ionic salt.'],['Ammonium sulfate','(NH4)2SO4','ionic','Ionic salt.'],['Ammonium carbonate','(NH4)2CO3','ionic','Ionic salt.'],['Sodium acetate','C2H3NaO2','ionic','Sodium salt of acetic acid.'],['Calcium phosphate','Ca3(PO4)2','ionic','Ionic solid.'],['Potassium chlorate','KClO3','ionic','Ionic salt.'],['Potassium chlorate (alternate label)','KClO3','ionic','Ionic salt.'],['Iron','Fe','metallic','Metallic lattice with delocalized electrons.'],['Copper','Cu','metallic','Metallic lattice; good conductor.'],['Aluminium','Al','metallic','Metallic lattice.'],['Silver','Ag','metallic','Metallic lattice.'],['Gold','Au','metallic','Metallic lattice.'],['Nickel','Ni','metallic','Metallic lattice.'],['Zinc','Zn','metallic','Metallic solid.'],['Tin','Sn','metallic','Metallic solid.'],['Lead','Pb','metallic','Metallic solid.'],['Magnesium metal','Mg','metallic','Metallic lattice.'],['Sodium metal','Na','metallic','Metallic lattice; reacts vigorously with water.'],['Potassium metal','K','metallic','Metallic lattice.'],['Calcium metal','Ca','metallic','Metallic lattice.'],['Titanium','Ti','metallic','Metallic lattice.'],['Chromium','Cr','metallic','Metallic lattice.'],['Cobalt','Co','metallic','Metallic lattice.'],['Platinum','Pt','metallic','Metallic lattice.'],['Tungsten','W','metallic','Metallic lattice.']
-];
-function parseFormula(f){let i=0;function group(){const out={};while(i<f.length){if(f[i]===')'){i++;break}if(f[i]==='('){i++;const inner=group();let d='';while(/\d/.test(f[i]||''))d+=f[i++];const m=+(d||1);for(const s in inner)out[s]=(out[s]||0)+inner[s]*m;continue}const m=f.slice(i).match(/^([A-Z][a-z]?)(\d*)/);if(!m){i++;continue}i+=m[0].length;out[m[1]]=(out[m[1]]||0)+ +(m[2]||1)}return out}return group()}
-function formulaOf(obj){return Object.keys(obj).filter(s=>bySym[s]&&obj[s]>0).sort((a,b)=>bySym[a].n-bySym[b].n).map(s=>s+(obj[s]>1?obj[s]:'')).join('')}
-function prettyFormula(f){return f.replace(/(\d+)/g,'<sub>$1</sub>')}const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let build={};const select=document.getElementById('element');E.forEach(e=>{let o=document.createElement('option');o.value=e.s;o.textContent=`${e.n} · ${e.s} — ${e.name} (${e.v} valence e⁻*)`;select.appendChild(o)});
-function render(){const stage=document.getElementById('stage'),keys=Object.keys(build).filter(s=>build[s]>0);stage.innerHTML='';if(!keys.length)stage.innerHTML='<div class="empty">Choose an element and press <b>Add</b> to start building.</div>';keys.forEach(s=>{const e=bySym[s];if(!e)return;const el=document.createElement('div');el.className='atom';el.style.background=e.color;el.innerHTML=`<span class="num">Atomic no. ${e.n}</span><span class="sym">${e.s}</span><span class="name">${e.name}</span><span class="count">×${build[s]}</span>`;stage.appendChild(el)});let f=formulaOf(build),total=Object.values(build).reduce((a,b)=>a+b,0),val=Object.entries(build).reduce((a,[s,n])=>a+(bySym[s]?.v||0)*n,0);document.getElementById('formula').innerHTML=f?prettyFormula(f):'No atoms yet';document.getElementById('atomTotal').textContent=total;document.getElementById('valenceTotal').textContent=val;document.getElementById('elementTotal').textContent=keys.length;document.getElementById('atomRows').innerHTML=keys.length?keys.map(s=>`<tr><td><span style="color:${bySym[s].color}">●</span> ${bySym[s].name} (${s})</td><td>${bySym[s].n}</td><td>${build[s]}</td><td>${bySym[s].v}*</td><td>${build[s]*bySym[s].v}</td></tr>`).join(''):'<tr><td colspan="5" class="muted">No atoms added.</td></tr>'}
-function analyze(sample){const box=document.getElementById('analysis'),keys=Object.keys(build).filter(s=>build[s]>0),f=formulaOf(build);if(!keys.length){box.className='status';box.innerHTML='<b>Waiting for your structure.</b><p class="muted">Add atoms to see a formula and bonding guidance.</p>';return}const match=sample||samples.find(sm=>formulaOf(parseFormula(sm[1]))===f),ve=Object.entries(build).reduce((a,[s,n])=>a+(bySym[s]?.v||0)*n,0);let cls='warn',message='';if(match){cls='good';message=`<span class="tag">Known entry</span><b>${esc(match[0])} — ${esc(match[1])}</b><p>${esc(match[3])}</p><p>Library classification: <b>${match[2]==='network'?'extended covalent network':esc(match[2])}</b>. The exact formula is in the library; this is stronger evidence than the simple octet test.</p>`}else if(keys.length===1&&['Fe','Cu','Al','Ag','Au','Ni','Zn','Sn','Pb','Mg','Na','K','Ca','Ti','Cr','Co','Pt','W'].includes(keys[0])){cls='good';message='<b>Metallic bonding is plausible.</b><p>Pure metals form a lattice with delocalized electrons. Do not use divisibility by 8 to judge metallic bonding.</p>'}else if(keys.length===1&&build[keys[0]]===1&&bySym[keys[0]].v===8){message='<b>Usually no ordinary bond is expected for this single atom.</b><p>Noble gases have filled outer shells, though some can form compounds under special conditions.</p>'}else if(ve%8===0){message=`<b>Octet heuristic: ${ve} total valence electrons is divisible by 8.</b><p>This does <b>not</b> prove that the proposed substance exists or is stable. Individual atoms, charges, likely bond counts, and geometry also matter.</p>`}else{message=`<b>Cannot conclude that bonding is impossible.</b><p>Total valence electrons = ${ve}, which is not divisible by 8. Many real molecules do not follow that simple test. This formula is not an exact match in the library, so more chemistry information is needed.</p>`}if(!match)message+='<p><span class="tag">Not in library</span> No exact formula match was found. That does not mean the compound is impossible.</p>';message+='<p class="muted">*Valence counts are simplified, especially for transition metals. The builder shows a formula, not a 3D bond structure.</p>';box.className='status '+cls;box.innerHTML=message}
-function loadSample(sm){build={};const parsed=parseFormula(sm[1]);for(const s in parsed)if(bySym[s])build[s]=parsed[s];render();analyze(sm)}function sampleButton(sm){const b=document.createElement('button');b.className='molecule';b.innerHTML=`<strong>${esc(sm[0])}</strong><span>${esc(sm[1])} · ${esc(sm[2])}</span>`;b.onclick=()=>loadSample(sm);return b}
-document.getElementById('add').onclick=()=>{const q=Math.max(1,Math.min(20,parseInt(document.getElementById('quantity').value)||1));build[select.value]=(build[select.value]||0)+q;render();analyze()};document.getElementById('remove').onclick=()=>{const ks=Object.keys(build);if(ks.length){const s=ks[ks.length-1];if(build[s]>1)build[s]--;else delete build[s];render();analyze()}};document.getElementById('clear').onclick=()=>{build={};render();analyze()};document.getElementById('check').onclick=()=>analyze();
-['Water','Carbon dioxide','Ammonia','Methane','Sodium chloride','Calcium carbonate','Iron','Sulfur hexafluoride'].forEach(n=>{const sm=samples.find(x=>x[0]===n);if(sm)document.getElementById('examples').appendChild(sampleButton(sm))});function drawLibrary(q=''){const el=document.getElementById('library');el.innerHTML='';const filtered=samples.filter(s=>s.join(' ').toLowerCase().includes(q.toLowerCase()));filtered.forEach(sm=>el.appendChild(sampleButton(sm)));if(!filtered.length)el.innerHTML='<p class="muted">No matching entry. Try another name or formula.</p>'}document.getElementById('search').addEventListener('input',e=>drawLibrary(e.target.value));drawLibrary();render();
-</script></body></html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Molecule &
+        Bonding Lab</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --panel: #141c31;
+            --text: #eef4ff;
+            --muted: #a8b6d3;
+            --line: #2c3a59;
+            --accent: #7c9cff;
+            --good: #5be0a1;
+            --warn: #ffd166;
+            --bad: #ff7b8b
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle at 20% 0%, #1d2b50 0, #0b1020 48%);
+            color: var(--text);
+            font: 15px/1.5 system-ui, Segoe UI, Arial, sans-serif
+        }
+
+        header {
+            padding: 28px 20px 18px;
+            text-align: center
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+            letter-spacing: -.04em
+        }
+
+        header p {
+            max-width: 850px;
+            margin: 10px auto;
+            color: var(--muted)
+        }
+
+        main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 0 16px 36px;
+            display: grid;
+            grid-template-columns: minmax(280px, 370px) 1fr;
+            gap: 16px
+        }
+
+        .panel {
+            background: linear-gradient(160deg, #17213aee, #11192bee);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 14px 40px #0003;
+            min-width: 0
+        }
+
+        h2 {
+            font-size: 1.15rem;
+            margin: 0 0 12px
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin: 16px 0 8px
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        label {
+            display: block;
+            font-weight: 650;
+            margin: 12px 0 6px
+        }
+
+        select,
+        input,
+        button {
+            font: inherit
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 11px;
+            background: #0d1528;
+            color: var(--text);
+            border: 1px solid #3a4a6d;
+            outline: none
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--accent)
+        }
+
+        button {
+            cursor: pointer;
+            border: 1px solid #526ba0;
+            background: #26385f;
+            color: white;
+            padding: 10px 13px;
+            border-radius: 11px;
+            font-weight: 700;
+            transition: .18s
+        }
+
+        button:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px)
+        }
+
+        button.primary {
+            background: linear-gradient(120deg, #6687ff, #8a66e8);
+            border: 0
+        }
+
+        button.danger {
+            background: #482535;
+            border-color: #814052
+        }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px
+        }
+
+        .fieldrow {
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            gap: 9px
+        }
+
+        .hint {
+            font-size: .87rem;
+            color: var(--muted);
+            margin: 7px 0
+        }
+
+        .stage {
+            min-height: 265px;
+            border: 1px dashed #435578;
+            border-radius: 16px;
+            background: radial-gradient(circle at center, #1b2b49, #0c1427);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .atom {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #08101e;
+            font-weight: 900;
+            box-shadow: inset -8px -10px 18px #0003, inset 5px 6px 15px #fff6, 0 8px 22px #0005;
+            position: relative;
+            flex-shrink: 0;
+            border: 2px solid #ffffff70
+        }
+
+        .atom .num {
+            font-size: .67rem;
+            line-height: 1.2
+        }
+
+        .atom .sym {
+            font-size: 1.8rem;
+            line-height: 1.15
+        }
+
+        .atom .name {
+            font-size: .65rem;
+            max-width: 82px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .atom .count {
+            position: absolute;
+            top: -8px;
+            right: -6px;
+            background: #fff;
+            color: #17213a;
+            border-radius: 99px;
+            padding: 2px 7px;
+            font-size: .72rem;
+            border: 2px solid #263654
+        }
+
+        .empty {
+            color: var(--muted);
+            text-align: center;
+            max-width: 360px
+        }
+
+        .formula {
+            font-size: 2rem;
+            font-weight: 850;
+            letter-spacing: .02em;
+            text-align: center;
+            margin: 12px 0
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin: 12px 0
+        }
+
+        .stat {
+            padding: 12px;
+            border: 1px solid var(--line);
+            background: #0e172a;
+            border-radius: 12px
+        }
+
+        .stat small {
+            display: block;
+            color: var(--muted)
+        }
+
+        .stat strong {
+            font-size: 1.2rem
+        }
+
+        .status {
+            border-radius: 12px;
+            padding: 13px 14px;
+            margin-top: 12px;
+            border: 1px solid var(--line);
+            background: #10192b
+        }
+
+        .status.good {
+            border-color: #277b5d;
+            background: #102a27
+        }
+
+        .status.warn {
+            border-color: #856d30;
+            background: #2b2515
+        }
+
+        .status.bad {
+            border-color: #864153;
+            background: #2c1722
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 99px;
+            font-size: .78rem;
+            font-weight: 800;
+            background: #293957;
+            margin-right: 5px
+        }
+
+        .formula-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 8px
+        }
+
+        .molecule {
+            border: 1px solid var(--line);
+            background: #10192b;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: left;
+            width: 100%
+        }
+
+        .molecule strong {
+            display: block
+        }
+
+        .molecule span {
+            color: var(--muted);
+            font-size: .82rem
+        }
+
+        .tablewrap {
+            overflow: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .9rem
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        th {
+            color: #cbd7f2
+        }
+
+        details {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 11px;
+            margin-top: 10px
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 750
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 18px 30px;
+            color: var(--muted);
+            font-size: .88rem
+        }
+
+        @media(max-width:850px) {
+            main {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:460px) {
+            .summary {
+                grid-template-columns: 1fr
+            }
+
+            .atom {
+                width: 75px;
+                height: 75px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>⚛️ Molecule & Bonding Lab</h1>
+        <p>Build a formula, inspect
+            valence electrons, and explore whether a familiar substance is
+            known. The bonding checker is an educational estimate—not proof
+            that a compound can or cannot exist.</p>
+    </header>
+    <main>
+        <section class="panel">
+            <h2>1. Build your substance</h2><label for="element">Choose an element</label><select id="element"></select>
+            <div class="fieldrow">
+                <div><label for="quantity">Number of atoms to add</label><input id="quantity" type="number" min="1"
+                        max="20" value="1"></div>
+                <div style="display:flex;align-items:end"><button class="primary" id="add" style="width:100%">＋
+                        Add</button></div>
+            </div>
+            <p class="hint">Add the same
+                element more than once (for example, two H atoms for H₂).
+                Each element has a unique color and its atomic
+                number.</p>
+            <div class="buttons"><button id="remove">Remove
+                    last</button><button id="clear" class="danger">Clear
+                    all</button><button id="check" class="primary">Analyze
+                    bonding</button></div>
+            <h3>Quick examples</h3>
+            <div class="formula-list" id="examples"></div>
+        </section>
+        <section class="panel">
+            <h2>2. Atom view</h2>
+            <div class="stage" id="stage">
+                <div class="empty">Choose an element and press
+                    <b>Add</b> to start building.
+                </div>
+            </div>
+            <div class="formula" id="formula">No atoms yet</div>
+            <div class="summary">
+                <div class="stat"><small>Total
+                        atoms</small><strong id="atomTotal">0</strong></div>
+                <div class="stat"><small>Total valence e⁻</small><strong id="valenceTotal">0</strong></div>
+                <div class="stat"><small>Unique elements</small><strong id="elementTotal">0</strong></div>
+            </div>
+            <div id="analysis" class="status"><b>Waiting for your
+                    structure.</b>
+                <p class="muted">Add atoms to see a
+                    formula and bonding guidance.</p>
+            </div>
+            <h3>Atoms in your
+                build</h3>
+            <div class="tablewrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Atomic
+                                no.</th>
+                            <th>Atoms</th>
+                            <th>Valence e⁻
+                                each*</th>
+                            <th>Valence e⁻
+                                total*</th>
+                        </tr>
+                    </thead>
+                    <tbody id="atomRows">
+                        <tr>
+                            <td colspan="5" class="muted">No
+                                atoms
+                                added.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section class="panel" style="grid-column:1/-1">
+            <h2>3. Known
+                substance library</h2>
+            <p class="muted">Search by name or
+                formula, then click a result to load its atoms.</p><input id="search"
+                placeholder="Search: water, CO2, sodium chloride…">
+            <div class="formula-list" id="library" style="margin-top:12px"></div>
+        </section>
+        <section class="panel" style="grid-column:1/-1">
+            <h2>4. Understand
+                the bonding result</h2>
+            <div class="formula-list">
+                <div class="stat"><b>Covalent</b>
+                    <p class="muted">Atoms share
+                        electron pairs. Many main-group atoms tend toward a
+                        duet (H) or octet, but there are
+                        exceptions.</p>
+                </div>
+                <div class="stat"><b>Ionic</b>
+                    <p class="muted">Electrons
+                        transfer and oppositely charged ions attract, often
+                        forming a crystal lattice rather than a single
+                        molecule.</p>
+                </div>
+                <div class="stat"><b>Metallic</b>
+                    <p class="muted">Metal atoms
+                        form a lattice with delocalized electrons. Metallic
+                        bonding is not judged by dividing valence electrons
+                        by 8.</p>
+                </div>
+            </div>
+            <p class="hint"><b>Important:</b> “total valence electrons
+                divisible by 8” is not a universal bonding rule. Octet
+                counting is a useful pattern for many simple covalent
+                molecules, but it cannot prove a substance exists or is
+                impossible. Transition metals, odd-electron molecules (NO),
+                expanded-octet species (SF₆), ions, and solids need more
+                detailed chemistry.</p>
+        </section>
+    </main>
+    <script>
+        const E = [
+            [1, 'H', 'Hydrogen', 1, '#f4f7ff'], [2, 'He', 'Helium', 2, '#d8e7ff'], [3, 'Li', 'Lithium', 1, '#ff9e80'], [4, 'Be', 'Beryllium', 2, '#ffd166'], [5, 'B', 'Boron', 3, '#b8e986'], [6, 'C', 'Carbon', 4, '#aab2bd'], [7, 'N', 'Nitrogen', 5, '#7aa7ff'], [8, 'O', 'Oxygen', 6, '#ff7373'], [9, 'F', 'Fluorine', 7, '#b8f28b'], [10, 'Ne', 'Neon', 8, '#b8a1ff'], [11, 'Na', 'Sodium', 1, '#ffbd69'], [12, 'Mg', 'Magnesium', 2, '#f7d774'], [13, 'Al', 'Aluminium', 3, '#c8d1dc'], [14, 'Si', 'Silicon', 4, '#b3c7a8'], [15, 'P', 'Phosphorus', 5, '#ff9b54'], [16, 'S', 'Sulfur', 6, '#ffe66d'], [17, 'Cl', 'Chlorine', 7, '#8be28b'], [18, 'Ar', 'Argon', 8, '#b2a0ff'], [19, 'K', 'Potassium', 1, '#ff9b9b'], [20, 'Ca', 'Calcium', 2, '#ffce8a'], [21, 'Sc', 'Scandium', 2, '#c0b8a8'], [22, 'Ti', 'Titanium', 2, '#aeb9c8'], [23, 'V', 'Vanadium', 2, '#8fa6bd'], [24, 'Cr', 'Chromium', 1, '#8cabb2'], [25, 'Mn', 'Manganese', 2, '#c5a6c9'], [26, 'Fe', 'Iron', 2, '#b6a08d'], [27, 'Co', 'Cobalt', 2, '#8da9e8'], [28, 'Ni', 'Nickel', 2, '#8dc9b5'], [29, 'Cu', 'Copper', 1, '#d99369'], [30, 'Zn', 'Zinc', 2, '#a7b7c6'], [31, 'Ga', 'Gallium', 3, '#c4d3e3'], [32, 'Ge', 'Germanium', 4, '#b0c2a1'], [33, 'As', 'Arsenic', 5, '#b0b3d8'], [34, 'Se', 'Selenium', 6, '#e6b86a'], [35, 'Br', 'Bromine', 7, '#b97746'], [36, 'Kr', 'Krypton', 8, '#c1b4f4'], [37, 'Rb', 'Rubidium', 1, '#ff9caa'], [38, 'Sr', 'Strontium', 2, '#ffca9a'], [47, 'Ag', 'Silver', 1, '#d4dce5'], [48, 'Cd', 'Cadmium', 2, '#aebdcc'], [50, 'Sn', 'Tin', 4, '#bac5d0'], [53, 'I', 'Iodine', 7, '#9c83c8'], [54, 'Xe', 'Xenon', 8, '#a99dff'], [55, 'Cs', 'Caesium', 1, '#e6a3a3'], [56, 'Ba', 'Barium', 2, '#f4c27c'], [79, 'Au', 'Gold', 1, '#ffd34e'], [80, 'Hg', 'Mercury', 2, '#c6d0dc'], [82, 'Pb', 'Lead', 4, '#9aa8b7'], [92, 'U', 'Uranium', 2, '#8fbb85'], [78, 'Pt', 'Platinum', 1, '#e5d8ca'], [74, 'W', 'Tungsten', 2, '#9ea8b4']].map(x => ({ n: x[0], s: x[1], name: x[2], v: x[3], color: x[4] }));
+        const bySym = Object.fromEntries(E.map(e => [e.s, e]));
+        const samples = [
+            ['Water', 'H2O', 'covalent', 'Bent molecule; familiar liquid.'], ['Hydrogen', 'H2', 'covalent', 'Diatomic elemental gas.'], ['Oxygen', 'O2', 'covalent', 'Diatomic gas with a double bond.'], ['Ozone', 'O3', 'covalent', 'Bent, resonance-stabilized molecule.'], ['Nitrogen', 'N2', 'covalent', 'Diatomic gas with a triple bond.'], ['Fluorine', 'F2', 'covalent', 'Diatomic halogen.'], ['Chlorine', 'Cl2', 'covalent', 'Diatomic halogen.'], ['Bromine', 'Br2', 'covalent', 'Diatomic halogen.'], ['Iodine', 'I2', 'covalent', 'Diatomic halogen.'], ['Hydrogen fluoride', 'HF', 'covalent', 'Polar covalent.'], ['Hydrogen chloride', 'HCl', 'covalent', 'Polar covalent.'], ['Hydrogen bromide', 'HBr', 'covalent', 'Polar covalent.'], ['Hydrogen iodide', 'HI', 'covalent', 'Polar covalent.'], ['Ammonia', 'NH3', 'covalent', 'Trigonal pyramidal.'], ['Methane', 'CH4', 'covalent', 'Tetrahedral.'], ['Ethane', 'C2H6', 'covalent', 'Two-carbon alkane.'], ['Ethene', 'C2H4', 'covalent', 'Contains a C=C double bond.'], ['Ethyne', 'C2H2', 'covalent', 'Contains a C≡C triple bond.'], ['Carbon dioxide', 'CO2', 'covalent', 'Linear molecule.'], ['Carbon monoxide', 'CO', 'covalent', 'Strong C–O bonding.'], ['Nitric oxide', 'NO', 'covalent', 'Odd-electron radical; octet exception.'], ['Nitrogen dioxide', 'NO2', 'covalent', 'Odd-electron radical.'], ['Dinitrogen tetroxide', 'N2O4', 'covalent', 'Dimer of nitrogen dioxide.'], ['Nitrous oxide', 'N2O', 'covalent', 'Linear molecule.'], ['Nitrogen trifluoride', 'NF3', 'covalent', 'Trigonal pyramidal.'], ['Nitrogen trichloride', 'NCl3', 'covalent', 'Trigonal pyramidal.'], ['Sulfur dioxide', 'SO2', 'covalent', 'Bent molecule.'], ['Sulfur trioxide', 'SO3', 'covalent', 'Trigonal planar.'], ['Hydrogen sulfide', 'H2S', 'covalent', 'Bent molecule.'], ['Sulfur hexafluoride', 'SF6', 'covalent', 'Expanded-octet example.'], ['Sulfuric acid', 'H2SO4', 'covalent', 'Molecular acid; ionizes in water.'], ['Sulfurous acid', 'H2SO3', 'covalent', 'Molecular acid.'], ['Phosphine', 'PH3', 'covalent', 'Trigonal pyramidal.'], ['Phosphorus trichloride', 'PCl3', 'covalent', 'Trigonal pyramidal.'], ['Phosphorus pentachloride', 'PCl5', 'covalent', 'Hypervalent in common descriptions.'], ['Phosphorus oxide', 'P4O10', 'covalent', 'Molecular formula of a phosphorus oxide.'], ['Hydrogen peroxide', 'H2O2', 'covalent', 'Contains an O–O bond.'], ['Methanol', 'CH4O', 'covalent', 'Alcohol.'], ['Ethanol', 'C2H6O', 'covalent', 'Alcohol.'], ['Glucose', 'C6H12O6', 'covalent', 'Simple sugar.'], ['Sucrose', 'C12H22O11', 'covalent', 'Table sugar.'], ['Acetic acid', 'C2H4O2', 'covalent', 'Acid in vinegar.'], ['Formaldehyde', 'CH2O', 'covalent', 'Small aldehyde.'], ['Acetone', 'C3H6O', 'covalent', 'Common solvent.'], ['Benzene', 'C6H6', 'covalent', 'Aromatic ring.'], ['Urea', 'CH4N2O', 'covalent', 'Organic molecule.'], ['Hydrogen cyanide', 'HCN', 'covalent', 'Linear and highly toxic.'], ['Cyanogen', 'C2N2', 'covalent', 'Contains C≡N groups.'], ['Silane', 'SiH4', 'covalent', 'Silicon analogue of methane.'], ['Silicon tetrachloride', 'SiCl4', 'covalent', 'Tetrahedral molecule.'], ['Dichloromethane', 'CH2Cl2', 'covalent', 'Chlorinated solvent.'], ['Chloroform', 'CHCl3', 'covalent', 'Chlorinated solvent.'], ['Carbon tetrachloride', 'CCl4', 'covalent', 'Tetrahedral molecule.'], ['Boron trifluoride', 'BF3', 'covalent', 'Electron-deficient Lewis acid.'], ['Diborane', 'B2H6', 'covalent', 'Three-center bonding.'], ['Carbon disulfide', 'CS2', 'covalent', 'Linear molecule.'], ['Xenon difluoride', 'XeF2', 'covalent', 'Hypervalent noble-gas compound.'], ['Xenon tetrafluoride', 'XeF4', 'covalent', 'Hypervalent noble-gas compound.'], ['Chlorine trifluoride', 'ClF3', 'covalent', 'T-shaped; hypervalent.'], ['Iodine pentafluoride', 'IF5', 'covalent', 'Square pyramidal.'], ['Hydrazine', 'N2H4', 'covalent', 'Molecule with an N–N bond.'], ['Hydrogen selenide', 'H2Se', 'covalent', 'Bent hydride.'], ['Phosgene', 'COCl2', 'covalent', 'Reactive carbonyl compound.'], ['Propane', 'C3H8', 'covalent', 'Three-carbon alkane.'], ['Butane', 'C4H10', 'covalent', 'Four-carbon alkane.'], ['Pentane', 'C5H12', 'covalent', 'Five-carbon alkane.'], ['Hexane', 'C6H14', 'covalent', 'Six-carbon alkane.'], ['Propene', 'C3H6', 'covalent', 'Three-carbon alkene.'], ['Propyne', 'C3H4', 'covalent', 'Three-carbon alkyne.'], ['Lactic acid', 'C3H6O3', 'covalent', 'Organic acid.'], ['Citric acid', 'C6H8O7', 'covalent', 'Acid found in citrus fruits.'], ['Ascorbic acid', 'C6H8O6', 'covalent', 'Vitamin C.'], ['Ribose', 'C5H10O5', 'covalent', 'Pentose sugar.'], ['Fructose', 'C6H12O6', 'covalent', 'Sugar isomer of glucose.'], ['Glycerol', 'C3H8O3', 'covalent', 'Three-carbon alcohol.'], ['Glycine', 'C2H5NO2', 'covalent', 'Simplest amino acid.'], ['Alanine', 'C3H7NO2', 'covalent', 'Amino acid.'], ['Caffeine', 'C8H10N4O2', 'covalent', 'Stimulant molecule.'], ['Aspirin', 'C9H8O4', 'covalent', 'Acetylsalicylic acid.'], ['Uric acid', 'C5H4N4O3', 'covalent', 'Biological molecule.'], ['Naphthalene', 'C10H8', 'covalent', 'Two fused aromatic rings.'], ['Phenol', 'C6H6O', 'covalent', 'Aromatic alcohol-like compound.'], ['Toluene', 'C7H8', 'covalent', 'Aromatic solvent.'], ['Ethylene glycol', 'C2H6O2', 'covalent', 'Diol; toxic if swallowed.'], ['Dimethyl ether', 'C2H6O', 'covalent', 'Ether.'], ['Acetaldehyde', 'C2H4O', 'covalent', 'Small aldehyde.'], ['Nitrous acid', 'HNO2', 'covalent', 'Unstable acid.'], ['Nitric acid', 'HNO3', 'covalent', 'Strong acid.'], ['Hydrogen carbonate acid', 'H2CO3', 'covalent', 'Carbonic acid.'], ['Boric acid', 'H3BO3', 'covalent', 'Weak acid.'], ['Silicon dioxide', 'SiO2', 'network', 'Extended network solid; not separate SiO2 molecules in quartz.'], ['Diamond', 'C', 'network', 'Carbon atoms in a 3-D covalent network.'], ['Graphite', 'C', 'network', 'Carbon atoms in layered covalent networks.'], ['Silicon carbide', 'SiC', 'network', 'Hard covalent network solid.'], ['Boron nitride', 'BN', 'network', 'Extended network solid.'],
+            ['Sodium chloride', 'NaCl', 'ionic', 'Ionic crystal; formula unit, not isolated molecule.'], ['Potassium chloride', 'KCl', 'ionic', 'Ionic crystal.'], ['Lithium fluoride', 'LiF', 'ionic', 'Ionic crystal.'], ['Sodium fluoride', 'NaF', 'ionic', 'Ionic crystal.'], ['Calcium chloride', 'CaCl2', 'ionic', 'Ionic crystal.'], ['Magnesium chloride', 'MgCl2', 'ionic', 'Ionic crystal.'], ['Calcium oxide', 'CaO', 'ionic', 'Ionic solid.'], ['Magnesium oxide', 'MgO', 'ionic', 'Ionic solid.'], ['Sodium oxide', 'Na2O', 'ionic', 'Ionic solid.'], ['Potassium oxide', 'K2O', 'ionic', 'Ionic solid.'], ['Aluminium oxide', 'Al2O3', 'ionic', 'Extended ionic/covalent lattice.'], ['Iron(III) oxide', 'Fe2O3', 'ionic', 'Ionic solid.'], ['Iron(II) oxide', 'FeO', 'ionic', 'Ionic solid.'], ['Copper(II) oxide', 'CuO', 'ionic', 'Ionic solid.'], ['Zinc oxide', 'ZnO', 'ionic', 'Ionic solid with mixed bonding character.'], ['Silver chloride', 'AgCl', 'ionic', 'Ionic solid.'], ['Silver nitrate', 'AgNO3', 'ionic', 'Ionic solid containing polyatomic ions.'], ['Sodium nitrate', 'NaNO3', 'ionic', 'Ionic solid.'], ['Potassium nitrate', 'KNO3', 'ionic', 'Ionic solid.'], ['Calcium carbonate', 'CaCO3', 'ionic', 'Ionic lattice with carbonate ions.'], ['Sodium carbonate', 'Na2CO3', 'ionic', 'Ionic salt.'], ['Sodium bicarbonate', 'NaHCO3', 'ionic', 'Baking soda.'], ['Calcium sulfate', 'CaSO4', 'ionic', 'Ionic solid.'], ['Magnesium sulfate', 'MgSO4', 'ionic', 'Ionic salt.'], ['Copper sulfate', 'CuSO4', 'ionic', 'Ionic salt.'], ['Ammonium chloride', 'NH4Cl', 'ionic', 'Ammonium and chloride ions.'], ['Ammonium nitrate', 'NH4NO3', 'ionic', 'Ammonium and nitrate ions.'], ['Sodium hydroxide', 'NaOH', 'ionic', 'Ionic solid; strong base.'], ['Potassium hydroxide', 'KOH', 'ionic', 'Ionic solid; strong base.'], ['Calcium hydroxide', 'Ca(OH)2', 'ionic', 'Ionic solid.'], ['Sodium sulfide', 'Na2S', 'ionic', 'Ionic solid.'], ['Barium sulfate', 'BaSO4', 'ionic', 'Sparingly soluble ionic solid.'], ['Lead(II) iodide', 'PbI2', 'ionic', 'Ionic solid.'], ['Potassium bromide', 'KBr', 'ionic', 'Ionic solid.'], ['Lithium oxide', 'Li2O', 'ionic', 'Ionic solid.'], ['Calcium fluoride', 'CaF2', 'ionic', 'Ionic solid.'], ['Sodium phosphate', 'Na3PO4', 'ionic', 'Ionic salt.'], ['Potassium permanganate', 'KMnO4', 'ionic', 'Ionic salt with polyatomic anion.'], ['Sodium hypochlorite', 'NaClO', 'ionic', 'Common active ingredient in bleach.'], ['Sodium sulfite', 'Na2SO3', 'ionic', 'Ionic salt.'], ['Sodium thiosulfate', 'Na2S2O3', 'ionic', 'Ionic salt.'], ['Potassium iodide', 'KI', 'ionic', 'Ionic salt.'], ['Magnesium nitride', 'Mg3N2', 'ionic', 'Ionic solid.'], ['Calcium nitride', 'Ca3N2', 'ionic', 'Ionic solid.'], ['Aluminium fluoride', 'AlF3', 'ionic', 'Ionic solid.'], ['Sodium bromide', 'NaBr', 'ionic', 'Ionic solid.'], ['Calcium bromide', 'CaBr2', 'ionic', 'Ionic solid.'], ['Potassium sulfate', 'K2SO4', 'ionic', 'Ionic salt.'], ['Sodium chromate', 'Na2CrO4', 'ionic', 'Ionic salt.'], ['Sodium dichromate', 'Na2Cr2O7', 'ionic', 'Ionic salt.'], ['Ammonium sulfate', '(NH4)2SO4', 'ionic', 'Ionic salt.'], ['Ammonium carbonate', '(NH4)2CO3', 'ionic', 'Ionic salt.'], ['Sodium acetate', 'C2H3NaO2', 'ionic', 'Sodium salt of acetic acid.'], ['Calcium phosphate', 'Ca3(PO4)2', 'ionic', 'Ionic solid.'], ['Potassium chlorate', 'KClO3', 'ionic', 'Ionic salt.'], ['Potassium chlorate (alternate label)', 'KClO3', 'ionic', 'Ionic salt.'], ['Iron', 'Fe', 'metallic', 'Metallic lattice with delocalized electrons.'], ['Copper', 'Cu', 'metallic', 'Metallic lattice; good conductor.'], ['Aluminium', 'Al', 'metallic', 'Metallic lattice.'], ['Silver', 'Ag', 'metallic', 'Metallic lattice.'], ['Gold', 'Au', 'metallic', 'Metallic lattice.'], ['Nickel', 'Ni', 'metallic', 'Metallic lattice.'], ['Zinc', 'Zn', 'metallic', 'Metallic solid.'], ['Tin', 'Sn', 'metallic', 'Metallic solid.'], ['Lead', 'Pb', 'metallic', 'Metallic solid.'], ['Magnesium metal', 'Mg', 'metallic', 'Metallic lattice.'], ['Sodium metal', 'Na', 'metallic', 'Metallic lattice; reacts vigorously with water.'], ['Potassium metal', 'K', 'metallic', 'Metallic lattice.'], ['Calcium metal', 'Ca', 'metallic', 'Metallic lattice.'], ['Titanium', 'Ti', 'metallic', 'Metallic lattice.'], ['Chromium', 'Cr', 'metallic', 'Metallic lattice.'], ['Cobalt', 'Co', 'metallic', 'Metallic lattice.'], ['Platinum', 'Pt', 'metallic', 'Metallic lattice.'], ['Tungsten', 'W', 'metallic', 'Metallic lattice.']
+        ];
+        function parseFormula(f) { let i = 0; function group() { const out = {}; while (i < f.length) { if (f[i] === ')') { i++; break } if (f[i] === '(') { i++; const inner = group(); let d = ''; while (/\d/.test(f[i] || '')) d += f[i++]; const m = +(d || 1); for (const s in inner) out[s] = (out[s] || 0) + inner[s] * m; continue } const m = f.slice(i).match(/^([A-Z][a-z]?)(\d*)/); if (!m) { i++; continue } i += m[0].length; out[m[1]] = (out[m[1]] || 0) + +(m[2] || 1) } return out } return group() }
+        function formulaOf(obj) { return Object.keys(obj).filter(s => bySym[s] && obj[s] > 0).sort((a, b) => bySym[a].n - bySym[b].n).map(s => s + (obj[s] > 1 ? obj[s] : '')).join('') }
+        function prettyFormula(f) { return f.replace(/(\d+)/g, '<sub>$1</sub>') } const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); let build = {}; const select = document.getElementById('element'); E.forEach(e => { let o = document.createElement('option'); o.value = e.s; o.textContent = `${e.n} · ${e.s} — ${e.name} (${e.v} valence e⁻*)`; select.appendChild(o) });
+        function render() { const stage = document.getElementById('stage'), keys = Object.keys(build).filter(s => build[s] > 0); stage.innerHTML = ''; if (!keys.length) stage.innerHTML = '<div class="empty">Choose an element and press <b>Add</b> to start building.</div>'; keys.forEach(s => { const e = bySym[s]; if (!e) return; const el = document.createElement('div'); el.className = 'atom'; el.style.background = e.color; el.innerHTML = `<span class="num">Atomic no. ${e.n}</span><span class="sym">${e.s}</span><span class="name">${e.name}</span><span class="count">×${build[s]}</span>`; stage.appendChild(el) }); let f = formulaOf(build), total = Object.values(build).reduce((a, b) => a + b, 0), val = Object.entries(build).reduce((a, [s, n]) => a + (bySym[s]?.v || 0) * n, 0); document.getElementById('formula').innerHTML = f ? prettyFormula(f) : 'No atoms yet'; document.getElementById('atomTotal').textContent = total; document.getElementById('valenceTotal').textContent = val; document.getElementById('elementTotal').textContent = keys.length; document.getElementById('atomRows').innerHTML = keys.length ? keys.map(s => `<tr><td><span style="color:${bySym[s].color}">●</span> ${bySym[s].name} (${s})</td><td>${bySym[s].n}</td><td>${build[s]}</td><td>${bySym[s].v}*</td><td>${build[s] * bySym[s].v}</td></tr>`).join('') : '<tr><td colspan="5" class="muted">No atoms added.</td></tr>' }
+        function analyze(sample) { const box = document.getElementById('analysis'), keys = Object.keys(build).filter(s => build[s] > 0), f = formulaOf(build); if (!keys.length) { box.className = 'status'; box.innerHTML = '<b>Waiting for your structure.</b><p class="muted">Add atoms to see a formula and bonding guidance.</p>'; return } const match = sample || samples.find(sm => formulaOf(parseFormula(sm[1])) === f), ve = Object.entries(build).reduce((a, [s, n]) => a + (bySym[s]?.v || 0) * n, 0); let cls = 'warn', message = ''; if (match) { cls = 'good'; message = `<span class="tag">Known entry</span><b>${esc(match[0])} — ${esc(match[1])}</b><p>${esc(match[3])}</p><p>Library classification: <b>${match[2] === 'network' ? 'extended covalent network' : esc(match[2])}</b>. The exact formula is in the library; this is stronger evidence than the simple octet test.</p>` } else if (keys.length === 1 && ['Fe', 'Cu', 'Al', 'Ag', 'Au', 'Ni', 'Zn', 'Sn', 'Pb', 'Mg', 'Na', 'K', 'Ca', 'Ti', 'Cr', 'Co', 'Pt', 'W'].includes(keys[0])) { cls = 'good'; message = '<b>Metallic bonding is plausible.</b><p>Pure metals form a lattice with delocalized electrons. Do not use divisibility by 8 to judge metallic bonding.</p>' } else if (keys.length === 1 && build[keys[0]] === 1 && bySym[keys[0]].v === 8) { message = '<b>Usually no ordinary bond is expected for this single atom.</b><p>Noble gases have filled outer shells, though some can form compounds under special conditions.</p>' } else if (ve % 8 === 0) { message = `<b>Octet heuristic: ${ve} total valence electrons is divisible by 8.</b><p>This does <b>not</b> prove that the proposed substance exists or is stable. Individual atoms, charges, likely bond counts, and geometry also matter.</p>` } else { message = `<b>Cannot conclude that bonding is impossible.</b><p>Total valence electrons = ${ve}, which is not divisible by 8. Many real molecules do not follow that simple test. This formula is not an exact match in the library, so more chemistry information is needed.</p>` } if (!match) message += '<p><span class="tag">Not in library</span> No exact formula match was found. That does not mean the compound is impossible.</p>'; message += '<p class="muted">*Valence counts are simplified, especially for transition metals. The builder shows a formula, not a 3D bond structure.</p>'; box.className = 'status ' + cls; box.innerHTML = message }
+        function loadSample(sm) { build = {}; const parsed = parseFormula(sm[1]); for (const s in parsed) if (bySym[s]) build[s] = parsed[s]; render(); analyze(sm) } function sampleButton(sm) { const b = document.createElement('button'); b.className = 'molecule'; b.innerHTML = `<strong>${esc(sm[0])}</strong><span>${esc(sm[1])} · ${esc(sm[2])}</span>`; b.onclick = () => loadSample(sm); return b }
+        document.getElementById('add').onclick = () => { const q = Math.max(1, Math.min(20, parseInt(document.getElementById('quantity').value) || 1)); build[select.value] = (build[select.value] || 0) + q; render(); analyze() }; document.getElementById('remove').onclick = () => { const ks = Object.keys(build); if (ks.length) { const s = ks[ks.length - 1]; if (build[s] > 1) build[s]--; else delete build[s]; render(); analyze() } }; document.getElementById('clear').onclick = () => { build = {}; render(); analyze() }; document.getElementById('check').onclick = () => analyze();
+        ['Water', 'Carbon dioxide', 'Ammonia', 'Methane', 'Sodium chloride', 'Calcium carbonate', 'Iron', 'Sulfur hexafluoride'].forEach(n => { const sm = samples.find(x => x[0] === n); if (sm) document.getElementById('examples').appendChild(sampleButton(sm)) }); function drawLibrary(q = '') { const el = document.getElementById('library'); el.innerHTML = ''; const filtered = samples.filter(s => s.join(' ').toLowerCase().includes(q.toLowerCase())); filtered.forEach(sm => el.appendChild(sampleButton(sm))); if (!filtered.length) el.innerHTML = '<p class="muted">No matching entry. Try another name or formula.</p>' } document.getElementById('search').addEventListener('input', e => drawLibrary(e.target.value)); drawLibrary(); render();
+    </script>
+</body>
+
+</html>

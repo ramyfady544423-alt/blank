@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Density Lab — Liquid Layers & Falling Objects</title>
+<style>
+:root{--bg:#071426;--panel:#0d2038;--panel2:#102944;--line:#23415f;--text:#eef6ff;--muted:#a8bdd4;--accent:#56d6c9;--gold:#ffd166}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#102b49 0,#071426 58%);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+header{max-width:1280px;margin:auto;padding:30px 22px 18px} .eyebrow{color:var(--accent);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:.75rem}h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;margin:8px 0 12px;letter-spacing:-.04em}header p{color:var(--muted);max-width:750px;margin:0}
+main{max-width:1280px;margin:auto;padding:0 22px 40px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:18px}
+.panel{background:linear-gradient(160deg,rgba(17,42,68,.97),rgba(10,27,47,.98));border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 55px #0002;min-width:0}.panel h2{font-size:1.1rem;margin:0 0 5px}.sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+.lab{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(250px,1.2fr);gap:18px;align-items:center}
+.glass-stage{height:410px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding:20px 0 36px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,#1a4563 0,transparent 65%)}
+.glass{position:relative;width:min(210px,80%);height:330px;border:3px solid #b8d9ebaa;border-top:0;border-radius:0 0 26px 26px;overflow:hidden;background:#a9dffb0b;box-shadow:inset 10px 0 18px #c6f1ff0b,12px 12px 30px #0002}
+.glass:before{content:"";position:absolute;top:0;left:-3px;right:-3px;height:12px;border:3px solid #b8d9ebaa;border-radius:50%;z-index:4}
+.liquid-layer{position:absolute;left:0;right:0;bottom:0;transition:height .65s ease,bottom .65s ease;opacity:.88;border-top:1px solid #ffffff80}
+.liquid-layer:after{content:"";position:absolute;left:0;right:0;top:-3px;height:7px;border-radius:50%;background:#ffffff25}
+.glass-label{position:absolute;left:50%;transform:translateX(-50%);bottom:7px;color:#d9efff;font-size:.72rem;white-space:nowrap;z-index:5}
+.object{position:absolute;z-index:8;width:44px;height:44px;left:50%;top:16px;transform:translateX(-50%);display:grid;place-items:center;border:2px solid #ffffffb0;box-shadow:0 5px 12px #0005;border-radius:50%;font-size:.7rem;font-weight:900;color:#092037;transition:top 1.25s cubic-bezier(.22,.8,.25,1),left .35s,transform .35s;will-change:top}
+.object.falling{animation:wobble .35s ease-in-out 3}@keyframes wobble{0%,100%{margin-left:0}25%{margin-left:-4px}75%{margin-left:4px}}
+.ruler{position:absolute;right:calc(50% - 135px);bottom:48px;height:300px;border-left:1px dashed #8fb5d080;width:20px}.ruler span{position:absolute;left:6px;color:#a8bdd4;font-size:10px}.ruler span:nth-child(1){top:0}.ruler span:nth-child(2){top:25%}.ruler span:nth-child(3){top:50%}.ruler span:nth-child(4){top:75%}.ruler span:nth-child(5){bottom:0}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:6px 9px;border-radius:999px;font-size:.75rem;color:#d7e6f5}.dot{width:9px;height:9px;border-radius:50%}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}.stat{background:#07182a;border:1px solid #203b57;border-radius:13px;padding:11px}.stat small{display:block;color:var(--muted);font-size:.72rem}.stat strong{font-size:1.1rem;display:block;margin-top:3px}
+.control-block{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}.control-block:first-child{border:0;padding-top:0;margin-top:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}.row label{font-weight:700;font-size:.9rem}select,input[type=number]{background:#07182a;color:var(--text);border:1px solid #31516e;border-radius:10px;padding:10px 11px;width:100%;font:inherit;min-width:0}select:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:var(--muted);font-size:.78rem;margin:0 0 5px}
+button{font:inherit;font-weight:800;border:0;border-radius:11px;padding:11px 14px;cursor:pointer;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button:focus-visible{outline:3px solid white;outline-offset:2px}.primary{background:var(--accent);color:#052132}.secondary{background:#173653;color:#e7f4ff;border:1px solid #31516e}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.buttons button{flex:1}
+.note{font-size:.82rem;color:var(--muted);background:#081a2c;border:1px solid #203b57;padding:12px;border-radius:12px;margin-top:14px}.result{margin-top:13px;border-radius:12px;padding:12px;background:#0a2b3a;border:1px solid #24616c;color:#c9fff5}.result strong{color:#fff}.result.warn{background:#352816;border-color:#78562a;color:#ffe6b4}
+.material-list{display:grid;gap:8px;margin-top:12px}.material{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:9px;align-items:center;background:#081a2c;border:1px solid #1d3854;border-radius:11px;padding:10px}.material .swatch{height:34px;border-radius:5px}.material strong{display:block;font-size:.87rem}.material small{color:var(--muted);font-size:.75rem}.material button{padding:6px 9px;font-size:.75rem}
+.table-wrap{overflow-x:auto;margin-top:14px}table{width:100%;border-collapse:collapse;font-size:.84rem}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #203b57;white-space:nowrap}th{color:#a8bdd4;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+footer{max-width:1280px;margin:0 auto;padding:0 22px 30px;color:#8ea8c2;font-size:.8rem}
+@media(max-width:850px){main{grid-template-columns:1fr}.lab{grid-template-columns:minmax(0,.85fr) minmax(230px,1fr)}}
+@media(max-width:560px){header{padding:23px 15px 15px}main{padding:0 12px 25px}.panel{padding:14px;border-radius:17px}.lab{grid-template-columns:1fr}.glass-stage{height:370px}.glass{height:290px}.ruler{height:260px;right:calc(50% - 132px)}.stat-grid{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:.92rem}.field-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Interactive physics • Density lab</div>
+  <h1>What sinks?<br><span style="color:var(--accent)">What floats?</span></h1>
+  <p>Build a layered liquid column, drop a solid into it, and see how density decides where everything settles. Choose real materials or enter your own values.</p>
+</header>
+<main>
+<section class="panel">
+  <h2>01 / Live density tank</h2><p class="sub">Liquids arrange from least dense at the top to most dense at the bottom.</p>
+  <div class="lab">
+    <div>
+      <div class="glass-stage" id="stage">
+        <div class="ruler"><span>Top</span><span>¼</span><span>½</span><span>¾</span><span>Bottom</span></div>
+        <div class="glass" id="glass"><div class="glass-label">DENSITY COLUMN</div></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div>
+      <div class="control-block">
+        <div class="row"><label for="liquidSelect">Add a liquid</label></div>
+        <select id="liquidSelect"></select>
+        <div class="buttons"><button class="primary" id="addLiquid">+ Add liquid</button><button class="secondary" id="resetLiquids">Reset layers</button></div>
+        <div class="note">For the clearest layer effect, choose liquids that do not mix easily. Real liquids such as water and alcohol may mix; this simulator shows idealized layers.</div>
+      </div>
+      <div class="control-block">
+        <div class="row"><label for="solidSelect">Solid to drop</label></div>
+        <select id="solidSelect"></select>
+        <div class="field-grid" style="margin-top:10px">
+          <div class="field"><label for="massInput">Mass (g)</label><input id="massInput" type="number" min="0.1" max="100000" step="any" value="50"></div>
+          <div class="field"><label for="volumeInput">Volume (mL)</label><input id="volumeInput" type="number" min="0.1" max="100000" step="any" value="18.5"></div>
+        </div>
+        <div class="buttons"><button class="primary" id="dropButton">↓ Drop object</button><button class="secondary" id="resetObject">Reset object</button></div>
+      </div>
+      <div id="result" class="result" aria-live="polite">Choose a solid and drop it into the column.</div>
+    </div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><small>Object density</small><strong id="densityStat">2.70 g/mL</strong></div>
+    <div class="stat"><small>Liquid layers</small><strong id="layerStat">3</strong></div>
+    <div class="stat"><small>Final position</small><strong id="positionStat">Ready</strong></div>
+  </div>
+</section>
+<section class="panel">
+  <h2>02 / Layer manager</h2><p class="sub">Remove any layer or add several liquids to compare their densities side by side.</p>
+  <div id="layerList" class="material-list"></div>
+  <div class="control-block">
+    <h2>03 / Custom material</h2><p class="sub">Add your own liquid or solid density (in g/mL).</p>
+    <div class="field-grid">
+      <div class="field"><label for="customName">Material name</label><input id="customName" placeholder="e.g. Mystery liquid" maxlength="28"></div>
+      <div class="field"><label for="customType">Material type</label><select id="customType"><option value="liquid">Liquid</option><option value="solid">Solid</option></select></div>
+      <div class="field"><label for="customDensity">Density (g/mL)</label><input id="customDensity" type="number" min="0.01" max="30" step="any" placeholder="e.g. 1.25"></div>
+      <div class="field"><label for="customColor">Color</label><select id="customColor"><option value="#bd83ff">Violet</option><option value="#ff8d76">Coral</option><option value="#6be2a4">Mint</option><option value="#ffd166">Amber</option><option value="#5fc8ff">Blue</option><option value="#ff75b5">Pink</option></select></div>
+    </div>
+    <div class="buttons"><button class="primary" id="addCustom">Add custom material</button></div>
+    <div id="customMessage" class="note">Custom liquids can be added to the column. Choose a custom solid from the solid menu to drop it.</div>
+  </div>
+  <div class="control-block">
+    <h2>04 / Density comparison</h2>
+    <div class="table-wrap"><table><thead><tr><th>Material</th><th>Type</th><th>Density</th></tr></thead><tbody id="densityTable"></tbody></table></div>
+  </div>
+</section>
+</main>
+<footer>Educational model: density = mass ÷ volume. Values are approximate and can vary with temperature, purity, and composition. The animation illustrates ideal settling, not fluid dynamics or chemical miscibility.</footer>
+<script>
+const liquidDB = [
+ {id:'oil',name:'Vegetable oil',density:.92,color:'#e8b84f',type:'liquid'},
+ {id:'alcohol',name:'Ethanol (alcohol)',density:.789,color:'#73c9ff',type:'liquid'},
+ {id:'water',name:'Water',density:1.00,color:'#39a9e8',type:'liquid'},
+ {id:'saltwater',name:'Salt water',density:1.03,color:'#2879d5',type:'liquid'},
+ {id:'milk',name:'Whole milk',density:1.03,color:'#f2f0dc',type:'liquid'},
+ {id:'honey',name:'Honey',density:1.42,color:'#e99b25',type:'liquid'},
+ {id:'syrup',name:'Corn syrup',density:1.38,color:'#c36b26',type:'liquid'},
+ {id:'glycerin',name:'Glycerin',density:1.26,color:'#9a8bff',type:'liquid'},
+ {id:'mercury',name:'Mercury',density:13.53,color:'#b7c5d2',type:'liquid'}
+];
+const solidDB = [
+ {id:'cork',name:'Cork',density:.24,color:'#c89b62',type:'solid'},
+ {id:'ice',name:'Ice',density:.917,color:'#bceeff',type:'solid'},
+ {id:'wood',name:'Pine wood',density:.55,color:'#d9a66c',type:'solid'},
+ {id:'plastic',name:'Plastic (HDPE)',density:.95,color:'#ff8d76',type:'solid'},
+ {id:'rubber',name:'Rubber',density:1.10,color:'#4b5665',type:'solid'},
+ {id:'glass',name:'Glass',density:2.50,color:'#83d8d0',type:'solid'},
+ {id:'aluminum',name:'Aluminum',density:2.70,color:'#c7d3df',type:'solid'},
+ {id:'iron',name:'Iron',density:7.87,color:'#9ba6b4',type:'solid'},
+ {id:'copper',name:'Copper',density:8.96,color:'#cf8055',type:'solid'},
+ {id:'gold',name:'Gold',density:19.32,color:'#ffd166',type:'solid'}
+];
+let customMaterials=[], nextId=1;
+let layers=['oil','water','honey'].map(id=>liquidDB.find(x=>x.id===id));
+let selectedSolid=solidDB.find(x=>x.id==='aluminum');
+let objectDropped=false;
+const $=id=>document.getElementById(id);
+const allMaterials=()=>[...liquidDB,...solidDB,...customMaterials];
+function fmt(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:3});}
+function populateSelects(){
+ $('liquidSelect').innerHTML=allMaterials().filter(m=>m.type==='liquid').map(m=>`<option value="${m.id}">${m.name} — ${fmt(m.density)} g/mL</option>`).join('');
+ $('solidSelect').innerHTML=allMaterials().filter(m=>m.type==='solid').map(m=>`<option value="${m.id}">${m.name} — ${fmt(m.density)} g/mL</option>`).join('');
+ $('solidSelect').value=selectedSolid.id;
+}
+function getMaterial(id){return allMaterials().find(m=>m.id===id);}
+function setSolidFromSelect(){selectedSolid=getMaterial($('solidSelect').value);$('massInput').value='50';$('volumeInput').value=fmt(50/selectedSolid.density);updateStats();if(objectDropped)dropObject(false);}
+function sortedLayers(){return [...layers].sort((a,b)=>a.density-b.density);}
+function renderLayers(){
+ const sorted=sortedLayers(), glass=$('glass');
+ glass.querySelectorAll('.liquid-layer').forEach(e=>e.remove());
+ const legend=$('legend');legend.innerHTML='';$('layerList').innerHTML='';
+ // Render from bottom to top so low-density liquid ends up above dense liquid.
+ let bottom=0;const total=sorted.reduce((s,l)=>s+l.density,0)||1;
+ sorted.forEach((l,i)=>{
+   const h=layers.length?100/layers.length:0;
+   const el=document.createElement('div');el.className='liquid-layer';el.style.height=h+'%';el.style.bottom=(i*100/layers.length)+'%';el.style.background=`linear-gradient(90deg,${l.color}cc,${l.color}80)`;
+   el.title=`${l.name}: ${l.density} g/mL`;glass.insertBefore(el,glass.querySelector('.glass-label'));
+   const chip=document.createElement('div');chip.className='chip';chip.innerHTML=`<span class="dot" style="background:${l.color}"></span>${l.name} · ${fmt(l.density)}`;legend.appendChild(chip);
+ });
+ // List order is top-to-bottom, lowest density first.
+ sorted.forEach((l,i)=>{
+   const item=document.createElement('div');item.className='material';
+   item.innerHTML=`<div class="swatch" style="background:${l.color}"></div><div><strong>${i===0?'Top layer':i===sorted.length-1?'Bottom layer':'Middle layer'} · ${l.name}</strong><small>${fmt(l.density)} g/mL</small></div><button class="secondary" data-remove="${l.id}" aria-label="Remove ${l.name}">Remove</button>`;
+   $('layerList').appendChild(item);
+ });
+ $('layerList').querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{layers=layers.filter(l=>l.id!==btn.dataset.remove);renderAll();if(objectDropped)dropObject(false)}));
+ $('layerStat').textContent=layers.length;
+ renderTable();updateStats();
+}
+function renderTable(){
+ const mats=allMaterials().slice().sort((a,b)=>a.density-b.density);
+ $('densityTable').innerHTML=mats.map(m=>`<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${m.color};margin-right:7px"></span>${m.name}</td><td>${m.type}</td><td>${fmt(m.density)} g/mL</td></tr>`).join('');
+}
+function updateStats(){
+ const mass=parseFloat($('massInput').value),vol=parseFloat($('volumeInput').value);
+ const density=mass>0&&vol>0?mass/vol:selectedSolid.density;
+ $('densityStat').textContent=fmt(density)+' g/mL';
+ $('layerStat').textContent=layers.length;
+}
+function addLayer(){
+ const l=getMaterial($('liquidSelect').value);if(!l)return;
+ if(layers.some(x=>x.id===l.id)){showResult(`${l.name} is already in the column. Remove it first if you want to add it again.`,true);return;}
+ layers.push(l);renderAll();
+}
+function renderAll(){populateSelects();renderLayers();}
+function showResult(msg,warn=false){$('result').className='result'+(warn?' warn':'');$('result').innerHTML=msg;}
+function resetObject(){objectDropped=false;const old=$('stage').querySelector('.object');if(old)old.remove();$('positionStat').textContent='Ready';showResult('Object reset. Choose a solid and drop it again.');}
+function dropObject(animate=true){
+ const mass=parseFloat($('massInput').value),vol=parseFloat($('volumeInput').value);
+ if(!(mass>0)||!(vol>0)||!Number.isFinite(mass/vol)){showResult('Enter a valid mass and volume greater than zero.',true);return;}
+ const density=mass/vol;let obj=$('stage').querySelector('.object');if(!obj){obj=document.createElement('div');obj.className='object';$('stage').appendChild(obj);}
+ obj.textContent=selectedSolid.name.split(' ').map(w=>w[0]).join('').slice(0,3);obj.style.background=selectedSolid.color;obj.title=`${selectedSolid.name}: ${fmt(density)} g/mL`;
+ obj.classList.remove('falling');obj.style.top='14px';obj.style.left='50%';obj.style.transform='translateX(-50%)';
+ $('positionStat').textContent='Falling…';$('densityStat').textContent=fmt(density)+' g/mL';
+ const sorted=sortedLayers();let destination, message, warn=false;
+ if(!sorted.length){destination=300;message=`There are no liquid layers, so the object falls to the bottom of the empty cup. Object density: <strong>${fmt(density)} g/mL</strong>.`; }
+ else {
+   // Layer model: object stops at the first liquid denser than itself; otherwise it reaches the bottom.
+   const firstDenser=sorted.findIndex(l=>density<l.density);
+   if(firstDenser===0){destination=48;message=`It <strong>floats on top</strong> of ${sorted[0].name}, because its density (${fmt(density)} g/mL) is lower than the top liquid (${fmt(sorted[0].density)} g/mL).`;}
+   else if(firstDenser>0){destination=48+(firstDenser*(290/sorted.length));message=`It sinks through the lighter layers, then <strong>floats at the ${firstDenser===sorted.length-1?'top of the bottom layer':'interface above '+sorted[firstDenser].name}</strong>. Its density (${fmt(density)} g/mL) is between the surrounding liquid densities.`;}
+   else {destination=295;message=`It <strong>sinks to the bottom</strong>. Its density (${fmt(density)} g/mL) is greater than every liquid layer.`;}
+   const equal=sorted.find(l=>Math.abs(l.density-density)<0.015);
+   if(equal){message=`Its density is almost the same as ${equal.name} (${fmt(equal.density)} g/mL), so it may remain suspended around that layer in this simplified model.`;destination=48+sorted.indexOf(equal)*(290/sorted.length);}
+ }
+ objectDropped=true;
+ if(animate){obj.classList.add('falling');setTimeout(()=>{obj.style.top=destination+'px';},60);setTimeout(()=>obj.classList.remove('falling'),1150);}else obj.style.top=destination+'px';
+ $('positionStat').textContent=destination>=250?'Bottom':destination<80?'Top':'Middle';
+ showResult(message,warn);
+}
+$('addLiquid').addEventListener('click',addLayer);
+$('resetLiquids').addEventListener('click',()=>{layers=['oil','water','honey'].map(id=>liquidDB.find(x=>x.id===id));renderAll();resetObject();});
+$('solidSelect').addEventListener('change',setSolidFromSelect);
+$('massInput').addEventListener('input',updateStats);$('volumeInput').addEventListener('input',updateStats);
+$('dropButton').addEventListener('click',()=>dropObject(true));$('resetObject').addEventListener('click',resetObject);
+$('addCustom').addEventListener('click',()=>{
+ const name=$('customName').value.trim(),density=Number($('customDensity').value),type=$('customType').value,color=$('customColor').value;
+ if(!name||!Number.isFinite(density)||density<=0||density>30){$('customMessage').textContent='Enter a material name and a density greater than 0 and no more than 30 g/mL.';return;}
+ const material={id:'custom-'+nextId++,name,density,color,type};customMaterials.push(material);
+ if(type==='liquid')layers.push(material);
+ populateSelects();renderLayers();$('customMessage').textContent=`Added ${name} at ${fmt(density)} g/mL. ${type==='liquid'?'It has been added to the liquid column.':'Select it from the solid menu to drop it.'}`;
+ if(type==='solid'){$('solidSelect').value=material.id;setSolidFromSelect();}
+});
+populateSelects();renderLayers();updateStats();
+</script>
+</body>
+</html>
