@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Molecule Phase Lab | Melting & Boiling Simulator</title>
+  <style>
+    :root {
+      --bg: #071426;
+      --panel: #0d1e35;
+      --panel2: #102641;
+      --line: #203c5d;
+      --text: #edf5ff;
+      --muted: #9cb2ce;
+      --cyan: #58d9f4;
+      --orange: #ffb86b;
+      --green: #68e0b2;
+      --red: #ff7d91
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at 15% 0%, #14335a 0, transparent 36%), var(--bg);
+      color: var(--text);
+      font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif
+    }
+
+    header {
+      padding: 30px max(20px, calc((100% - 1180px)/2)) 22px;
+      border-bottom: 1px solid #203653
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-weight: 800;
+      letter-spacing: .16em;
+      font-size: .75rem;
+      text-transform: uppercase
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.08;
+      margin: 10px 0
+    }
+
+    header p {
+      max-width: 750px;
+      color: var(--muted);
+      margin: 12px 0 0
+    }
+
+    main {
+      max-width: 1180px;
+      margin: auto;
+      padding: 24px 20px 48px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px
+    }
+
+    .panel {
+      background: linear-gradient(160deg, #102641, #0b1a2e);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 36px #0002
+    }
+
+    h2 {
+      font-size: 1.08rem;
+      margin: 0 0 14px
+    }
+
+    label {
+      display: block;
+      font-size: .83rem;
+      color: #b6c8df;
+      font-weight: 650;
+      margin: 14px 0 7px
+    }
+
+    input,
+    select,
+    button {
+      font: inherit
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #2a4767;
+      border-radius: 11px;
+      background: #07172a;
+      color: var(--text);
+      outline: none
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px #58d9f422
+    }
+
+    button {
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 750;
+      transition: .18s
+    }
+
+    .primary {
+      background: var(--cyan);
+      color: #062036
+    }
+
+    .primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08)
+    }
+
+    .secondary {
+      background: #193552;
+      color: var(--text);
+      border: 1px solid #31516f
+    }
+
+    .secondary:hover {
+      background: #234566
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px
+    }
+
+    .actions button {
+      flex: 1
+    }
+
+    .small {
+      font-size: .8rem;
+      color: var(--muted)
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px
+    }
+
+    .chip {
+      background: #142b45;
+      border: 1px solid #2b4a68;
+      color: #c8e8ff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .78rem
+    }
+
+    .results {
+      display: grid;
+      gap: 20px
+    }
+
+    .topcards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .stat {
+      padding: 17px;
+      border-radius: 15px;
+      background: #0a1a2c;
+      border: 1px solid #203b58
+    }
+
+    .stat .name {
+      color: var(--muted);
+      font-size: .8rem
+    }
+
+    .stat .value {
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+      font-weight: 850;
+      letter-spacing: -.04em;
+      margin: 5px 0
+    }
+
+    .stat small {
+      color: var(--muted)
+    }
+
+    .melting {
+      color: var(--cyan)
+    }
+
+    .boiling {
+      color: var(--orange)
+    }
+
+    .phase-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px
+    }
+
+    .pill {
+      font-size: .75rem;
+      font-weight: 800;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #183b4b;
+      color: #80e6ff
+    }
+
+    .thermo {
+      margin-top: 17px;
+      background: #071426;
+      border: 1px solid #213b58;
+      border-radius: 15px;
+      padding: 15px
+    }
+
+    .scale {
+      height: 16px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #67d8fa 0%, #a1d9d5 40%, #ffd17b 72%, #ff7d91 100%);
+      position: relative;
+      margin: 18px 7px 12px
+    }
+
+    .marker {
+      position: absolute;
+      top: -8px;
+      width: 3px;
+      height: 32px;
+      background: white;
+      box-shadow: 0 0 0 2px #071426;
+      border-radius: 3px;
+      left: 50%;
+      transition: left .25s
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: .72rem
+    }
+
+    .temp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px
+    }
+
+    .temp-row input {
+      max-width: 130px
+    }
+
+    .phase-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px;
+      border-radius: 14px;
+      background: #0a1a2c;
+      border: 1px solid #203b58;
+      margin-top: 14px
+    }
+
+    .phase-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #173552;
+      font-size: 1.8rem
+    }
+
+    .phase-name {
+      font-weight: 850;
+      font-size: 1.1rem
+    }
+
+    .phase-desc {
+      font-size: .83rem;
+      color: var(--muted)
+    }
+
+    .particle-stage {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: linear-gradient(#09182a, #0d2540);
+      border: 1px solid #203b58;
+      margin-top: 14px
+    }
+
+    .particle-stage:after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 25%;
+      background: linear-gradient(#1c709055, #174a78aa);
+      border-top: 1px solid #54d8ef55
+    }
+
+    .particle {
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #e9ffff, #58d9f4 55%, #1874ae);
+      box-shadow: 0 0 12px #58d9f455;
+      z-index: 1
+    }
+
+    .particle.solid {
+      animation: none
+    }
+
+    .particle.liquid {
+      animation: liquid 2s ease-in-out infinite alternate
+    }
+
+    .particle.gas {
+      animation: gas 3.5s ease-in-out infinite alternate
+    }
+
+    @keyframes liquid {
+      from {
+        transform: translate(0, 0)
+      }
+
+      to {
+        transform: translate(5px, -5px)
+      }
+    }
+
+    @keyframes gas {
+      0% {
+        transform: translate(0, 0)
+      }
+
+      35% {
+        transform: translate(8px, -10px)
+      }
+
+      70% {
+        transform: translate(-7px, 7px)
+      }
+
+      100% {
+        transform: translate(3px, -4px)
+      }
+    }
+
+    .explain {
+      color: #c1d2e7;
+      font-size: .9rem
+    }
+
+    .notice {
+      border-left: 3px solid var(--orange);
+      padding: 10px 12px;
+      background: #2a241c;
+      color: #e9d7bd;
+      border-radius: 0 10px 10px 0;
+      font-size: .8rem;
+      margin-top: 14px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .87rem
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid #203b58
+    }
+
+    th {
+      color: var(--muted);
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .06em
+    }
+
+    .hidden {
+      display: none
+    }
+
+    .subheading {
+      font-weight: 800;
+      margin: 0 0 8px
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: .78rem;
+      margin-top: 12px
+    }
+
+    @media(max-width:820px) {
+      main {
+        grid-template-columns: 1fr
+      }
+
+      .topcards {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:460px) {
+      .topcards {
+        grid-template-columns: 1fr
+      }
+
+      .panel {
+        padding: 16px
+      }
+
+      header {
+        padding-top: 24px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="eyebrow">Interactive chemistry • Phase explorer</div>
+    <h1>Molecule Phase Lab</h1>
+    <p>Explore melting points, boiling points, and how temperature changes the state of a substance. Choose a known
+      substance or enter your own values to run a simple phase simulation.</p>
+  </header>
+  <main>
+    <aside class="panel">
+      <h2>1. Choose a substance</h2>
+      <label for="substance">Substance database</label>
+      <select id="substance">
+        <option value="water">Water (H₂O)</option>
+        <option value="ethanol">Ethanol (C₂H₆O)</option>
+        <option value="oxygen">Oxygen (O₂)</option>
+        <option value="nitrogen">Nitrogen (N₂)</option>
+        <option value="carbonDioxide">Carbon dioxide (CO₂)</option>
+        <option value="methane">Methane (CH₄)</option>
+        <option value="ammonia">Ammonia (NH₃)</option>
+        <option value="hydrogen">Hydrogen (H₂)</option>
+        <option value="chlorine">Chlorine (Cl₂)</option>
+        <option value="benzene">Benzene (C₆H₆)</option>
+        <option value="acetone">Acetone (C₃H₆O)</option>
+        <option value="mercury">Mercury (Hg)</option>
+        <option value="iron">Iron (Fe)</option>
+        <option value="copper">Copper (Cu)</option>
+        <option value="sodiumChloride">Sodium chloride (NaCl)</option>
+        <option value="sucrose">Sucrose (C₁₂H₂₂O₁₁)</option>
+        <option value="custom">Custom substance / molecule</option>
+      </select>
+      <div id="presetInfo" class="small" style="margin-top:8px"></div>
+      <label for="search">Find a substance</label><input id="search" placeholder="Search name or formula…">
+      <div id="searchResults" class="examples"></div>
+      <div id="customFields" class="hidden">
+        <label for="customName">Substance name</label><input id="customName" placeholder="e.g. My molecule">
+        <label for="customFormula">Formula (optional)</label><input id="customFormula" placeholder="e.g. X₂Y">
+        <label for="customMp">Melting point (°C)</label><input id="customMp" type="number" value="0" step="any">
+        <label for="customBp">Boiling point (°C)</label><input id="customBp" type="number" value="100" step="any">
+        <div class="small">Enter experimental/reference values. The formula alone cannot reliably predict these
+          temperatures.</div>
+      </div>
+      <div class="actions"><button class="primary" id="apply">Apply substance</button><button class="secondary"
+          id="reset">Reset</button></div>
+      <div class="notice">Reference values are approximate and generally for about 1 atm pressure. Some substances
+        decompose or sublime instead of melting normally.</div>
+    </aside>
+    <section class="results">
+      <div class="panel">
+        <div class="phase-head">
+          <div>
+            <div class="eyebrow">Substance profile</div>
+            <h2 id="currentName" style="margin:5px 0 0">Water (H₂O)</h2>
+          </div><span class="pill" id="formulaPill">H₂O</span>
+        </div>
+        <p id="description" class="explain">A familiar molecular liquid. Hydrogen bonding gives water unusually high
+          melting and boiling points for its small molecules.</p>
+        <div class="topcards">
+          <div class="stat">
+            <div class="name">Melting point</div>
+            <div class="value melting" id="mpValue">0 °C</div><small id="mpKelvin">273.15 K</small>
+          </div>
+          <div class="stat">
+            <div class="name">Boiling point</div>
+            <div class="value boiling" id="bpValue">100 °C</div><small id="bpKelvin">373.15 K</small>
+          </div>
+        </div>
+        <div class="thermo">
+          <div class="phase-head"><strong>2. Change temperature</strong><span class="pill" id="tempReadout">20 °C</span>
+          </div>
+          <div class="temp-row"><label for="tempSlider" style="margin:0">Temperature</label><input id="tempNumber"
+              type="number" value="20" min="-273.15" max="5000" step="any" aria-label="Temperature in Celsius"></div>
+          <input id="tempSlider" type="range" min="-273.15" max="500" value="20" step="0.5"
+            style="padding:0;margin-top:13px;accent-color:#58d9f4">
+          <div class="scale">
+            <div class="marker" id="mpMarker" title="Melting point"></div>
+            <div class="marker" id="bpMarker" title="Boiling point"></div>
+          </div>
+          <div class="scale-labels"><span>Colder</span><span>Melting point</span><span>Boiling
+              point</span><span>Hotter</span></div>
+        </div>
+        <div class="phase-box">
+          <div class="phase-icon" id="phaseIcon">💧</div>
+          <div>
+            <div class="phase-name" id="phaseName">Liquid</div>
+            <div class="phase-desc" id="phaseDesc">The substance is between its melting and boiling points at this
+              pressure.</div>
+          </div>
+        </div>
+        <div class="particle-stage" id="particles" aria-label="Animated particle illustration"></div>
+        <p class="footer-note">Particle animation is a visual analogy, not a molecular dynamics calculation. Phase
+          changes can also depend on pressure.</p>
+      </div>
+      <div class="panel">
+        <h2>3. Compare substances</h2>
+        <p class="small">Add selected substances to a comparison table. Values shown are reference values, not
+          predictions from chemical formula.</p>
+        <div class="actions" style="margin:0 0 10px"><button class="primary" id="addCompare">＋ Add current
+            substance</button><button class="secondary" id="clearCompare">Clear table</button></div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Substance</th>
+                <th>Formula</th>
+                <th>Melting (°C)</th>
+                <th>Boiling (°C)</th>
+              </tr>
+            </thead>
+            <tbody id="compareBody">
+              <tr>
+                <td colspan="4" class="small">Add substances to compare them.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>What do the temperatures mean?</h2>
+        <p class="explain"><strong class="melting">Melting point:</strong> the temperature where a solid changes into a
+          liquid at a given pressure.</p>
+        <p class="explain"><strong class="boiling">Boiling point:</strong> the temperature where a liquid's vapour
+          pressure matches the surrounding pressure, so bubbles can form throughout the liquid.</p>
+        <p class="explain"><strong>Why are they different?</strong> Particle attractions matter. Stronger attractions
+          often mean more energy is needed to separate particles, but molecular shape, crystal structure, and pressure
+          also affect the result.</p>
+        <p class="footer-note">“All molecules” is too large for a small built-in list: countless compounds exist, and
+          many have no measured melting or boiling point. Use Custom to enter trusted values for any substance. Ionic
+          solids and metals are included as comparison examples even though they are not molecules.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const data = {
+      water: { name: "Water", formula: "H₂O", mp: 0, bp: 100, desc: "A small molecule with strong hydrogen bonding. At standard pressure, ice melts at 0°C and liquid water boils at 100°C." },
+      ethanol: { name: "Ethanol", formula: "C₂H₆O", mp: -114.1, bp: 78.37, desc: "A polar molecule that can form hydrogen bonds. It melts far below water and boils below water at standard pressure." },
+      oxygen: { name: "Oxygen", formula: "O₂", mp: -218.79, bp: -182.96, desc: "A small, nonpolar molecule. Weak intermolecular attractions make oxygen a gas at ordinary room temperature." },
+      nitrogen: { name: "Nitrogen", formula: "N₂", mp: -210, bp: -195.79, desc: "A small nonpolar molecule with weak attractions; it remains gaseous at ordinary room temperature." },
+      carbonDioxide: { name: "Carbon dioxide", formula: "CO₂", mp: -56.6, bp: -78.5, desc: "At 1 atm, carbon dioxide does not melt into a liquid: it sublimates near −78.5°C. Its liquid phase requires pressure above the triple point (~5.18 bar)." },
+      methane: { name: "Methane", formula: "CH₄", mp: -182.5, bp: -161.5, desc: "A small nonpolar molecule with weak intermolecular forces. It is a gas at room temperature." },
+      ammonia: { name: "Ammonia", formula: "NH₃", mp: -77.73, bp: -33.34, desc: "A polar molecule that can hydrogen-bond. It is gaseous at room temperature at standard pressure." },
+      hydrogen: { name: "Hydrogen", formula: "H₂", mp: -259.16, bp: -252.87, desc: "The lightest molecule, with very weak intermolecular attractions. It remains gaseous at ordinary temperatures." },
+      chlorine: { name: "Chlorine", formula: "Cl₂", mp: -101.5, bp: -34.04, desc: "A nonpolar diatomic molecule. It is a gas at room temperature, with a boiling point close to −34°C." },
+      benzene: { name: "Benzene", formula: "C₆H₆", mp: 5.5, bp: 80.1, desc: "A ring-shaped, nonpolar molecule. It is liquid at room temperature, but hazardous and carcinogenic." },
+      acetone: { name: "Acetone", formula: "C₃H₆O", mp: -94.7, bp: 56.05, desc: "A polar solvent with a relatively low boiling point. It is highly flammable." },
+      mercury: { name: "Mercury", formula: "Hg", mp: -38.83, bp: 356.73, desc: "An element and metal, not a molecule. It is liquid at room temperature; mercury vapour is toxic." },
+      iron: { name: "Iron", formula: "Fe", mp: 1538, bp: 2862, desc: "A metallic element, not a molecule. Its strong metallic bonding gives it a very high melting point." },
+      copper: { name: "Copper", formula: "Cu", mp: 1084.62, bp: 2562, desc: "A metallic element, not a molecule. Included to compare molecular substances with metals." },
+      sodiumChloride: { name: "Sodium chloride", formula: "NaCl", mp: 801, bp: 1465, desc: "An ionic compound, not a discrete molecule in solid salt. Strong electrostatic attractions produce high phase-change temperatures." },
+      sucrose: { name: "Sucrose", formula: "C₁₂H₂₂O₁₁", mp: 186, bp: null, desc: "Sucrose (table sugar) decomposes/caramelizes on heating rather than having a normal, useful boiling point at 1 atm." }
+    };
+    let current = { ...data.water, key: "water" }, compare = [];
+    const $ = id => document.getElementById(id);
+    function fmt(v) { return v === null || v === undefined ? "No normal boiling point" : `${v} °C` }
+    function applyCurrent(key) {
+      if (key === "custom") {
+        $("customFields").classList.remove("hidden");
+        current = { name: $("customName").value.trim() || "Custom substance", formula: $("customFormula").value.trim() || "—", mp: Number($("customMp").value), bp: Number($("customBp").value), desc: "Custom values supplied by you. They are not automatically predicted from the molecular formula.", key: "custom" };
+        if (!Number.isFinite(current.mp) || !Number.isFinite(current.bp) || current.bp < current.mp) { alert("Enter valid temperatures, with boiling point greater than or equal to melting point."); return }
+      } else {
+        $("customFields").classList.add("hidden"); current = { ...data[key], key };
+      }
+      render();
+    }
+    function render() {
+      $("currentName").textContent = current.name; $("formulaPill").textContent = current.formula;
+      $("description").textContent = current.desc; $("mpValue").textContent = fmt(current.mp); $("bpValue").textContent = fmt(current.bp);
+      $("mpKelvin").textContent = `${(current.mp + 273.15).toFixed(2)} K`;
+      $("bpKelvin").textContent = current.bp == null ? "—" : `${(current.bp + 273.15).toFixed(2)} K`;
+      $("presetInfo").textContent = current.key === "custom" ? "Custom reference values" : `Reference data • ${current.key === "carbonDioxide" || current.key === "sucrose" ? "special phase behaviour" : "approximately 1 atm"}`;
+      const t = Number($("tempNumber").value); updateTemp(t);
+    }
+    function updateTemp(t) {
+      if (!Number.isFinite(t)) return;
+      $("tempReadout").textContent = `${t} °C`;
+      let phase, icon, desc, kind;
+      if (current.key === "carbonDioxide" && t > -78.5 && t < -56.6) { phase = "Liquid range requires pressure"; icon = "⚠️"; desc = "At about 1 atm, CO₂ has no liquid phase. Increase pressure for liquid CO₂."; kind = "gas" }
+      else if (t < current.mp) { phase = "Solid"; icon = "🧊"; desc = "Particles are held in relatively fixed positions and mainly vibrate."; kind = "solid" }
+      else if (current.bp == null) { phase = t >= current.mp ? "Decomposes on heating" : "Solid"; icon = t >= current.mp ? "♨️" : "🧊"; desc = t >= current.mp ? "This substance breaks down before a normal boiling point can be assigned." : "The material is below its listed melting/decomposition temperature."; kind = t >= current.mp ? "liquid" : "solid" }
+      else if (t < current.bp) { phase = t === current.mp ? "Melting point" : "Liquid"; icon = t === current.mp ? "🫧" : "💧"; desc = t === current.mp ? "Solid and liquid can coexist at the melting point." : "At this temperature the substance is generally liquid at the stated pressure."; kind = t === current.mp ? "liquid" : "liquid" }
+      else { phase = t === current.bp ? "Boiling point" : "Gas"; icon = "☁️"; desc = t === current.bp ? "Liquid and gas can coexist at the boiling point." : "Particles move freely and spread out as a gas."; kind = "gas" }
+      $("phaseName").textContent = phase; $("phaseIcon").textContent = icon; $("phaseDesc").textContent = desc;
+      const lo = Number($("tempSlider").min), hi = Number($("tempSlider").max);
+      $("mpMarker").style.left = (Math.max(0, Math.min(100, (current.mp - lo) / (hi - lo) * 100))) + "%";
+      $("bpMarker").style.left = (current.bp == null ? 100 : Math.max(0, Math.min(100, (current.bp - lo) / (hi - lo) * 100))) + "%";
+      makeParticles(kind);
+    }
+    function makeParticles(kind) {
+      const stage = $("particles"); stage.innerHTML = "";
+      const count = kind === "gas" ? 25 : kind === "liquid" ? 35 : 36;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("i"); p.className = "particle " + kind;
+        let x, y;
+        if (kind === "solid") { x = 12 + (i % 9) * 9 + Math.random() * 2; y = 17 + Math.floor(i / 9) * 17 + Math.random() * 2 }
+        else if (kind === "liquid") { x = 7 + Math.random() * 86; y = 45 + Math.random() * 42 }
+        else { x = 4 + Math.random() * 91; y = 5 + Math.random() * 84 }
+        p.style.left = x + "%"; p.style.top = y + "%"; p.style.animationDelay = (-Math.random() * 3) + "s"; stage.appendChild(p);
+      }
+    }
+    function addCompare() {
+      if (!compare.some(x => x.name === current.name && x.formula === current.formula && x.mp === current.mp && x.bp === current.bp)) compare.push({ ...current });
+      renderCompare();
+    }
+    function renderCompare() {
+      const body = $("compareBody"); body.innerHTML = "";
+      if (!compare.length) { body.innerHTML = '<tr><td colspan="4" class="small">Add substances to compare them.</td></tr>'; return }
+      compare.forEach((x, i) => { const tr = document.createElement("tr");[x.name, x.formula, fmt(x.mp), fmt(x.bp)].forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td) }); const td = document.createElement("td"); const b = document.createElement("button"); b.textContent = "×"; b.className = "secondary"; b.setAttribute("aria-label", "Remove " + x.name); b.onclick = () => { compare.splice(i, 1); renderCompare() }; td.appendChild(b); tr.appendChild(td); body.appendChild(tr) });
+    }
+    $("apply").onclick = () => applyCurrent($("substance").value);
+    $("substance").onchange = () => { if ($("substance").value === "custom") { $("customFields").classList.remove("hidden") } else applyCurrent($("substance").value) };
+    $("tempSlider").oninput = () => { $("tempNumber").value = $("tempSlider").value; updateTemp(Number($("tempSlider").value)) };
+    $("tempNumber").oninput = () => { const t = Number($("tempNumber").value); if (Number.isFinite(t)) { if (t >= -273.15 && t <= 500) $("tempSlider").value = t; updateTemp(t) } };
+    $("addCompare").onclick = addCompare; $("clearCompare").onclick = () => { compare = []; renderCompare() };
+    $("reset").onclick = () => { $("substance").value = "water"; $("search").value = ""; $("tempNumber").value = 20; $("tempSlider").value = 20; applyCurrent("water") };
+    function searchData(q) {
+      const wrap = $("searchResults"); wrap.innerHTML = ""; if (!q.trim()) return;
+      const matches = Object.entries(data).filter(([k, v]) => (v.name + " " + v.formula).toLowerCase().includes(q.toLowerCase())).slice(0, 6);
+      matches.forEach(([key, v]) => { const b = document.createElement("button"); b.className = "chip"; b.textContent = v.name + " (" + v.formula + ")"; b.onclick = () => { $("substance").value = key; applyCurrent(key); wrap.innerHTML = ""; $("search").value = "" }; wrap.appendChild(b) });
+      if (!matches.length) { const s = document.createElement("span"); s.className = "small"; s.textContent = "No match in this small built-in list. Use Custom."; wrap.appendChild(s) }
+    }
+    $("search").addEventListener("input", e => searchData(e.target.value));
+    render();
+  </script>
+</body>
+
+</html>
