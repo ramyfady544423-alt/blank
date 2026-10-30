@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>File Download</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #071426;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-card {
+            background: #10243d;
+            border: 1px solid #203d5e;
+            border-radius: 25px;
+            padding: 45px 35px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .file-icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #9eb2ca;
+            margin-bottom: 30px;
+        }
+
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            margin-top: 12px;
+            transition: 0.25s;
+        }
+
+        .download-btn {
+            background: #1677ff;
+            color: white;
+            border: none;
+        }
+
+        .download-btn:hover {
+            background: #005de0;
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        .qr-btn {
+            background: transparent;
+            border: 2px solid #328cff;
+            color: #64aaff;
+        }
+
+        .qr-btn:hover {
+            background: #1677ff;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .qr-container {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            animation: appear 0.3s ease;
+        }
+
+        .qr-container img {
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .qr-container p {
+            color: #26364a;
+            font-weight: bold;
+            margin: 12px 0 0;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            color: #7189a5;
+            font-size: 12px;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-card">
+
+        <div class="file-icon">📁</div>
+
+        <h2>Download Your File</h2>
+
+        <p class="description">
+            Download the file directly or scan the QR code
+            using your mobile device.
+        </p>
+
+        <!-- DOWNLOAD BUTTON -->
+        <a id="downloadButton"
+           href="YOUR_DOWNLOAD_LINK_HERE"
+           download
+           class="btn main-btn download-btn">
+
+            ⬇ Download File
+
+        </a>
+
+        <!-- QR CODE BUTTON -->
+        <button class="btn main-btn qr-btn"
+                onclick="toggleQR()">
+
+            ▦ Show QR Code
+
+        </button>
+
+        <!-- QR CODE IMAGE -->
+        <div class="qr-container" id="qrContainer">
+
+            <img src="qr-code.png"
+                 alt="Download QR Code">
+
+            <p>Scan to access the file</p>
+
+        </div>
+
+        <div class="footer">
+            Secure File Access
+        </div>
+
+    </div>
+
+    <script>
+
+        function toggleQR() {
+
+            const qr = document.getElementById("qrContainer");
+            const button = document.querySelector(".qr-btn");
+
+            if (qr.style.display === "block") {
+
+                qr.style.display = "none";
+                button.innerHTML = "▦ Show QR Code";
+
+            } else {
+
+                qr.style.display = "block";
+                button.innerHTML = "✕ Hide QR Code";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

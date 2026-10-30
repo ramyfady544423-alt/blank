@@ -2,413 +2,412 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science Hub</title>
 
-    <title>Science Hub</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+<style>
+* {
+    box-sizing: border-box;
+}
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: white;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(ellipse at 15% 0%, #102b50, transparent 45%),
+        radial-gradient(ellipse at 100% 100%, #102342, transparent 45%),
+        #071426;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+.ambient {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: .17;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 12s ease-in-out infinite alternate;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: white;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background:
-                radial-gradient(ellipse at 15% 0%, #102b50 0%, transparent 45%),
-                radial-gradient(ellipse at 100% 100%, #102342 0%, transparent 45%),
-                #071426;
-        }
+.ambient-one {
+    top: -200px;
+    left: -100px;
+    background: #168cff;
+}
 
-        /* Background glow */
-        .ambient {
-            position: fixed;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            filter: blur(110px);
-            opacity: 0.16;
-            pointer-events: none;
-            z-index: -1;
-            animation: drift 12s ease-in-out infinite alternate;
-        }
+.ambient-two {
+    bottom: -220px;
+    right: -100px;
+    background: #752cff;
+}
 
-        .ambient-one {
-            top: -200px;
-            left: -100px;
-            background: #168cff;
-        }
+@keyframes drift {
+    to { transform: translate(100px, 80px); }
+}
 
-        .ambient-two {
-            bottom: -220px;
-            right: -100px;
-            background: #752cff;
-            animation-delay: -5s;
-        }
+.main-container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 55px 20px;
+}
 
-        @keyframes drift {
-            to {
-                transform: translate(100px, 100px);
-            }
-        }
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #65baff;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
 
-        .main-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 65px 22px;
-        }
+.eyebrow::before,
+.eyebrow::after {
+    content: "";
+    width: 35px;
+    height: 1px;
+    background: #278eff;
+}
 
-        /* Header */
-        .eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #65baff;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
+.main-title {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 850;
+    letter-spacing: -3px;
+    text-align: center;
+    margin: 0;
+    background: linear-gradient(110deg, white, #8edaff 55%, #3698ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
 
-        .eyebrow::before,
-        .eyebrow::after {
-            content: "";
-            width: 35px;
-            height: 1px;
-            background: #278eff;
-        }
+.subtitle {
+    max-width: 530px;
+    text-align: center;
+    color: #8da5c6;
+    font-size: .95rem;
+    line-height: 1.8;
+    margin: 20px 0 38px;
+}
 
-        .main-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 850;
-            letter-spacing: -4px;
-            text-align: center;
-            line-height: 1.05;
-            margin: 0;
-            background: linear-gradient(110deg, #ffffff, #8edaff 55%, #3698ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+/* Subject sections */
+.science-grid {
+    width: min(100%, 650px);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 
-        .subtitle {
-            max-width: 550px;
-            text-align: center;
-            color: #8da5c6;
-            font-size: 1rem;
-            line-height: 1.8;
-            margin: 22px 0 45px;
-        }
+.subject-section {
+    --accent: #48b8ff;
+    --rgb: 72,184,255;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        /* Subject cards */
-        .science-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 22px;
-            width: min(100%, 720px);
-        }
+/* Main subject button */
+.science-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 115px;
+    padding: 20px 24px;
+    overflow: hidden;
 
-        .science-card {
-            --accent: #36aaff;
-            --rgb: 54, 170, 255;
+    color: white;
+    text-decoration: none;
+    border: 1px solid rgba(var(--rgb), .5);
+    border-radius: 22px;
 
-            position: relative;
-            isolation: isolate;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            min-height: 150px;
-            padding: 25px 30px;
-            overflow: hidden;
+    background: linear-gradient(
+        115deg,
+        rgba(var(--rgb), .15),
+        rgba(8,22,42,.95) 75%
+    );
 
-            color: white;
-            text-decoration: none;
-            border: 1px solid rgba(var(--rgb), 0.55);
-            border-radius: 27px;
+    transition: .35s ease;
+}
 
-            background: linear-gradient(
-                115deg,
-                rgba(var(--rgb), 0.13),
-                rgba(8, 22, 42, 0.88) 75%
-            );
+.science-card::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: -120%;
+    width: 75%;
+    height: 100%;
+    transform: skewX(-20deg);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.12),
+        transparent
+    );
+    transition: left .7s ease;
+}
 
-            box-shadow:
-                inset 0 1px rgba(255, 255, 255, 0.06),
-                0 12px 35px rgba(0, 0, 0, 0.13);
+.science-card:hover::before {
+    left: 150%;
+}
 
-            transition:
-                transform 0.35s cubic-bezier(.2, .8, .2, 1),
-                border-color 0.35s ease,
-                box-shadow 0.35s ease,
-                background 0.35s ease;
-        }
+.science-card:hover {
+    color: white;
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 0 25px rgba(var(--rgb), .2),
+                0 15px 35px rgba(0,0,0,.2);
+}
 
-        /* Sweeping shine */
-        .science-card::before {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            top: 0;
-            left: -130%;
-            width: 75%;
-            height: 100%;
-            transform: skewX(-20deg);
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.09),
-                transparent
-            );
-            transition: left 0.7s ease;
-        }
+/* Main icon */
+.icon-box {
+    flex-shrink: 0;
+    width: 62px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    border-radius: 17px;
+    color: var(--accent);
+    font-size: 2rem;
+    border: 1px solid rgba(var(--rgb), .4);
+    background: rgba(var(--rgb), .12);
+    transition: .35s ease;
+}
 
-        .science-card:hover::before {
-            left: 150%;
-        }
+.science-card:hover .icon-box {
+    transform: rotate(-5deg) scale(1.08);
+    box-shadow: 0 0 20px rgba(var(--rgb), .2);
+}
 
-        /* Card glow */
-        .science-card::after {
-            content: "";
-            position: absolute;
-            z-index: -2;
-            inset: 10px;
-            border-radius: inherit;
-            background: rgba(var(--rgb), 0.3);
-            filter: blur(35px);
-            opacity: 0;
-            transition: opacity 0.35s ease;
-        }
+.card-content {
+    flex: 1;
+}
 
-        .science-card:hover {
-            color: white;
-            transform: translateY(-7px) scale(1.015);
-            border-color: var(--accent);
-            background: linear-gradient(
-                115deg,
-                rgba(var(--rgb), 0.23),
-                rgba(8, 22, 42, 0.96) 75%
-            );
-            box-shadow:
-                0 0 25px rgba(var(--rgb), 0.15),
-                0 20px 45px rgba(0, 0, 0, 0.3);
-        }
+.subject-label {
+    display: block;
+    color: var(--accent);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
 
-        .science-card:hover::after {
-            opacity: 1;
-        }
+.subject-title {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 750;
+}
 
-        .science-card:active {
-            transform: translateY(-2px) scale(0.99);
-        }
+.subject-description {
+    display: block;
+    color: #91a8c7;
+    font-size: .8rem;
+    margin-top: 3px;
+}
 
-        .science-card:focus-visible {
-            outline: 3px solid white;
-            outline-offset: 5px;
-        }
+.arrow-circle {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--accent);
+    border: 1px solid rgba(var(--rgb), .4);
+    background: rgba(var(--rgb), .08);
+    transition: .3s ease;
+}
 
-        /* Subject icon */
-        .icon-box {
-            flex-shrink: 0;
-            width: 82px;
-            height: 82px;
-            display: grid;
-            place-items: center;
-            border-radius: 23px;
-            color: var(--accent);
-            font-size: 2.5rem;
-            border: 1px solid rgba(var(--rgb), 0.45);
-            background: rgba(var(--rgb), 0.12);
-            transition:
-                transform 0.35s ease,
-                background 0.35s ease,
-                box-shadow 0.35s ease;
-        }
+.science-card:hover .arrow-circle {
+    transform: translateX(5px);
+}
 
-        .science-card:hover .icon-box {
-            transform: rotate(-6deg) scale(1.08);
-            background: rgba(var(--rgb), 0.22);
-            box-shadow: 0 0 25px rgba(var(--rgb), 0.15);
-        }
+/* Two sub-buttons */
+.sub-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
 
-        .card-content {
-            flex: 1;
-            min-width: 0;
-        }
+.sub-button {
+    min-width: 0;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
-        .subject-label {
-            display: block;
-            color: var(--accent);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin-bottom: 7px;
-        }
+    padding: 10px 8px;
+    text-align: center;
+    text-decoration: none;
 
-        .subject-title {
-            display: block;
-            font-size: clamp(1.5rem, 4vw, 2.15rem);
-            font-weight: 750;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-        }
+    color: var(--accent);
+    background: rgba(var(--rgb), .07);
+    border: 1px solid rgba(var(--rgb), .3);
+    border-radius: 12px;
 
-        .subject-description {
-            display: block;
-            color: #91a8c7;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
+    font-size: .83rem;
+    font-weight: 650;
 
-        .arrow-circle {
-            flex-shrink: 0;
-            width: 52px;
-            height: 52px;
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            border: 1px solid rgba(var(--rgb), 0.4);
-            background: rgba(var(--rgb), 0.08);
-            font-size: 1.5rem;
-            transition:
-                transform 0.35s ease,
-                background 0.35s ease;
-        }
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
 
-        .science-card:hover .arrow-circle {
-            transform: translateX(6px);
-            background: rgba(var(--rgb), 0.2);
-        }
+.sub-button:hover {
+    color: #071426;
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 18px rgba(var(--rgb), .22);
+}
 
-        /* Individual science themes */
-        .chemistry {
-            --accent: #48b8ff;
-            --rgb: 72, 184, 255;
-        }
+.sub-button:active {
+    transform: scale(.97);
+}
 
-        .biology {
-            --accent: #53e6a2;
-            --rgb: 83, 230, 162;
-        }
+.sub-button i {
+    font-size: 1rem;
+}
 
-        .physics {
-            --accent: #aa8aff;
-            --rgb: 170, 138, 255;
-        }
+/* Subject colors */
+.chemistry {
+    --accent: #48b8ff;
+    --rgb: 72,184,255;
+}
 
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #607895;
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-        }
+.biology {
+    --accent: #53e6a2;
+    --rgb: 83,230,162;
+}
 
-        .footer i {
-            color: #4daaff;
-            margin-right: 7px;
-        }
+.physics {
+    --accent: #aa8aff;
+    --rgb: 170,138,255;
+}
 
-        @media (max-width: 576px) {
-            .main-container {
-                padding: 45px 17px;
-            }
+.footer {
+    margin-top: 38px;
+    text-align: center;
+    color: #607895;
+    font-size: .72rem;
+    letter-spacing: 3px;
+}
 
-            .main-title {
-                letter-spacing: -2px;
-            }
+.footer i {
+    color: #4daaff;
+    margin-right: 7px;
+}
 
-            .subtitle {
-                margin-bottom: 32px;
-                font-size: 0.9rem;
-            }
+/* Mobile */
+@media (max-width: 576px) {
+    .main-container {
+        padding: 40px 16px;
+    }
 
-            .science-grid {
-                gap: 16px;
-            }
+    .main-title {
+        letter-spacing: -2px;
+    }
 
-            .science-card {
-                min-height: 120px;
-                padding: 19px 15px;
-                gap: 14px;
-                border-radius: 22px;
-            }
+    .subtitle {
+        font-size: .88rem;
+        margin: 17px 0 30px;
+    }
 
-            .icon-box {
-                width: 57px;
-                height: 57px;
-                border-radius: 16px;
-                font-size: 1.8rem;
-            }
+    .science-grid {
+        gap: 22px;
+    }
 
-            .subject-label {
-                font-size: 0.58rem;
-                letter-spacing: 2px;
-            }
+    .science-card {
+        min-height: 100px;
+        padding: 15px;
+        gap: 12px;
+    }
 
-            .subject-title {
-                font-size: 1.35rem;
-                margin-bottom: 4px;
-            }
+    .icon-box {
+        width: 49px;
+        height: 49px;
+        font-size: 1.6rem;
+    }
 
-            .subject-description {
-                font-size: 0.73rem;
-            }
+    .subject-title {
+        font-size: 1.35rem;
+    }
 
-            .arrow-circle {
-                width: 35px;
-                height: 35px;
-                font-size: 1.1rem;
-            }
-        }
+    .subject-description {
+        font-size: .7rem;
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-    </style>
+    .arrow-circle {
+        width: 34px;
+        height: 34px;
+    }
+
+    .sub-buttons {
+        gap: 8px;
+    }
+
+    .sub-button {
+        min-height: 44px;
+        font-size: .73rem;
+        padding: 8px 4px;
+        gap: 5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
+<div class="ambient ambient-one"></div>
+<div class="ambient ambient-two"></div>
 
-    <main class="main-container">
+<main class="main-container">
 
-        <div class="eyebrow">Explore the universe</div>
+    <div class="eyebrow">Explore the universe</div>
 
-        <h1 class="main-title">Science Hub</h1>
+    <h1 class="main-title">Science Hub</h1>
 
-        <p class="subtitle">
-            Discover the building blocks of matter, the secrets of life,
-            and the laws that govern our universe.
-        </p>
+    <p class="subtitle">
+        Discover the building blocks of matter, the secrets of life,
+        and the laws that govern our universe.
+    </p>
 
-        <nav class="science-grid" aria-label="Science subjects">
+    <div class="science-grid">
 
-            <!-- CHEMISTRY -->
-            <a href="chemistry.html" class="science-card chemistry">
+        <!-- CHEMISTRY -->
+        <section class="subject-section chemistry">
 
+            <a href="chemistry.html" class="science-card">
                 <span class="icon-box">
-                    <i class="bi bi-droplet-half" aria-hidden="true"></i>
+                    <i class="bi bi-droplet-half"></i>
                 </span>
 
                 <span class="card-content">
@@ -420,16 +419,30 @@
                 </span>
 
                 <span class="arrow-circle">
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    <i class="bi bi-arrow-right"></i>
                 </span>
-
             </a>
 
-            <!-- BIOLOGY -->
-            <a href="biology.html" class="science-card biology">
+            <div class="sub-buttons">
+                <a href="elements.html" class="sub-button">
+                    <i class="bi bi-grid-3x3"></i>
+                    Elements
+                </a>
 
+                <a href="molecules.html" class="sub-button">
+                    <i class="bi bi-diagram-3"></i>
+                    Molecules
+                </a>
+            </div>
+
+        </section>
+
+        <!-- BIOLOGY -->
+        <section class="subject-section biology">
+
+            <a href="biology.html" class="science-card">
                 <span class="icon-box">
-                    <i class="bi bi-virus" aria-hidden="true"></i>
+                    <i class="bi bi-virus"></i>
                 </span>
 
                 <span class="card-content">
@@ -441,16 +454,30 @@
                 </span>
 
                 <span class="arrow-circle">
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    <i class="bi bi-arrow-right"></i>
                 </span>
-
             </a>
 
-            <!-- PHYSICS -->
-            <a href="physics.html" class="science-card physics">
+            <div class="sub-buttons">
+                <a href="aq.html" class="sub-button">
+                    <i class="bi bi-circle"></i>
+                    Alarms and Quizzes
+                </a>
 
+                <a href="organisms.html" class="sub-button">
+                    <i class="bi bi-tree"></i>
+                    Reviews
+                </a>
+            </div>
+
+        </section>
+
+        <!-- PHYSICS -->
+        <section class="subject-section physics">
+
+            <a href="physics.html" class="science-card">
                 <span class="icon-box">
-                    <i class="bi bi-atom" aria-hidden="true"></i>
+                    <i class="bi bi-atom"></i>
                 </span>
 
                 <span class="card-content">
@@ -462,16 +489,32 @@
                 </span>
 
                 <span class="arrow-circle">
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    <i class="bi bi-arrow-right"></i>
                 </span>
-
             </a>
 
-        </nav>
+            <div class="sub-buttons">
+                <a href="motion.html" class="sub-button">
+                    <i class="bi bi-speedometer2"></i>
+                    Motion
+                </a>
 
-        
+                <a href="energy.html" class="sub-button">
+                    <i class="bi bi-lightning"></i>
+                    Energy
+                </a>
+            </div>
 
-    </main>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <i class="bi bi-stars"></i>
+        CURIOSITY HAS NO LIMITS
+    </footer>
+
+</main>
 
 </body>
 </html>
