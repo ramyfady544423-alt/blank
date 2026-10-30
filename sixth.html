@@ -4,35 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Density Lab — Liquid Layers & Falling Objects</title>
-<style>
-:root{--bg:#071426;--panel:#0d2038;--panel2:#102944;--line:#23415f;--text:#eef6ff;--muted:#a8bdd4;--accent:#56d6c9;--gold:#ffd166}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#102b49 0,#071426 58%);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
-header{max-width:1280px;margin:auto;padding:30px 22px 18px} .eyebrow{color:var(--accent);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:.75rem}h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;margin:8px 0 12px;letter-spacing:-.04em}header p{color:var(--muted);max-width:750px;margin:0}
-main{max-width:1280px;margin:auto;padding:0 22px 40px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:18px}
-.panel{background:linear-gradient(160deg,rgba(17,42,68,.97),rgba(10,27,47,.98));border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 55px #0002;min-width:0}.panel h2{font-size:1.1rem;margin:0 0 5px}.sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
-.lab{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(250px,1.2fr);gap:18px;align-items:center}
-.glass-stage{height:410px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding:20px 0 36px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,#1a4563 0,transparent 65%)}
-.glass{position:relative;width:min(210px,80%);height:330px;border:3px solid #b8d9ebaa;border-top:0;border-radius:0 0 26px 26px;overflow:hidden;background:#a9dffb0b;box-shadow:inset 10px 0 18px #c6f1ff0b,12px 12px 30px #0002}
-.glass:before{content:"";position:absolute;top:0;left:-3px;right:-3px;height:12px;border:3px solid #b8d9ebaa;border-radius:50%;z-index:4}
-.liquid-layer{position:absolute;left:0;right:0;bottom:0;transition:height .65s ease,bottom .65s ease;opacity:.88;border-top:1px solid #ffffff80}
-.liquid-layer:after{content:"";position:absolute;left:0;right:0;top:-3px;height:7px;border-radius:50%;background:#ffffff25}
-.glass-label{position:absolute;left:50%;transform:translateX(-50%);bottom:7px;color:#d9efff;font-size:.72rem;white-space:nowrap;z-index:5}
-.object{position:absolute;z-index:8;width:44px;height:44px;left:50%;top:16px;transform:translateX(-50%);display:grid;place-items:center;border:2px solid #ffffffb0;box-shadow:0 5px 12px #0005;border-radius:50%;font-size:.7rem;font-weight:900;color:#092037;transition:top 1.25s cubic-bezier(.22,.8,.25,1),left .35s,transform .35s;will-change:top}
-.object.falling{animation:wobble .35s ease-in-out 3}@keyframes wobble{0%,100%{margin-left:0}25%{margin-left:-4px}75%{margin-left:4px}}
-.ruler{position:absolute;right:calc(50% - 135px);bottom:48px;height:300px;border-left:1px dashed #8fb5d080;width:20px}.ruler span{position:absolute;left:6px;color:#a8bdd4;font-size:10px}.ruler span:nth-child(1){top:0}.ruler span:nth-child(2){top:25%}.ruler span:nth-child(3){top:50%}.ruler span:nth-child(4){top:75%}.ruler span:nth-child(5){bottom:0}
-.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:6px 9px;border-radius:999px;font-size:.75rem;color:#d7e6f5}.dot{width:9px;height:9px;border-radius:50%}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}.stat{background:#07182a;border:1px solid #203b57;border-radius:13px;padding:11px}.stat small{display:block;color:var(--muted);font-size:.72rem}.stat strong{font-size:1.1rem;display:block;margin-top:3px}
-.control-block{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}.control-block:first-child{border:0;padding-top:0;margin-top:0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}.row label{font-weight:700;font-size:.9rem}select,input[type=number]{background:#07182a;color:var(--text);border:1px solid #31516e;border-radius:10px;padding:10px 11px;width:100%;font:inherit;min-width:0}select:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:var(--muted);font-size:.78rem;margin:0 0 5px}
-button{font:inherit;font-weight:800;border:0;border-radius:11px;padding:11px 14px;cursor:pointer;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button:focus-visible{outline:3px solid white;outline-offset:2px}.primary{background:var(--accent);color:#052132}.secondary{background:#173653;color:#e7f4ff;border:1px solid #31516e}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.buttons button{flex:1}
-.note{font-size:.82rem;color:var(--muted);background:#081a2c;border:1px solid #203b57;padding:12px;border-radius:12px;margin-top:14px}.result{margin-top:13px;border-radius:12px;padding:12px;background:#0a2b3a;border:1px solid #24616c;color:#c9fff5}.result strong{color:#fff}.result.warn{background:#352816;border-color:#78562a;color:#ffe6b4}
-.material-list{display:grid;gap:8px;margin-top:12px}.material{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:9px;align-items:center;background:#081a2c;border:1px solid #1d3854;border-radius:11px;padding:10px}.material .swatch{height:34px;border-radius:5px}.material strong{display:block;font-size:.87rem}.material small{color:var(--muted);font-size:.75rem}.material button{padding:6px 9px;font-size:.75rem}
-.table-wrap{overflow-x:auto;margin-top:14px}table{width:100%;border-collapse:collapse;font-size:.84rem}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #203b57;white-space:nowrap}th{color:#a8bdd4;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
-footer{max-width:1280px;margin:0 auto;padding:0 22px 30px;color:#8ea8c2;font-size:.8rem}
-@media(max-width:850px){main{grid-template-columns:1fr}.lab{grid-template-columns:minmax(0,.85fr) minmax(230px,1fr)}}
-@media(max-width:560px){header{padding:23px 15px 15px}main{padding:0 12px 25px}.panel{padding:14px;border-radius:17px}.lab{grid-template-columns:1fr}.glass-stage{height:370px}.glass{height:290px}.ruler{height:260px;right:calc(50% - 132px)}.stat-grid{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:.92rem}.field-grid{grid-template-columns:1fr 1fr}}
-</style>
+
 </head>
 <body>
 <header>

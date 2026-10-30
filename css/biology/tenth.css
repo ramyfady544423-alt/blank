@@ -1,0 +1,549 @@
+
+        :root {
+            --bg: #061426;
+            --panel: #0a2039;
+            --panel2: #0d2947;
+            --line: #174267;
+            --text: #eaf5ff;
+            --muted: #a8c2dc;
+            --blue: #29a9ff;
+            --cyan: #62d7ff;
+            --green: #55e0a3
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(ellipse at 55% -15%, #123b64 0, transparent 48%), var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #06172bea;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+            padding: 14px 20px
+        }
+
+        .brand {
+            font-size: 1.35rem;
+            font-weight: 850;
+            letter-spacing: -.6px
+        }
+
+        .brand span {
+            color: var(--blue)
+        }
+
+        .brand-icon {
+            font-size: 1.7rem;
+            margin-right: 9px
+        }
+
+        .searchbox {
+            background: #0c2947;
+            border: 1px solid #24557d;
+            color: white;
+            border-radius: 13px;
+            padding: 10px 13px;
+            width: 100%;
+            outline: none
+        }
+
+        .searchbox::placeholder {
+            color: #a0bad4
+        }
+
+        .searchbox:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px #29a9ff22
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 245px minmax(0, 1fr);
+            min-height: calc(100vh - 68px)
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--line);
+            padding: 18px 14px;
+            background: #041329a8
+        }
+
+        .side-title {
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #72cfff;
+            font-weight: 800;
+            margin: 5px 8px 12px
+        }
+
+        .organism-list {
+            display: grid;
+            gap: 5px
+        }
+
+        .org-btn {
+            border: 1px solid transparent;
+            background: transparent;
+            color: #c5d9ec;
+            text-align: left;
+            border-radius: 10px;
+            padding: 9px 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            width: 100%;
+            transition: .18s
+        }
+
+        .org-btn:hover {
+            background: #102d4b;
+            border-color: #1e5279;
+            color: white
+        }
+
+        .org-btn.active {
+            background: linear-gradient(100deg, #07559a, #0c3157);
+            border-color: #1c91e6;
+            color: #fff
+        }
+
+        .org-emoji {
+            font-size: 1.35rem;
+            width: 28px;
+            text-align: center
+        }
+
+        .org-count {
+            margin-left: auto;
+            font-size: .75rem;
+            color: #86abc9
+        }
+
+        .main {
+            padding: 22px;
+            min-width: 0
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #0d2d50, #09203b 72%);
+            border: 1px solid #1c4b71;
+            border-radius: 18px;
+            padding: 23px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 17px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .welcome:after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border: 1px solid #2c82b544;
+            border-radius: 50%;
+            right: -50px;
+            top: -100px;
+            box-shadow: 0 0 0 28px #2c82b51a, 0 0 0 60px #2c82b511
+        }
+
+        .welcome-emoji {
+            font-size: 4.6rem;
+            min-width: 95px;
+            text-align: center;
+            filter: drop-shadow(0 7px 12px #0005)
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 850;
+            letter-spacing: -1px;
+            margin: 0 0 5px
+        }
+
+        .subtitle {
+            color: #8fd7ff;
+            font-style: italic;
+            margin-bottom: 12px
+        }
+
+        .welcome p {
+            color: #c1d6e9;
+            max-width: 700px;
+            margin: 0;
+            line-height: 1.65
+        }
+
+        .pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px
+        }
+
+        .pill {
+            border: 1px solid #285b80;
+            background: #0c2947;
+            border-radius: 100px;
+            padding: 6px 11px;
+            color: #cdeaff;
+            font-size: .8rem
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+            gap: 17px;
+            align-items: start
+        }
+
+        .panel {
+            background: linear-gradient(160deg, #091e36, #06182d);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .panel-head {
+            padding: 16px 18px;
+            border-bottom: 1px solid #153957;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px
+        }
+
+        .panel-head h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 0
+        }
+
+        .hint {
+            color: #a3c2dd;
+            font-size: .8rem
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            padding: 13px 14px 5px
+        }
+
+        .filter {
+            background: #102b48;
+            border: 1px solid #1b4265;
+            color: #c5d9ec;
+            border-radius: 9px;
+            padding: 7px 11px;
+            font-size: .8rem
+        }
+
+        .filter:hover {
+            border-color: #43baff;
+            color: white
+        }
+
+        .filter.active {
+            background: #128ce0;
+            border-color: #51c5ff;
+            color: white;
+            font-weight: 750
+        }
+
+        .organ-grid {
+            padding: 12px 14px 16px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 9px
+        }
+
+        .organ-card {
+            min-width: 0;
+            min-height: 116px;
+            border: 1px solid #183f62;
+            background: linear-gradient(155deg, #0d2947, #071a30);
+            border-radius: 12px;
+            color: #d9edff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 11px 5px;
+            cursor: pointer;
+            transition: transform .16s, border-color .16s, background .16s
+        }
+
+        .organ-card:hover {
+            transform: translateY(-2px);
+            border-color: #4ac6ff;
+            background: #10365a
+        }
+
+        .organ-card.active {
+            border: 2px solid #27baff;
+            background: linear-gradient(145deg, #0c4772, #092542);
+            box-shadow: 0 0 0 3px #16aaff18
+        }
+
+        .organ-emoji {
+            font-size: 2.25rem;
+            line-height: 1.15
+        }
+
+        .organ-name {
+            font-size: .82rem;
+            font-weight: 700;
+            text-align: center
+        }
+
+        .detail {
+            padding: 19px;
+            position: sticky;
+            top: 90px
+        }
+
+        .detail-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px
+        }
+
+        .detail-emoji {
+            font-size: 4.2rem;
+            width: 100px;
+            height: 100px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            background: radial-gradient(circle, #184a6d, #0a2039 70%);
+            border: 1px solid #205277;
+            border-radius: 17px
+        }
+
+        .detail h2 {
+            font-size: 1.65rem;
+            font-weight: 850;
+            margin: 0 0 7px
+        }
+
+        .tag {
+            display: inline-block;
+            background: #064d82;
+            border: 1px solid #1689d2;
+            color: #c9edff;
+            border-radius: 50px;
+            padding: 5px 10px;
+            font-size: .76rem
+        }
+
+        .detail p {
+            color: #c2d6e8;
+            line-height: 1.65
+        }
+
+        .section-title {
+            font-size: .95rem;
+            font-weight: 800;
+            border-top: 1px solid #1a3b59;
+            padding-top: 15px;
+            margin: 17px 0 12px
+        }
+
+        .function {
+            display: flex;
+            gap: 11px;
+            margin: 12px 0;
+            align-items: flex-start
+        }
+
+        .function-icon {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            background: #103654;
+            border-radius: 11px;
+            font-size: 1.1rem;
+            flex-shrink: 0
+        }
+
+        .function strong {
+            display: block;
+            font-size: .88rem;
+            margin-bottom: 3px
+        }
+
+        .function span {
+            font-size: .81rem;
+            color: #b3cce2;
+            line-height: 1.5;
+            display: block
+        }
+
+        .fact {
+            background: #082847;
+            border: 1px solid #1b5c83;
+            border-radius: 12px;
+            padding: 13px;
+            color: #c9eaff;
+            font-size: .87rem;
+            line-height: 1.6
+        }
+
+        .bottom-note {
+            margin-top: 17px;
+            background: #08203a;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #bcd4e9
+        }
+
+        .bottom-note strong {
+            color: white
+        }
+
+        .empty {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--muted);
+            padding: 25px
+        }
+
+        .compare-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px
+        }
+
+        .compare-bar select {
+            max-width: 190px;
+            background: #0c2947;
+            color: #eaf5ff;
+            border: 1px solid #285578;
+            border-radius: 9px;
+            padding: 8px
+        }
+
+        .compare-output {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border: 1px solid #235779;
+            border-radius: 11px;
+            background: #08243e;
+            color: #cce8fb;
+            font-size: .88rem;
+            line-height: 1.6
+        }
+
+        @media(max-width:1050px) {
+            .content-grid {
+                grid-template-columns: 1fr
+            }
+
+            .detail {
+                position: static
+            }
+
+            .organ-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr))
+            }
+        }
+
+        @media(max-width:700px) {
+            .app {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+                padding: 13px
+            }
+
+            .sidebar .organism-list {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 5px
+            }
+
+            .org-btn {
+                min-width: max-content;
+                width: auto
+            }
+
+            .org-count {
+                display: none
+            }
+
+            .side-title {
+                margin-bottom: 8px
+            }
+
+            .main {
+                padding: 12px
+            }
+
+            .topbar {
+                padding: 12px
+            }
+
+            .topbar .search-area {
+                margin-top: 10px
+            }
+
+            .welcome {
+                padding: 17px;
+                gap: 9px
+            }
+
+            .welcome-emoji {
+                font-size: 3rem;
+                min-width: 55px
+            }
+
+            .organ-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                padding: 10px
+            }
+
+            .organ-card {
+                min-height: 100px
+            }
+
+            .detail {
+                padding: 15px
+            }
+
+            .detail-emoji {
+                width: 76px;
+                height: 76px;
+                font-size: 3.2rem
+            }
+
+            .brand {
+                font-size: 1.15rem
+            }
+        }

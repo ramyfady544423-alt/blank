@@ -4,21 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Living Organisms Atlas</title>
-<style>
-:root{--bg:#071426;--panel:#0d2038;--panel2:#112944;--line:#25415f;--text:#edf5ff;--muted:#a9bfd6;--cyan:#62e6df;--blue:#78aaff;--green:#a5efbd;--pink:#ff9fc7}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#133354 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
-header{padding:38px max(20px,calc((100% - 1320px)/2)) 28px;border-bottom:1px solid var(--line);background:#08172ad9}
-.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-size:.75rem}
-h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.06;margin:12px 0}header p{max-width:800px;color:var(--muted);margin:12px 0 0}
-main{max-width:1320px;margin:auto;padding:24px 18px 60px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.stat,.panel{background:linear-gradient(145deg,#102641,#0b1c31);border:1px solid var(--line);border-radius:18px}.stat{padding:16px}.stat b{display:block;font-size:1.8rem;color:var(--cyan)}.stat span{color:var(--muted);font-size:.85rem}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tab,button,select,input{font:inherit}.tab,button{border:1px solid var(--line);background:#102640;color:var(--text);border-radius:10px;padding:10px 14px;cursor:pointer;transition:.18s}.tab:hover,button:hover{border-color:var(--cyan);transform:translateY(-1px)}.tab.active{background:var(--cyan);color:#05202a;border-color:var(--cyan);font-weight:800}
-.panel{padding:18px;margin-bottom:18px}.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}.field label{display:block;font-size:.8rem;color:var(--muted);margin:0 0 6px}.field input,.field select{width:100%;background:#07182b;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;min-width:0}
-.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.panelhead h2{margin:0;font-size:1.2rem}.hint{color:var(--muted);font-size:.85rem}
-.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:650px}table{border-collapse:collapse;width:100%;min-width:900px;background:#091a2d}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #1b3651;vertical-align:top}th{position:sticky;top:0;background:#17324f;color:#cce6ff;z-index:1;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}td{font-size:.88rem}tr:hover td{background:#112944}.name{font-weight:800;color:var(--text)}.latin{display:block;color:var(--muted);font-style:italic;font-size:.78rem}.pill{display:inline-block;border:1px solid #345b79;background:#142f4b;border-radius:999px;padding:3px 8px;font-size:.75rem;white-space:nowrap}.detailgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.property{background:#091a2d;border:1px solid #1d3955;border-radius:12px;padding:12px}.property small{display:block;color:var(--cyan);text-transform:uppercase;font-weight:800;letter-spacing:.05em;font-size:.68rem;margin-bottom:4px}.property div{font-weight:650}.property p{color:var(--muted);margin:5px 0 0;font-size:.8rem}
-.compare-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.compare-controls .field{flex:1;min-width:180px}.notice{border-left:3px solid var(--cyan);padding:10px 14px;background:#102841;color:var(--muted);border-radius:0 10px 10px 0;font-size:.88rem}
-footer{color:var(--muted);font-size:.8rem;text-align:center;padding:22px;border-top:1px solid var(--line)}
-@media(max-width:850px){.filters{grid-template-columns:1fr 1fr}.detailgrid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.filters,.detailgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}main{padding:16px 10px 40px}.panel{padding:12px}}
-</style>
+<link rel="stylesheet" href="./css/biology/twelve.css">
 </head>
 <body>
 <header><div class="eyebrow">Interactive biology reference</div><h1>Living Organisms Atlas</h1><p>Explore and compare 60 organisms across 50 biological properties—from cell type and kingdom to habitat, nutrition, reproduction, body systems, and ecological role. Search, filter, inspect a species, or compare two side by side.</p></header>
