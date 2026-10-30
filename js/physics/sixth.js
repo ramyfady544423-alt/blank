@@ -1,0 +1,116 @@
+
+const liquidDB = [
+ {id:'oil',name:'Vegetable oil',density:.92,color:'#e8b84f',type:'liquid'},
+ {id:'alcohol',name:'Ethanol (alcohol)',density:.789,color:'#73c9ff',type:'liquid'},
+ {id:'water',name:'Water',density:1.00,color:'#39a9e8',type:'liquid'},
+ {id:'saltwater',name:'Salt water',density:1.03,color:'#2879d5',type:'liquid'},
+ {id:'milk',name:'Whole milk',density:1.03,color:'#f2f0dc',type:'liquid'},
+ {id:'honey',name:'Honey',density:1.42,color:'#e99b25',type:'liquid'},
+ {id:'syrup',name:'Corn syrup',density:1.38,color:'#c36b26',type:'liquid'},
+ {id:'glycerin',name:'Glycerin',density:1.26,color:'#9a8bff',type:'liquid'},
+ {id:'mercury',name:'Mercury',density:13.53,color:'#b7c5d2',type:'liquid'}
+];
+const solidDB = [
+ {id:'cork',name:'Cork',density:.24,color:'#c89b62',type:'solid'},
+ {id:'ice',name:'Ice',density:.917,color:'#bceeff',type:'solid'},
+ {id:'wood',name:'Pine wood',density:.55,color:'#d9a66c',type:'solid'},
+ {id:'plastic',name:'Plastic (HDPE)',density:.95,color:'#ff8d76',type:'solid'},
+ {id:'rubber',name:'Rubber',density:1.10,color:'#4b5665',type:'solid'},
+ {id:'glass',name:'Glass',density:2.50,color:'#83d8d0',type:'solid'},
+ {id:'aluminum',name:'Aluminum',density:2.70,color:'#c7d3df',type:'solid'},
+ {id:'iron',name:'Iron',density:7.87,color:'#9ba6b4',type:'solid'},
+ {id:'copper',name:'Copper',density:8.96,color:'#cf8055',type:'solid'},
+ {id:'gold',name:'Gold',density:19.32,color:'#ffd166',type:'solid'}
+];
+let customMaterials=[], nextId=1;
+let layers=['oil','water','honey'].map(id=>liquidDB.find(x=>x.id===id));
+let selectedSolid=solidDB.find(x=>x.id==='aluminum');
+let objectDropped=false;
+const $=id=>document.getElementById(id);
+const allMaterials=()=>[...liquidDB,...solidDB,...customMaterials];
+function fmt(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits:3});}
+function populateSelects(){
+ $('liquidSelect').innerHTML=allMaterials().filter(m=>m.type==='liquid').map(m=>`<option value="${m.id}">${m.name} — ${fmt(m.density)} g/mL</option>`).join('');
+ $('solidSelect').innerHTML=allMaterials().filter(m=>m.type==='solid').map(m=>`<option value="${m.id}">${m.name} — ${fmt(m.density)} g/mL</option>`).join('');
+ $('solidSelect').value=selectedSolid.id;
+}
+function getMaterial(id){return allMaterials().find(m=>m.id===id);}
+function setSolidFromSelect(){selectedSolid=getMaterial($('solidSelect').value);$('massInput').value='50';$('volumeInput').value=fmt(50/selectedSolid.density);updateStats();if(objectDropped)dropObject(false);}
+function sortedLayers(){return [...layers].sort((a,b)=>a.density-b.density);}
+function renderLayers(){
+ const sorted=sortedLayers(), glass=$('glass');
+ glass.querySelectorAll('.liquid-layer').forEach(e=>e.remove());
+ const legend=$('legend');legend.innerHTML='';$('layerList').innerHTML='';
+ // Render from bottom to top so low-density liquid ends up above dense liquid.
+ let bottom=0;const total=sorted.reduce((s,l)=>s+l.density,0)||1;
+ sorted.forEach((l,i)=>{
+   const h=layers.length?100/layers.length:0;
+   const el=document.createElement('div');el.className='liquid-layer';el.style.height=h+'%';el.style.bottom=(i*100/layers.length)+'%';el.style.background=`linear-gradient(90deg,${l.color}cc,${l.color}80)`;
+   el.title=`${l.name}: ${l.density} g/mL`;glass.insertBefore(el,glass.querySelector('.glass-label'));
+   const chip=document.createElement('div');chip.className='chip';chip.innerHTML=`<span class="dot" style="background:${l.color}"></span>${l.name} · ${fmt(l.density)}`;legend.appendChild(chip);
+ });
+ // List order is top-to-bottom, lowest density first.
+ sorted.forEach((l,i)=>{
+   const item=document.createElement('div');item.className='material';
+   item.innerHTML=`<div class="swatch" style="background:${l.color}"></div><div><strong>${i===0?'Top layer':i===sorted.length-1?'Bottom layer':'Middle layer'} · ${l.name}</strong><small>${fmt(l.density)} g/mL</small></div><button class="secondary" data-remove="${l.id}" aria-label="Remove ${l.name}">Remove</button>`;
+   $('layerList').appendChild(item);
+ });
+ $('layerList').querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{layers=layers.filter(l=>l.id!==btn.dataset.remove);renderAll();if(objectDropped)dropObject(false)}));
+ $('layerStat').textContent=layers.length;
+ renderTable();updateStats();
+}
+function renderTable(){
+ const mats=allMaterials().slice().sort((a,b)=>a.density-b.density);
+ $('densityTable').innerHTML=mats.map(m=>`<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${m.color};margin-right:7px"></span>${m.name}</td><td>${m.type}</td><td>${fmt(m.density)} g/mL</td></tr>`).join('');
+}
+function updateStats(){
+ const mass=parseFloat($('massInput').value),vol=parseFloat($('volumeInput').value);
+ const density=mass>0&&vol>0?mass/vol:selectedSolid.density;
+ $('densityStat').textContent=fmt(density)+' g/mL';
+ $('layerStat').textContent=layers.length;
+}
+function addLayer(){
+ const l=getMaterial($('liquidSelect').value);if(!l)return;
+ if(layers.some(x=>x.id===l.id)){showResult(`${l.name} is already in the column. Remove it first if you want to add it again.`,true);return;}
+ layers.push(l);renderAll();
+}
+function renderAll(){populateSelects();renderLayers();}
+function showResult(msg,warn=false){$('result').className='result'+(warn?' warn':'');$('result').innerHTML=msg;}
+function resetObject(){objectDropped=false;const old=$('stage').querySelector('.object');if(old)old.remove();$('positionStat').textContent='Ready';showResult('Object reset. Choose a solid and drop it again.');}
+function dropObject(animate=true){
+ const mass=parseFloat($('massInput').value),vol=parseFloat($('volumeInput').value);
+ if(!(mass>0)||!(vol>0)||!Number.isFinite(mass/vol)){showResult('Enter a valid mass and volume greater than zero.',true);return;}
+ const density=mass/vol;let obj=$('stage').querySelector('.object');if(!obj){obj=document.createElement('div');obj.className='object';$('stage').appendChild(obj);}
+ obj.textContent=selectedSolid.name.split(' ').map(w=>w[0]).join('').slice(0,3);obj.style.background=selectedSolid.color;obj.title=`${selectedSolid.name}: ${fmt(density)} g/mL`;
+ obj.classList.remove('falling');obj.style.top='14px';obj.style.left='50%';obj.style.transform='translateX(-50%)';
+ $('positionStat').textContent='Falling…';$('densityStat').textContent=fmt(density)+' g/mL';
+ const sorted=sortedLayers();let destination, message, warn=false;
+ if(!sorted.length){destination=300;message=`There are no liquid layers, so the object falls to the bottom of the empty cup. Object density: <strong>${fmt(density)} g/mL</strong>.`; }
+ else {
+   // Layer model: object stops at the first liquid denser than itself; otherwise it reaches the bottom.
+   const firstDenser=sorted.findIndex(l=>density<l.density);
+   if(firstDenser===0){destination=48;message=`It <strong>floats on top</strong> of ${sorted[0].name}, because its density (${fmt(density)} g/mL) is lower than the top liquid (${fmt(sorted[0].density)} g/mL).`;}
+   else if(firstDenser>0){destination=48+(firstDenser*(290/sorted.length));message=`It sinks through the lighter layers, then <strong>floats at the ${firstDenser===sorted.length-1?'top of the bottom layer':'interface above '+sorted[firstDenser].name}</strong>. Its density (${fmt(density)} g/mL) is between the surrounding liquid densities.`;}
+   else {destination=295;message=`It <strong>sinks to the bottom</strong>. Its density (${fmt(density)} g/mL) is greater than every liquid layer.`;}
+   const equal=sorted.find(l=>Math.abs(l.density-density)<0.015);
+   if(equal){message=`Its density is almost the same as ${equal.name} (${fmt(equal.density)} g/mL), so it may remain suspended around that layer in this simplified model.`;destination=48+sorted.indexOf(equal)*(290/sorted.length);}
+ }
+ objectDropped=true;
+ if(animate){obj.classList.add('falling');setTimeout(()=>{obj.style.top=destination+'px';},60);setTimeout(()=>obj.classList.remove('falling'),1150);}else obj.style.top=destination+'px';
+ $('positionStat').textContent=destination>=250?'Bottom':destination<80?'Top':'Middle';
+ showResult(message,warn);
+}
+$('addLiquid').addEventListener('click',addLayer);
+$('resetLiquids').addEventListener('click',()=>{layers=['oil','water','honey'].map(id=>liquidDB.find(x=>x.id===id));renderAll();resetObject();});
+$('solidSelect').addEventListener('change',setSolidFromSelect);
+$('massInput').addEventListener('input',updateStats);$('volumeInput').addEventListener('input',updateStats);
+$('dropButton').addEventListener('click',()=>dropObject(true));$('resetObject').addEventListener('click',resetObject);
+$('addCustom').addEventListener('click',()=>{
+ const name=$('customName').value.trim(),density=Number($('customDensity').value),type=$('customType').value,color=$('customColor').value;
+ if(!name||!Number.isFinite(density)||density<=0||density>30){$('customMessage').textContent='Enter a material name and a density greater than 0 and no more than 30 g/mL.';return;}
+ const material={id:'custom-'+nextId++,name,density,color,type};customMaterials.push(material);
+ if(type==='liquid')layers.push(material);
+ populateSelects();renderLayers();$('customMessage').textContent=`Added ${name} at ${fmt(density)} g/mL. ${type==='liquid'?'It has been added to the liquid column.':'Select it from the solid menu to drop it.'}`;
+ if(type==='solid'){$('solidSelect').value=material.id;setSolidFromSelect();}
+});
+populateSelects();renderLayers();updateStats();

@@ -1,0 +1,373 @@
+
+        let grid = document.getElementById("periodicGrid");
+       const elements = {
+    1: ["Hydrogen", "H"],
+    2: ["Helium", "He"],
+    3: ["Lithium", "Li"],
+    4: ["Beryllium", "Be"],
+    5: ["Boron", "B"],
+    6: ["Carbon", "C"],
+    7: ["Nitrogen", "N"],
+    8: ["Oxygen", "O"],
+    9: ["Fluorine", "F"],
+    10: ["Neon", "Ne"],
+    11: ["Sodium", "Na"],
+    12: ["Magnesium", "Mg"],
+    13: ["Aluminium", "Al"],
+    14: ["Silicon", "Si"],
+    15: ["Phosphorus", "P"],
+    16: ["Sulfur", "S"],
+    17: ["Chlorine", "Cl"],
+    18: ["Argon", "Ar"],
+    19: ["Potassium", "K"],
+    20: ["Calcium", "Ca"],
+    21: ["Scandium", "Sc"],
+    22: ["Titanium", "Ti"],
+    23: ["Vanadium", "V"],
+    24: ["Chromium", "Cr"],
+    25: ["Manganese", "Mn"],
+    26: ["Iron", "Fe"],
+    27: ["Cobalt", "Co"],
+    28: ["Nickel", "Ni"],
+    29: ["Copper", "Cu"],
+    30: ["Zinc", "Zn"],
+    31: ["Gallium", "Ga"],
+    32: ["Germanium", "Ge"],
+    33: ["Arsenic", "As"],
+    34: ["Selenium", "Se"],
+    35: ["Bromine", "Br"],
+    36: ["Krypton", "Kr"],
+    37: ["Rubidium", "Rb"],
+    38: ["Strontium", "Sr"],
+    39: ["Yttrium", "Y"],
+    40: ["Zirconium", "Zr"],
+    41: ["Niobium", "Nb"],
+    42: ["Molybdenum", "Mo"],
+    43: ["Technetium", "Tc"],
+    44: ["Ruthenium", "Ru"],
+    45: ["Rhodium", "Rh"],
+    46: ["Palladium", "Pd"],
+    47: ["Silver", "Ag"],
+    48: ["Cadmium", "Cd"],
+    49: ["Indium", "In"],
+    50: ["Tin", "Sn"],
+    51: ["Antimony", "Sb"],
+    52: ["Tellurium", "Te"],
+    53: ["Iodine", "I"],
+    54: ["Xenon", "Xe"],
+    55: ["Caesium", "Cs"],
+    56: ["Barium", "Ba"],
+    57: ["Lanthanum", "La"],
+    58: ["Cerium", "Ce"],
+    59: ["Praseodymium", "Pr"],
+    60: ["Neodymium", "Nd"],
+    61: ["Promethium", "Pm"],
+    62: ["Samarium", "Sm"],
+    63: ["Europium", "Eu"],
+    64: ["Gadolinium", "Gd"],
+    65: ["Terbium", "Tb"],
+    66: ["Dysprosium", "Dy"],
+    67: ["Holmium", "Ho"],
+    68: ["Erbium", "Er"],
+    69: ["Thulium", "Tm"],
+    70: ["Ytterbium", "Yb"],
+    71: ["Lutetium", "Lu"],
+    72: ["Hafnium", "Hf"],
+    73: ["Tantalum", "Ta"],
+    74: ["Tungsten", "W"],
+    75: ["Rhenium", "Re"],
+    76: ["Osmium", "Os"],
+    77: ["Iridium", "Ir"],
+    78: ["Platinum", "Pt"],
+    79: ["Gold", "Au"],
+    80: ["Mercury", "Hg"],
+    81: ["Thallium", "Tl"],
+    82: ["Lead", "Pb"],
+    83: ["Bismuth", "Bi"],
+    84: ["Polonium", "Po"],
+    85: ["Astatine", "At"],
+    86: ["Radon", "Rn"],
+    87: ["Francium", "Fr"],
+    88: ["Radium", "Ra"],
+    89: ["Actinium", "Ac"],
+    90: ["Thorium", "Th"],
+    91: ["Protactinium", "Pa"],
+    92: ["Uranium", "U"],
+    93: ["Neptunium", "Np"],
+    94: ["Plutonium", "Pu"],
+    95: ["Americium", "Am"],
+    96: ["Curium", "Cm"],
+    97: ["Berkelium", "Bk"],
+    98: ["Californium", "Cf"],
+    99: ["Einsteinium", "Es"],
+    100: ["Fermium", "Fm"],
+    101: ["Mendelevium", "Md"],
+    102: ["Nobelium", "No"],
+    103: ["Lawrencium", "Lr"],
+    104: ["Rutherfordium", "Rf"],
+    105: ["Dubnium", "Db"],
+    106: ["Seaborgium", "Sg"],
+    107: ["Bohrium", "Bh"],
+    108: ["Hassium", "Hs"],
+    109: ["Meitnerium", "Mt"],
+    110: ["Darmstadtium", "Ds"],
+    111: ["Roentgenium", "Rg"],
+    112: ["Copernicium", "Cn"],
+    113: ["Nihonium", "Nh"],
+    114: ["Flerovium", "Fl"],
+    115: ["Moscovium", "Mc"],
+    116: ["Livermorium", "Lv"],
+    117: ["Tennessine", "Ts"],
+    118: ["Oganesson", "Og"]
+}
+const elementsb = {
+    "Hydrogen": {"atomic_number": 1, "symbol": "H", "atomic_mass": 1.008, "group": 1, "period": 1, "category": "nonmetal", "description": "The lightest element; abundant in stars and present in water and organic compounds."},
+    "Helium": {"atomic_number": 2, "symbol": "He", "atomic_mass": 4.0026, "group": 18, "period": 1, "category": "noble gas", "description": "A very light, unreactive gas used in cryogenics, leak detection, and balloons."},
+    "Lithium": {"atomic_number": 3, "symbol": "Li", "atomic_mass": 6.94, "group": 1, "period": 2, "category": "alkali metal", "description": "A very light, reactive metal widely used in rechargeable batteries."},
+    "Beryllium": {"atomic_number": 4, "symbol": "Be", "atomic_mass": 9.0122, "group": 2, "period": 2, "category": "alkaline earth metal", "description": "A stiff, lightweight metal used in aerospace components; dust and fumes are toxic."},
+    "Boron": {"atomic_number": 5, "symbol": "B", "atomic_mass": 10.81, "group": 13, "period": 2, "category": "metalloid", "description": "A metalloid used in borosilicate glass, detergents, and neutron-absorbing materials."},
+    "Carbon": {"atomic_number": 6, "symbol": "C", "atomic_mass": 12.011, "group": 14, "period": 2, "category": "nonmetal", "description": "The basis of organic chemistry; forms diamond, graphite, graphene, and countless compounds."},
+    "Nitrogen": {"atomic_number": 7, "symbol": "N", "atomic_mass": 14.007, "group": 15, "period": 2, "category": "nonmetal", "description": "A gas making up about 78% of Earth's atmosphere; essential in proteins and DNA."},
+    "Oxygen": {"atomic_number": 8, "symbol": "O", "atomic_mass": 15.999, "group": 16, "period": 2, "category": "nonmetal", "description": "A reactive gas essential for aerobic respiration and supporting combustion."},
+    "Fluorine": {"atomic_number": 9, "symbol": "F", "atomic_mass": 18.998, "group": 17, "period": 2, "category": "halogen", "description": "The most electronegative element; extremely reactive and hazardous as a pure gas."},
+    "Neon": {"atomic_number": 10, "symbol": "Ne", "atomic_mass": 20.180, "group": 18, "period": 2, "category": "noble gas", "description": "An unreactive gas that produces a red-orange glow in discharge tubes."},
+    "Sodium": {"atomic_number": 11, "symbol": "Na", "atomic_mass": 22.990, "group": 1, "period": 3, "category": "alkali metal", "description": "A soft, reactive metal; sodium ions are important for nerve signals and fluid balance."},
+    "Magnesium": {"atomic_number": 12, "symbol": "Mg", "atomic_mass": 24.305, "group": 2, "period": 3, "category": "alkaline earth metal", "description": "A lightweight metal used in alloys; magnesium is central to chlorophyll."},
+    "Aluminium": {"atomic_number": 13, "symbol": "Al", "atomic_mass": 26.982, "group": 13, "period": 3, "category": "post-transition metal", "description": "A lightweight, corrosion-resistant metal used in aircraft, packaging, and construction."},
+    "Silicon": {"atomic_number": 14, "symbol": "Si", "atomic_mass": 28.085, "group": 14, "period": 3, "category": "metalloid", "description": "A semiconductor essential to computer chips and solar cells; also common in silicate minerals."},
+    "Phosphorus": {"atomic_number": 15, "symbol": "P", "atomic_mass": 30.974, "group": 15, "period": 3, "category": "nonmetal", "description": "Essential in DNA, RNA, ATP, and bones; phosphate compounds are widely used in fertilizers."},
+    "Sulfur": {"atomic_number": 16, "symbol": "S", "atomic_mass": 32.06, "group": 16, "period": 3, "category": "nonmetal", "description": "A yellow solid used in sulfuric acid production and rubber vulcanization; present in proteins."},
+    "Chlorine": {"atomic_number": 17, "symbol": "Cl", "atomic_mass": 35.45, "group": 17, "period": 3, "category": "halogen", "description": "A toxic yellow-green gas used in water disinfection and PVC manufacture; chloride is biologically essential."},
+    "Argon": {"atomic_number": 18, "symbol": "Ar", "atomic_mass": 39.948, "group": 18, "period": 3, "category": "noble gas", "description": "An unreactive gas in air used as a protective atmosphere in welding and manufacturing."},
+    "Potassium": {"atomic_number": 19, "symbol": "K", "atomic_mass": 39.098, "group": 1, "period": 4, "category": "alkali metal", "description": "A reactive metal; potassium ions are essential for nerve, muscle, and cellular function."},
+    "Calcium": {"atomic_number": 20, "symbol": "Ca", "atomic_mass": 40.078, "group": 2, "period": 4, "category": "alkaline earth metal", "description": "A reactive metal; calcium compounds occur in limestone, while calcium is vital to bones and muscles."},
+    "Scandium": {"atomic_number": 21, "symbol": "Sc", "atomic_mass": 44.956, "group": 3, "period": 4, "category": "transition metal", "description": "A lightweight metal used in specialised aluminium alloys and some lighting applications."},
+    "Titanium": {"atomic_number": 22, "symbol": "Ti", "atomic_mass": 47.867, "group": 4, "period": 4, "category": "transition metal", "description": "A strong, lightweight, corrosion-resistant metal used in aircraft and medical implants."},
+    "Vanadium": {"atomic_number": 23, "symbol": "V", "atomic_mass": 50.942, "group": 5, "period": 4, "category": "transition metal", "description": "A metal used to strengthen steel and in vanadium redox-flow batteries."},
+    "Chromium": {"atomic_number": 24, "symbol": "Cr", "atomic_mass": 51.996, "group": 6, "period": 4, "category": "transition metal", "description": "A hard metal used in stainless steel and plating; some chromium compounds are highly toxic."},
+    "Manganese": {"atomic_number": 25, "symbol": "Mn", "atomic_mass": 54.938, "group": 7, "period": 4, "category": "transition metal", "description": "Used in steelmaking and batteries; also a trace nutrient required by enzymes."},
+    "Iron": {"atomic_number": 26, "symbol": "Fe", "atomic_mass": 55.845, "group": 8, "period": 4, "category": "transition metal", "description": "A major component of steel; iron is essential in hemoglobin for oxygen transport."},
+    "Cobalt": {"atomic_number": 27, "symbol": "Co", "atomic_mass": 58.933, "group": 9, "period": 4, "category": "transition metal", "description": "Used in some batteries, superalloys, and pigments; cobalt is part of vitamin B12."},
+    "Nickel": {"atomic_number": 28, "symbol": "Ni", "atomic_mass": 58.693, "group": 10, "period": 4, "category": "transition metal", "description": "A corrosion-resistant metal used in stainless steel, plating, and batteries."},
+    "Copper": {"atomic_number": 29, "symbol": "Cu", "atomic_mass": 63.546, "group": 11, "period": 4, "category": "transition metal", "description": "An excellent electrical conductor used in wiring, motors, plumbing, and alloys."},
+    "Zinc": {"atomic_number": 30, "symbol": "Zn", "atomic_mass": 65.38, "group": 12, "period": 4, "category": "transition metal", "description": "Used to protect steel from corrosion and to make brass; zinc is an essential trace nutrient."},
+    "Gallium": {"atomic_number": 31, "symbol": "Ga", "atomic_mass": 69.723, "group": 13, "period": 4, "category": "post-transition metal", "description": "A metal that melts near 29.8 °C; gallium compounds are used in LEDs and power electronics."},
+    "Germanium": {"atomic_number": 32, "symbol": "Ge", "atomic_mass": 72.630, "group": 14, "period": 4, "category": "metalloid", "description": "A semiconductor used in fiber optics, infrared optics, and specialised electronics."},
+    "Arsenic": {"atomic_number": 33, "symbol": "As", "atomic_mass": 74.922, "group": 15, "period": 4, "category": "metalloid", "description": "A metalloid used in some semiconductors; many arsenic compounds are highly toxic."},
+    "Selenium": {"atomic_number": 34, "symbol": "Se", "atomic_mass": 78.971, "group": 16, "period": 4, "category": "nonmetal", "description": "Used in glassmaking and electronics; required in tiny amounts but toxic in excess."},
+    "Bromine": {"atomic_number": 35, "symbol": "Br", "atomic_mass": 79.904, "group": 17, "period": 4, "category": "halogen", "description": "A reddish-brown liquid at room temperature used in chemical synthesis; its vapour is hazardous."},
+    "Krypton": {"atomic_number": 36, "symbol": "Kr", "atomic_mass": 83.798, "group": 18, "period": 4, "category": "noble gas", "description": "A noble gas used in specialised lamps, lasers, and some insulating windows."},
+    "Rubidium": {"atomic_number": 37, "symbol": "Rb", "atomic_mass": 85.468, "group": 1, "period": 5, "category": "alkali metal", "description": "A very reactive metal used in atomic-physics research and specialised clocks."},
+    "Strontium": {"atomic_number": 38, "symbol": "Sr", "atomic_mass": 87.62, "group": 2, "period": 5, "category": "alkaline earth metal", "description": "Used in red fireworks and some ceramics; radioactive strontium-90 is a hazardous fission product."},
+    "Yttrium": {"atomic_number": 39, "symbol": "Y", "atomic_mass": 88.906, "group": 3, "period": 5, "category": "transition metal", "description": "Used in phosphors, lasers, ceramics, and high-performance materials."},
+    "Zirconium": {"atomic_number": 40, "symbol": "Zr", "atomic_mass": 91.224, "group": 4, "period": 5, "category": "transition metal", "description": "A corrosion-resistant metal used in chemical equipment and nuclear reactor fuel cladding."},
+    "Niobium": {"atomic_number": 41, "symbol": "Nb", "atomic_mass": 92.906, "group": 5, "period": 5, "category": "transition metal", "description": "Used in high-strength steel and superconducting magnets."},
+    "Molybdenum": {"atomic_number": 42, "symbol": "Mo", "atomic_mass": 95.95, "group": 6, "period": 5, "category": "transition metal", "description": "Strengthens steel at high temperatures and is a trace component of several enzymes."},
+    "Technetium": {"atomic_number": 43, "symbol": "Tc", "atomic_mass": 98, "group": 7, "period": 5, "category": "transition metal", "description": "A radioactive element with no stable isotopes; technetium-99m is widely used in diagnostic imaging."},
+    "Ruthenium": {"atomic_number": 44, "symbol": "Ru", "atomic_mass": 101.07, "group": 8, "period": 5, "category": "transition metal", "description": "A platinum-group metal used in catalysts, electrical contacts, and specialised alloys."},
+    "Rhodium": {"atomic_number": 45, "symbol": "Rh", "atomic_mass": 102.906, "group": 9, "period": 5, "category": "transition metal", "description": "A rare, reflective metal used in catalytic converters and corrosion-resistant plating."},
+    "Palladium": {"atomic_number": 46, "symbol": "Pd", "atomic_mass": 106.42, "group": 10, "period": 5, "category": "transition metal", "description": "Used in catalytic converters, electronics, and chemical catalysts; can absorb hydrogen."},
+    "Silver": {"atomic_number": 47, "symbol": "Ag", "atomic_mass": 107.868, "group": 11, "period": 5, "category": "transition metal", "description": "The most electrically conductive element; used in electronics, mirrors, jewellery, and photography."},
+    "Cadmium": {"atomic_number": 48, "symbol": "Cd", "atomic_mass": 112.414, "group": 12, "period": 5, "category": "transition metal", "description": "A toxic metal formerly common in nickel-cadmium batteries and still used in some specialised products."},
+    "Indium": {"atomic_number": 49, "symbol": "In", "atomic_mass": 114.818, "group": 13, "period": 5, "category": "post-transition metal", "description": "A soft metal used in transparent conductive coatings for displays and touchscreens."},
+    "Tin": {"atomic_number": 50, "symbol": "Sn", "atomic_mass": 118.710, "group": 14, "period": 5, "category": "post-transition metal", "description": "Used in solder and tin-plated steel cans; it has more than one solid structural form."},
+    "Antimony": {"atomic_number": 51, "symbol": "Sb", "atomic_mass": 121.760, "group": 15, "period": 5, "category": "metalloid", "description": "A brittle metalloid used in alloys and some flame-retardant and semiconductor applications."},
+    "Tellurium": {"atomic_number": 52, "symbol": "Te", "atomic_mass": 127.60, "group": 16, "period": 5, "category": "metalloid", "description": "A rare, brittle element used in thermoelectric materials, solar cells, and alloys."},
+    "Iodine": {"atomic_number": 53, "symbol": "I", "atomic_mass": 126.904, "group": 17, "period": 5, "category": "halogen", "description": "A dark solid that forms violet vapour; iodine is essential for thyroid hormones."},
+    "Xenon": {"atomic_number": 54, "symbol": "Xe", "atomic_mass": 131.293, "group": 18, "period": 5, "category": "noble gas", "description": "A heavy noble gas used in specialised lamps, ion propulsion, and some medical applications."},
+    "Caesium": {"atomic_number": 55, "symbol": "Cs", "atomic_mass": 132.905, "group": 1, "period": 6, "category": "alkali metal", "description": "An extremely reactive metal; caesium-133 is used to define the SI second through atomic clocks."},
+    "Barium": {"atomic_number": 56, "symbol": "Ba", "atomic_mass": 137.327, "group": 2, "period": 6, "category": "alkaline earth metal", "description": "Used in specialised materials; insoluble barium sulfate is used in medical imaging, while soluble barium salts can be toxic."},
+    "Lanthanum": {"atomic_number": 57, "symbol": "La", "atomic_mass": 138.905, "group": 3, "period": 6, "category": "lanthanide", "description": "A soft, reactive rare-earth metal used in optical glass, catalysts, and battery alloys."},
+    "Cerium": {"atomic_number": 58, "symbol": "Ce", "atomic_mass": 140.116, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A reactive rare-earth metal used in catalytic converters, glass polishing, and lighter flints."},
+    "Praseodymium": {"atomic_number": 59, "symbol": "Pr", "atomic_mass": 140.908, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in strong magnets, alloys, and specialty glass; some compounds have yellow-green colours."},
+    "Neodymium": {"atomic_number": 60, "symbol": "Nd", "atomic_mass": 144.242, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A key component of powerful permanent magnets used in motors, headphones, and wind turbines."},
+    "Promethium": {"atomic_number": 61, "symbol": "Pm", "atomic_mass": 145, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A radioactive lanthanide with no stable isotopes; promethium-147 has specialised measurement and research uses."},
+    "Samarium": {"atomic_number": 62, "symbol": "Sm", "atomic_mass": 150.36, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in samarium-cobalt permanent magnets that can work at elevated temperatures."},
+    "Europium": {"atomic_number": 63, "symbol": "Eu", "atomic_mass": 151.964, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in red and blue phosphors for displays, lighting, and security markings."},
+    "Gadolinium": {"atomic_number": 64, "symbol": "Gd", "atomic_mass": 157.25, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A paramagnetic rare-earth metal used in MRI contrast-agent compounds and neutron-absorbing materials."},
+    "Terbium": {"atomic_number": 65, "symbol": "Tb", "atomic_mass": 158.925, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in green phosphors, magnetostrictive materials, and specialised electronic devices."},
+    "Dysprosium": {"atomic_number": 66, "symbol": "Dy", "atomic_mass": 162.500, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Added to some high-performance magnets to improve heat tolerance and coercivity."},
+    "Holmium": {"atomic_number": 67, "symbol": "Ho", "atomic_mass": 164.930, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A strongly magnetic rare-earth element used in specialised lasers and magnetic materials."},
+    "Erbium": {"atomic_number": 68, "symbol": "Er", "atomic_mass": 167.259, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in optical-fibre amplifiers and lasers because erbium ions amplify light at useful telecom wavelengths."},
+    "Thulium": {"atomic_number": 69, "symbol": "Tm", "atomic_mass": 168.934, "group": "f-block", "period": 6, "category": "lanthanide", "description": "A rare-earth metal used in specialised lasers, portable X-ray sources, and research."},
+    "Ytterbium": {"atomic_number": 70, "symbol": "Yb", "atomic_mass": 173.045, "group": "f-block", "period": 6, "category": "lanthanide", "description": "Used in fibre lasers, atomic-clock research, and specialised alloys."},
+    "Lutetium": {"atomic_number": 71, "symbol": "Lu", "atomic_mass": 174.967, "group": 3, "period": 6, "category": "lanthanide", "description": "A dense rare-earth metal; lutetium-containing crystals are used in PET scanners and lutetium-177 in targeted radionuclide therapy."},
+    "Hafnium": {"atomic_number": 72, "symbol": "Hf", "atomic_mass": 178.49, "group": 4, "period": 6, "category": "transition metal", "description": "A corrosion-resistant metal used in nuclear control rods and high-temperature alloys."},
+    "Tantalum": {"atomic_number": 73, "symbol": "Ta", "atomic_mass": 180.948, "group": 5, "period": 6, "category": "transition metal", "description": "Highly corrosion-resistant metal used in capacitors, chemical equipment, and some medical implants."},
+    "Tungsten": {"atomic_number": 74, "symbol": "W", "atomic_mass": 183.84, "group": 6, "period": 6, "category": "transition metal", "description": "Has the highest melting point among pure metals; used in cutting tools and high-temperature components."},
+    "Rhenium": {"atomic_number": 75, "symbol": "Re", "atomic_mass": 186.207, "group": 7, "period": 6, "category": "transition metal", "description": "A rare, high-melting-point metal used in jet-engine superalloys and catalysts."},
+    "Osmium": {"atomic_number": 76, "symbol": "Os", "atomic_mass": 190.23, "group": 8, "period": 6, "category": "transition metal", "description": "An extremely dense metal used in specialised alloys; some osmium compounds are highly toxic."},
+    "Iridium": {"atomic_number": 77, "symbol": "Ir", "atomic_mass": 192.217, "group": 9, "period": 6, "category": "transition metal", "description": "A very corrosion-resistant metal used in specialised crucibles, spark plugs, and high-performance alloys."},
+    "Platinum": {"atomic_number": 78, "symbol": "Pt", "atomic_mass": 195.084, "group": 10, "period": 6, "category": "transition metal", "description": "A precious metal used in catalysts, laboratory equipment, jewellery, and some cancer medicines."},
+    "Gold": {"atomic_number": 79, "symbol": "Au", "atomic_mass": 196.967, "group": 11, "period": 6, "category": "transition metal", "description": "A malleable, corrosion-resistant metal used in jewellery, electronics, investment, and specialised applications."},
+    "Mercury": {"atomic_number": 80, "symbol": "Hg", "atomic_mass": 200.592, "group": 12, "period": 6, "category": "transition metal", "description": "A silvery liquid metal at room temperature; its vapour and many compounds are toxic."},
+    "Thallium": {"atomic_number": 81, "symbol": "Tl", "atomic_mass": 204.38, "group": 13, "period": 6, "category": "post-transition metal", "description": "A soft, heavy, highly toxic metal used in limited specialised electronic and optical applications."},
+    "Lead": {"atomic_number": 82, "symbol": "Pb", "atomic_mass": 207.2, "group": 14, "period": 6, "category": "post-transition metal", "description": "A dense, soft metal used in lead-acid batteries and radiation shielding; exposure harms the nervous system."},
+    "Bismuth": {"atomic_number": 83, "symbol": "Bi", "atomic_mass": 208.980, "group": 15, "period": 6, "category": "post-transition metal", "description": "A brittle, heavy metal used in low-melting alloys and some medicines; generally less toxic than lead."},
+    "Polonium": {"atomic_number": 84, "symbol": "Po", "atomic_mass": 209, "group": 16, "period": 6, "category": "post-transition metal", "description": "A highly radioactive element discovered by Marie and Pierre Curie; polonium-210 is extremely hazardous."},
+    "Astatine": {"atomic_number": 85, "symbol": "At", "atomic_mass": 210, "group": 17, "period": 6, "category": "halogen", "description": "An extremely rare radioactive halogen studied mainly in specialised research."},
+    "Radon": {"atomic_number": 86, "symbol": "Rn", "atomic_mass": 222, "group": 18, "period": 6, "category": "noble gas", "description": "A radioactive noble gas from decay chains; indoor accumulation increases lung-cancer risk."},
+    "Francium": {"atomic_number": 87, "symbol": "Fr", "atomic_mass": 223, "group": 1, "period": 7, "category": "alkali metal", "description": "An extremely rare, radioactive alkali metal known only in tiny quantities."},
+    "Radium": {"atomic_number": 88, "symbol": "Ra", "atomic_mass": 226, "group": 2, "period": 7, "category": "alkaline earth metal", "description": "A radioactive metal discovered by Marie and Pierre Curie; exposure is hazardous."},
+    "Actinium": {"atomic_number": 89, "symbol": "Ac", "atomic_mass": 227, "group": 3, "period": 7, "category": "actinide", "description": "A radioactive actinide; actinium-225 is used in research and targeted alpha-particle cancer therapy."},
+    "Thorium": {"atomic_number": 90, "symbol": "Th", "atomic_mass": 232.038, "group": "f-block", "period": 7, "category": "actinide", "description": "A naturally occurring radioactive metal studied as a potential nuclear fuel source."},
+    "Protactinium": {"atomic_number": 91, "symbol": "Pa", "atomic_mass": 231.036, "group": "f-block", "period": 7, "category": "actinide", "description": "A rare radioactive metal found in trace amounts in uranium ores and studied in nuclear chemistry."},
+    "Uranium": {"atomic_number": 92, "symbol": "U", "atomic_mass": 238.029, "group": "f-block", "period": 7, "category": "actinide", "description": "A heavy radioactive metal used as nuclear fuel; uranium-235 is fissile."},
+    "Neptunium": {"atomic_number": 93, "symbol": "Np", "atomic_mass": 237, "group": "f-block", "period": 7, "category": "actinide", "description": "A radioactive element produced mainly in nuclear reactions and important in nuclear science."},
+    "Plutonium": {"atomic_number": 94, "symbol": "Pu", "atomic_mass": 244, "group": "f-block", "period": 7, "category": "actinide", "description": "A radioactive metal used in some nuclear fuels and radioisotope power systems; some isotopes are fissile."},
+    "Americium": {"atomic_number": 95, "symbol": "Am", "atomic_mass": 243, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element; americium-241 is used in many ionization-type smoke alarms."},
+    "Curium": {"atomic_number": 96, "symbol": "Cm", "atomic_mass": 247, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element named after Marie and Pierre Curie, mainly used in research."},
+    "Berkelium": {"atomic_number": 97, "symbol": "Bk", "atomic_mass": 247, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element produced in specialised nuclear facilities and used in research."},
+    "Californium": {"atomic_number": 98, "symbol": "Cf", "atomic_mass": 251, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element; californium-252 is a strong neutron source for specialised applications."},
+    "Einsteinium": {"atomic_number": 99, "symbol": "Es", "atomic_mass": 252, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element discovered in nuclear-test debris and studied in nuclear chemistry."},
+    "Fermium": {"atomic_number": 100, "symbol": "Fm", "atomic_mass": 257, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element with no commercial bulk applications, used in research."},
+    "Mendelevium": {"atomic_number": 101, "symbol": "Md", "atomic_mass": 258, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element named after Dmitri Mendeleev and studied in nuclear chemistry."},
+    "Nobelium": {"atomic_number": 102, "symbol": "No", "atomic_mass": 259, "group": "f-block", "period": 7, "category": "actinide", "description": "A synthetic radioactive element named after Alfred Nobel and studied using short-lived isotopes."},
+    "Lawrencium": {"atomic_number": 103, "symbol": "Lr", "atomic_mass": 266, "group": 3, "period": 7, "category": "actinide", "description": "A synthetic radioactive element that completes the actinide series."},
+    "Rutherfordium": {"atomic_number": 104, "symbol": "Rf", "atomic_mass": 267, "group": 4, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Ernest Rutherford; its chemistry is studied atom by atom."},
+    "Dubnium": {"atomic_number": 105, "symbol": "Db", "atomic_mass": 268, "group": 5, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Dubna, Russia, and studied in nuclear research."},
+    "Seaborgium": {"atomic_number": 106, "symbol": "Sg", "atomic_mass": 269, "group": 6, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Glenn T. Seaborg."},
+    "Bohrium": {"atomic_number": 107, "symbol": "Bh", "atomic_mass": 270, "group": 7, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after physicist Niels Bohr."},
+    "Hassium": {"atomic_number": 108, "symbol": "Hs", "atomic_mass": 277, "group": 8, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after the German state of Hesse."},
+    "Meitnerium": {"atomic_number": 109, "symbol": "Mt", "atomic_mass": 278, "group": 9, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after physicist Lise Meitner."},
+    "Darmstadtium": {"atomic_number": 110, "symbol": "Ds", "atomic_mass": 281, "group": 10, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Darmstadt, Germany."},
+    "Roentgenium": {"atomic_number": 111, "symbol": "Rg", "atomic_mass": 282, "group": 11, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Wilhelm Conrad Röntgen."},
+    "Copernicium": {"atomic_number": 112, "symbol": "Cn", "atomic_mass": 285, "group": 12, "period": 7, "category": "transition metal", "description": "A synthetic superheavy element named after Nicolaus Copernicus."},
+    "Nihonium": {"atomic_number": 113, "symbol": "Nh", "atomic_mass": 286, "group": 13, "period": 7, "category": "post-transition metal", "description": "A synthetic superheavy element named from 'Nihon', a name for Japan."},
+    "Flerovium": {"atomic_number": 114, "symbol": "Fl", "atomic_mass": 289, "group": 14, "period": 7, "category": "post-transition metal", "description": "A synthetic superheavy element named after the Flerov Laboratory of Nuclear Reactions."},
+    "Moscovium": {"atomic_number": 115, "symbol": "Mc", "atomic_mass": 290, "group": 15, "period": 7, "category": "post-transition metal", "description": "A synthetic superheavy element named after the Moscow region."},
+    "Livermorium": {"atomic_number": 116, "symbol": "Lv", "atomic_mass": 293, "group": 16, "period": 7, "category": "post-transition metal", "description": "A synthetic superheavy element named after Lawrence Livermore National Laboratory."},
+    "Tennessine": {"atomic_number": 117, "symbol": "Ts", "atomic_mass": 294, "group": 17, "period": 7, "category": "halogen", "description": "A synthetic superheavy element named after Tennessee; its chemistry is still poorly characterized."},
+    "Oganesson": {"atomic_number": 118, "symbol": "Og", "atomic_mass": 294, "group": 18, "period": 7, "category": "noble gas", "description": "A synthetic superheavy element named after Yuri Oganessian; its physical and chemical properties remain uncertain."},
+}
+
+
+
+        /*
+          Define occupied columns for each row.
+          Columns are numbered 1 through 18, from left to right.
+        */
+        const rowColumns = {
+            1:  [1, 18],
+            2:  [1, 2, 13, 14, 15, 16, 17, 18],
+            3:  [1, 2, 13, 14, 15, 16, 17, 18],
+            4:  Array.from({ length: 18 }, (_, i) => i + 1),
+            5:  Array.from({ length: 18 }, (_, i) => i + 1),
+
+            // Column 3 is empty in rows 6 and 7
+            6:  [...[1, 2], ...Array.from(
+                { length: 15 }, (_, i) => i + 4
+            )],
+            7:  [...[1, 2], ...Array.from(
+                { length: 15 }, (_, i) => i + 4
+            )],
+
+            // Entirely empty rows
+            8:  [],
+            9:  [],
+
+            // Rows 10 and 11 occupy columns 4 through 18
+            10: Array.from({ length: 15 }, (_, i) => i + 4),
+            11: Array.from({ length: 15 }, (_, i) => i + 4)
+        };
+
+        /*
+          Numbering order:
+          Rows 1–5, first 2 cells of row 6, row 10,
+          remaining cells of row 6, first 2 cells of row 7,
+          row 11, remaining cells of row 7.
+        */
+        const numberingOrder = [
+            ...[1, 2, 3, 4, 5].flatMap(row =>
+                rowColumns[row].map(col => [row, col])
+            ),
+
+            [6, 1], [6, 2],
+
+            ...rowColumns[10].map(col => [10, col]),
+
+            ...rowColumns[6]
+                .filter(col => col !== 1 && col !== 2)
+                .map(col => [6, col]),
+
+            [7, 1], [7, 2],
+
+            ...rowColumns[11].map(col => [11, col]),
+
+            ...rowColumns[7]
+                .filter(col => col !== 1 && col !== 2)
+                .map(col => [7, col])
+        ];
+
+        // Assign the correct ID to each occupied position
+        const idMap = new Map();
+
+        numberingOrder.forEach(([row, col], index) => {
+            idMap.set(`${row}-${col}`, index + 1);
+        });
+
+        // Create the grid cells
+        for (let row = 1; row <= 11; row++) {
+
+            // Keep empty rows 8 and 9 at their correct heights
+            if (rowColumns[row].length === 0) {
+                const spacer = document.createElement("div");
+                spacer.className = "empty-row";
+                spacer.style.gridRow = row;
+                grid.appendChild(spacer);
+                continue;
+            }
+
+            for (const col of rowColumns[row]) {
+                const id = idMap.get(`${row}-${col}`);
+
+                const cell = document.createElement("div");
+                cell.className = "element";
+                cell.style.gridRow = row;
+                cell.style.gridColumn = col;
+               
+cell.addEventListener("click", () => {
+    const explanation = document.querySelector(".explanation");
+
+    // Get the element's name and its detailed information
+    const elementName = elements[id][0];
+    const elementSymbol = elements[id][1];
+    const details = elementsb[elementName];
+
+    // Display the selected element's information
+    explanation.classList.remove("d-none");
+    explanation.classList.add("p-3", "rounded-3", "text-start");
+
+    explanation.innerHTML = `
+        <h3>${elementName} (${elementSymbol})</h3>
+        <hr>
+        <strong>Atomic Number:</strong> ${details.atomic_number}<br>
+        <strong>Atomic Mass:</strong> ${details.atomic_mass}<br>
+        <strong>Group:</strong> ${details.group ?? "Not assigned"}<br>
+        <strong>Period:</strong> ${details.period}<br>
+        <strong>Category:</strong> ${details.category}<br>
+        <strong>Description:</strong> ${details.description}
+    `;
+});
+
+                cell.id = `element-${id}`;
+
+                cell.innerHTML = `
+                    <span class="element-id">${id}</span>
+
+                    <div class="avatar">
+                        <span class="element-symbol">${elements[id][1]}</span>
+                    </div>
+
+                    <div
+                        class="element-text"
+                        contenteditable="true"
+                        spellcheck="false"
+                        aria-label="Text for element ${id}"
+                    >${elements[id][0]}</div>
+                `;
+
+                grid.appendChild(cell);
+            }
+        }
+   
