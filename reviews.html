@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ratings & Reviews</title>
+    <style>
+        :root {
+            font-family: Inter, Arial, sans-serif;
+            color: #202124;
+            background: #071426
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0
+        }
+
+        .shell {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 0 20px
+        }
+
+        .panel {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 30px #24334b0b
+        }
+
+        h1 {
+            font-size: 30px;
+            margin: 0 0 8px
+        }
+
+        h2 {
+            font-size: 21px
+        }
+
+        .muted {
+            color: #68717d
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 35px;
+            align-items: center;
+            margin: 30px 0
+        }
+
+        .score {
+            font-size: 64px;
+            font-weight: 700;
+            letter-spacing: -3px
+        }
+
+        .stars {
+            color: #01875f;
+            font-size: 23px;
+            letter-spacing: 2px
+        }
+
+        .barrow {
+            display: grid;
+            grid-template-columns: 14px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin: 7px 0;
+            font-size: 13px
+        }
+
+        .track {
+            height: 10px;
+            border-radius: 20px;
+            background: #e9edf0;
+            overflow: hidden
+        }
+
+        .fill {
+            height: 100%;
+            background: #01875f;
+            border-radius: 20px
+        }
+
+        .btn {
+            border: 0;
+            background: #01875f;
+            color: white;
+            border-radius: 25px;
+            padding: 12px 22px;
+            font-weight: 650;
+            cursor: pointer
+        }
+
+        .btn:hover {
+            background: #006b4b
+        }
+
+        .btn:disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+        .outline {
+            background: white;
+            border: 1px solid #cbd3d8;
+            color: #344054
+        }
+
+        .outline:hover {
+            background: #eef7f2
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .review {
+            padding: 23px 0;
+            border-bottom: 1px solid #e9edf0
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            background: #e4eee9;
+            color: #166445;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: bold
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .review-stars {
+            color: #01875f;
+            letter-spacing: 2px
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #737b84;
+            margin: 6px 0 12px
+        }
+
+        .review p {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere
+        }
+
+        .helpful {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #68717d
+        }
+
+        .formbox {
+            margin: 24px 0;
+            padding: 25px;
+            border-radius: 18px;
+            background: #f8faf9
+        }
+
+        .formbox input,
+        .formbox textarea,
+        select {
+            width: 100%;
+            border: 1px solid #cdd6d1;
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            font: inherit;
+            margin: 7px 0 16px
+        }
+
+        .formbox textarea {
+            min-height: 110px;
+            resize: vertical
+        }
+
+        .rate button {
+            background: none;
+            border: 0;
+            font-size: 37px;
+            color: #c9d1cc;
+            cursor: pointer;
+            padding: 2px
+        }
+
+        .rate button.active {
+            color: #01875f
+        }
+
+        .notice {
+            font-size: 13px;
+            color: #667085;
+            margin-top: 14px
+        }
+
+        .error {
+            color: #b42318
+        }
+
+        .success {
+            color: #027a48
+        }
+
+        .hidden {
+            display: none
+        }
+
+        @media(max-width:620px) {
+            .shell {
+                margin: 12px auto;
+                padding: 0 10px
+            }
+
+            .panel {
+                padding: 20px
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+                gap: 15px
+            }
+
+            .score {
+                font-size: 52px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="shell">
+        <section class="panel">
+            <h1>Ratings and reviews</h1>
+            <div class="muted">Share your experience with the community</div>
+            <div class="summary">
+                <div>
+                    <div id="avg" class="score">—</div>
+                    <div id="avgStars" class="stars">☆☆☆☆☆</div>
+                    <div id="count" class="muted">No ratings yet</div>
+                </div>
+                <div id="distribution"></div>
+            </div><button class="btn" id="toggle">Write a review</button>
+            <div id="formbox" class="formbox hidden">
+                <h2>Rate your experience</h2>
+                <form id="reviewForm"><label>Your name<input id="name" maxlength="50" placeholder="Your display name"
+                            required></label>
+                    <div class="rate" id="rate" aria-label="Select a star rating"></div><label>Review title<input
+                            id="title" maxlength="100" placeholder="Summarize your experience"
+                            required></label><label>Your review<textarea id="body" maxlength="2000"
+                            placeholder="What did you like or dislike?" required></textarea></label><button class="btn"
+                        id="submit" type="submit">Post review</button>
+                    <div id="formMessage" class="notice" role="status"></div>
+                </form>
+            </div>
+            <hr style="border:0;border-top:1px solid #edf0f2;margin:32px 0">
+            <div class="toolbar">
+                <h2>All reviews <span id="reviewCount" class="muted"></span></h2>
+                <div><label for="sort" class="muted">Sort by </label><select id="sort" style="width:auto;margin:0">
+                        <option value="newest">Newest</option>
+                        <option value="highest">Highest rating</option>
+                        <option value="lowest">Lowest rating</option>
+                    </select></div>
+            </div>
+            <div id="status" class="notice">Connect Firebase to load reviews.</div>
+            <div id="reviews"></div>
+        </section>
+    </main>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, runTransaction, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+        // Replace these values with your Firebase project's Web App config.
+        const firebaseConfig = {
+            apiKey: "AIzaSyD62NIjpMzR4UthxpsbYut03ZZR7h9bebc",
+            authDomain: "unknown-ramy.firebaseapp.com",
+            projectId: "unknown-ramy",
+            storageBucket: "unknown-ramy.firebasestorage.app",
+            messagingSenderId: "740091749382",
+            appId: "1:740091749382:web:968ef4ccdbea0a05804f87"
+        };
+        const $ = (id) => document.getElementById(id);
+        let rating = 0;
+        let all = [];
+        let db = null;
+        const configured = !Object.values(firebaseConfig).some(v => String(v).startsWith('YOUR_'));
+        function renderRating() { $('rate').replaceChildren(); for (let i = 1; i <= 5; i++) {
+            let b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = i <= rating ? '★' : '☆';
+            b.className = i <= rating ? 'active' : '';
+            b.setAttribute('aria-label', `${i} stars`);
+            b.onclick = () => { rating = i; renderRating(); };
+            $('rate').append(b);
+        } }
+        renderRating();
+        $('toggle').onclick = () => { $('formbox').classList.toggle('hidden'); $('toggle').textContent = $('formbox').classList.contains('hidden') ? 'Write a review' : 'Close review form'; };
+        $('sort').onchange = render;
+        function el(tag, cls, content) { const n = document.createElement(tag); if (cls)
+            n.className = cls; if (content !== undefined)
+            n.textContent = content; return n; }
+        function render() { const counts = [0, 0, 0, 0, 0]; all.forEach(r => counts[r.rating - 1]++); const avg = all.length ? all.reduce((a, r) => a + r.rating, 0) / all.length : 0; $('avg').textContent = all.length ? avg.toFixed(1) : '—'; $('avgStars').textContent = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg)); $('count').textContent = `${all.length} rating${all.length === 1 ? '' : 's'}`; $('reviewCount').textContent = `(${all.length})`; $('distribution').replaceChildren(); for (let i = 5; i >= 1; i--) {
+            const row = el('div', 'barrow');
+            row.append(el('span', '', String(i)));
+            const track = el('div', 'track'), fill = el('div', 'fill');
+            fill.style.width = `${all.length ? counts[i - 1] / all.length * 100 : 0}%`;
+            track.append(fill);
+            row.append(track);
+            $('distribution').append(row);
+        } const reviews = [...all]; const sort = $('sort').value; reviews.sort((a, b) => sort === 'highest' ? b.rating - a.rating : sort === 'lowest' ? a.rating - b.rating : b.createdAt - a.createdAt); $('reviews').replaceChildren(); if (!reviews.length) {
+            $('reviews').append(el('p', 'muted', 'No reviews yet. Be the first to write one.'));
+        } for (const r of reviews) {
+            const wrap = el('article', 'review'), author = el('div', 'author'), avatar = el('div', 'avatar', (r.name || '?')[0].toUpperCase()), details = el('div');
+            details.append(el('strong', '', r.name));
+            details.append(el('div', 'meta', new Date(r.createdAt || Date.now()).toLocaleDateString()));
+            author.append(avatar, details);
+            wrap.append(author, el('div', 'review-stars', '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating)), el('strong', '', r.title), el('p', '', r.body));
+            const helpful = el('div', 'helpful'), btn = el('button', 'btn outline', `👍 Helpful (${r.helpful || 0})`);
+            btn.style.padding = '7px 14px';
+            btn.disabled = !db || localStorage.getItem('voted:' + r.id) === 'yes';
+            btn.onclick = async () => { if (!db || localStorage.getItem('voted:' + r.id))
+                return; btn.disabled = true; try {
+                const ref = doc(db, 'reviews', r.id);
+                await runTransaction(db, async (t) => { const snap = await t.get(ref); if (!snap.exists())
+                    throw Error('Review not found'); t.update(ref, { helpful: (snap.data().helpful || 0) + 1 }); });
+                localStorage.setItem('voted:' + r.id, 'yes');
+            }
+            catch (e) {
+                btn.disabled = false;
+                alert(e.message);
+            } };
+            helpful.append(el('span', '', 'Was this review helpful?'), btn);
+            wrap.append(helpful);
+            $('reviews').append(wrap);
+        } }
+        $('reviewForm').onsubmit = async (e) => { e.preventDefault(); if (!db) {
+            $('formMessage').textContent = 'Configure Firebase first.';
+            return;
+        } if (!rating) {
+            $('formMessage').textContent = 'Please select a star rating.';
+            return;
+        } const name = $('name').value.trim(), title = $('title').value.trim(), body = $('body').value.trim(); if (!name || !title || !body)
+            return; $('submit').disabled = true; $('formMessage').textContent = 'Posting…'; try {
+            await addDoc(collection(db, 'reviews'), { name, title, body, rating, helpful: 0, createdAt: serverTimestamp() });
+            $('reviewForm').reset();
+            rating = 0;
+            renderRating();
+            $('formMessage').textContent = 'Review posted successfully!';
+            $('formMessage').className = 'notice success';
+        }
+        catch (err) {
+            $('formMessage').textContent = 'Could not post: ' + err.message;
+            $('formMessage').className = 'notice error';
+        }
+        finally {
+            $('submit').disabled = false;
+        } };
+        if (configured) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                // Connect to the named Firestore database: ramy.
+                db = getFirestore(app, 'ramy');
+                const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+                onSnapshot(q, snap => { $('status').textContent = ''; all = snap.docs.map(d => ({ ...d.data(), id: d.id, createdAt: d.data().createdAt?.toMillis?.() || Date.now() })).filter(r => Number.isInteger(r.rating) && r.rating >= 1 && r.rating <= 5); render(); }, err => { $('status').textContent = 'Firebase error: ' + err.message; $('status').className = 'notice error'; });
+            }
+            catch (e) {
+                $('status').textContent = e.message;
+            }
+        }
+        else {
+            $('status').textContent = 'Firebase is not configured. Add your Firebase Web App configuration in the HTML source to enable live reviews.';
+            render();
+        }
+    </script>
+</body>
+
+</html>
